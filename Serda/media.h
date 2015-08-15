@@ -1,5 +1,5 @@
 #ifndef SERDA_MEDIA_H
-#define SERDA_MEdIA_H
+#define SERDA_MEDIA_H
 
 #include <map>
 #include <memory>
