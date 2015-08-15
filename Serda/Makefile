@@ -9,8 +9,8 @@ all: $(BNAME)
 run: $(BNAME)
 	@./$(BNAME)
 
-$(BNAME): main.o game.o
-	$(CC) $(CFLAGS) -o $(BNAME) main.o game.o $(LFLAGS)
+$(BNAME): main.o game.o state_stack.o state.o
+	$(CC) $(CFLAGS) -o $(BNAME) main.o game.o state_stack.o state.o $(LFLAGS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o $@ $^
