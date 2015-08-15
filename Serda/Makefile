@@ -1,5 +1,7 @@
 CC=@g++
-CFLAGS=-Wall -O2 -std=c++11 -lsfml-graphics -lsfml-window -lsfml-system
+CFLAGS=-Wall -O2 -std=c++11
+#LFLAGS=-lsfml-system -lsfml-window -lsfml-graphics
+LFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 BNAME=serda
 
 all: $(BNAME)
@@ -7,8 +9,9 @@ all: $(BNAME)
 run: $(BNAME)
 	@./$(BNAME)
 
-$(BNAME): main.o
-	$(CC) $(CFLAGS) -o $(BNAME) main.o 
+$(BNAME): main.o game.o
+	$(CC) $(CFLAGS) -o $(BNAME) main.o game.o $(LFLAGS)
+
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o $@ $^
 
