@@ -4,7 +4,7 @@
 
 using namespace sf;
 
-State::Context::Context(RenderWindow* window) : window(window) {}
+State::Context::Context(RenderWindow* window, Media* media) : window(window), media(media) {}
 
 State::State(StateStack* stack, Context context) : stack(stack), context(std::move(context)) {}
 

@@ -21,6 +21,7 @@ class Game {
 
   private:
     sf::RenderWindow window;
+    Media media;
     StateStack stack;
 };
 
