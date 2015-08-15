@@ -3,14 +3,15 @@ CFLAGS=-Wall -O2 -std=c++11
 #LFLAGS=-lsfml-system -lsfml-window -lsfml-graphics
 LFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 BNAME=serda
+STATES=state_stack.o state.o troll_state.o
 
 all: $(BNAME)
 
 run: $(BNAME)
 	@./$(BNAME)
 
-$(BNAME): main.o game.o state_stack.o state.o
-	$(CC) $(CFLAGS) -o $(BNAME) main.o game.o state_stack.o state.o $(LFLAGS)
+$(BNAME): main.o game.o $(STATES)
+	$(CC) $(CFLAGS) -o $(BNAME) main.o game.o $(STATES) $(LFLAGS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o $@ $^
