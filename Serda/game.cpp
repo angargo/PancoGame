@@ -1,5 +1,6 @@
 #include "game.h"
 
+#include "title_state.h"
 #include "troll_state.h"
 
 using namespace sf;
@@ -7,7 +8,7 @@ using namespace sf;
 Game::Game() : window(VideoMode(640, 480), "Serda"),
                stack(State::Context(&window, &media)) {
   registerStates();
-  stack.pushState(States::Troll);
+  stack.pushState(States::Title);
 }
 
 Game::~Game() {}
@@ -57,4 +58,5 @@ void Game::render() {
 
 void Game::registerStates() {
   stack.registerState<TrollState>(States::Troll);
+  stack.registerState<TitleState>(States::Title);
 }

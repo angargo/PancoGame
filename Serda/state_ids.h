@@ -4,7 +4,8 @@
 struct States {
   enum ID {
     None,
-    Troll
+    Troll,
+    Title
   };
 };
 #endif // SERDA_STATE_IDS_H

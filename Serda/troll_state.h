@@ -1,6 +1,10 @@
 #ifndef SERDA_TROLL_STATE_H
 #define SERDA_TROLL_STATE_H
 
+#include <vector>
+
+#include <SFML/Graphics.hpp>
+
 #include "state.h"
 
 class TrollState : public State {
@@ -13,7 +17,13 @@ class TrollState : public State {
 
   private:
     sf::Time elapsed_time;
-    sf::Color color;
+
+    const int num_circles;
+    std::vector<sf::CircleShape> circles;
+    std::vector<float> angles;
+
+    float speed;
+    int width, height;
 };
 
 #endif // SERDA_TROLL_STATE_H

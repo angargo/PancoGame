@@ -2,29 +2,49 @@
 
 #include <cstdlib>
 
-using namespace sf;
-
 TitleState::TitleState(StateStack* stack, Context context) : State(stack, context),
-  elapsed_time(sf::Time::Zero), color(Color::White) {}
+  elapsed_time(sf::Time::Zero), color(sf::Color::White),
+  font(context.media->getFont(Media::Font::Arial)),
+  first_time(true) {
 
-bool TitleState::update(Time dt) {
-  elapsed_time += dt;
-  if (elapsed_time > seconds(1)) {
-    elapsed_time = Time::Zero;
-    color = Color(rand() % 256, rand() % 256, rand() % 256);
-  }
-  return true;
+  text.setFont(*font);
+  text.setString("The Legend of Serda: A Limp to the Panco");
+  text.setCharacterSize(30);
+  text.setColor(sf::Color::Blue);
+  text.setStyle(sf::Text::Bold);
+
+
+  // Center text.
+  sf::FloatRect textRect = text.getLocalBounds();
+  text.setOrigin(textRect.left + textRect.width / 2,
+                 textRect.top  + textRect.height / 2);
+  sf::Vector2i size(context.window->getSize());
+  text.setPosition(size.x / 2, size.y / 2);
 }
 
-bool TitleState::handleEvent(const Event& event) {
-  if (event.type == Event::KeyPressed and event.key.code == Keyboard::Escape) {
+bool TitleState::update(sf::Time dt) {
+  if (first_time) {
+    requestStackPush(States::Troll);
+    first_time = false;
+  }
+
+  elapsed_time += dt;
+  if (elapsed_time > sf::seconds(3)) {
+    
+  }
+  return false;
+}
+
+bool TitleState::handleEvent(const sf::Event& event) {
+  if (event.type == sf::Event::KeyPressed and event.key.code == sf::Keyboard::Escape) {
     requestStackPop();
   }
-  return true;
+  return false;
 }
 
 void TitleState::draw() {
   const Context& context = getContext();
-  RenderWindow& window = *context.window;
-  window.clear(color);
+  context.window->clear(sf::Color::White);
+  context.window->draw(text);
 }
+

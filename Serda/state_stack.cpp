@@ -46,7 +46,6 @@ bool StateStack::isEmpty() const {
 
 std::unique_ptr<State> StateStack::createState(States::ID stateID) {
   assert(factories.count(stateID));
-
   return factories[stateID]();
 }
 

@@ -3,7 +3,7 @@ CFLAGS=-Wall -O2 -std=c++11
 #LFLAGS=-lsfml-system -lsfml-window -lsfml-graphics
 LFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 BNAME=serda
-STATES=state_stack.o state.o troll_state.o
+STATES=state_stack.o state.o troll_state.o title_state.o
 OBJS=main.o game.o media.o $(STATES)
 
 all: $(BNAME)

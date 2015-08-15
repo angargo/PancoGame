@@ -1,6 +1,8 @@
 #ifndef SERDA_TITLE_STATE_H
 #define SERDA_TITLE_STATE_H
 
+#include <SFML/Graphics/Text.hpp>
+
 #include "state.h"
 
 class TitleState : public State {
@@ -14,6 +16,9 @@ class TitleState : public State {
   private:
     sf::Time elapsed_time;
     sf::Color color;
+    const sf::Font* font;
+    sf::Text text;
+    bool first_time;
 };
 
 #endif // SERDA_TITLE_STATE_H
