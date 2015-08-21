@@ -1,5 +1,6 @@
 #include "game.h"
 
+#include "game_state.h"
 #include "title_state.h"
 #include "troll_state.h"
 
@@ -59,4 +60,5 @@ void Game::render() {
 void Game::registerStates() {
   stack.registerState<TrollState>(States::Troll);
   stack.registerState<TitleState>(States::Title);
+  stack.registerState<GameState>(States::Game);
 }

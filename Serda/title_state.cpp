@@ -36,8 +36,13 @@ bool TitleState::update(sf::Time dt) {
 }
 
 bool TitleState::handleEvent(const sf::Event& event) {
-  if (event.type == sf::Event::KeyPressed and event.key.code == sf::Keyboard::Escape) {
-    requestStackPop();
+  if (event.type == sf::Event::KeyPressed) {
+    if (event.key.code == sf::Keyboard::Escape) {
+      requestStackPop();
+    } else if (event.key.code == sf::Keyboard::Return) {
+      requestStackClear();
+      requestStackPush(States::Game);
+    }
   }
   return false;
 }
