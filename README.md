@@ -7,4 +7,4 @@ myTest:
 -Garbage^2
 
 Serda:
--Clone of The Legend of Zelda: A Link to the Past.
+![image](Serda/media/img/Banner_flat.png)
