@@ -3,7 +3,16 @@
 #include <cstdlib>
 
 GameState::GameState(StateStack* stack, Context context, Save save)
-  : State(stack, context), save(std::move(save)) {
+    : State(stack, context), save(std::move(save)) {
+  // Temporal code for testing. TODO: remove.
+  auto window = context.window;
+  id_type link_id = world.createEntity();
+
+  sf::Vector2u size = window->getSize();
+  world.addComponent(link_id, PositionComponent(size.x / 2, size.y / 2));
+
+  texture.loadFromFile("media/img/link_front1.png");
+  world.addComponent(link_id, RenderComponent(sf::Sprite(texture)));
 }
 
 bool GameState::update(sf::Time dt) {
@@ -62,8 +71,11 @@ void GameState::renderSystem() {
   sf::RenderWindow* window = getContext().window;
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
-      const auto& render = static_cast<const RenderComponent&>(
-          world.getComponent(entity, Component::RENDER));
+      auto& render = static_cast<RenderComponent&>(
+          world.mutableComponent(entity, Component::RENDER));
+      const auto& position = static_cast<const PositionComponent&>(
+          world.getComponent(entity, Component::POSITION));
+      render.sprite.setPosition(position.x, position.y);
       window->draw(render.sprite);
     }
   }

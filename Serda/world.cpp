@@ -43,7 +43,7 @@ Component& World::mutableComponent(id_type entity_id,
   return mutableComponent(entities.at(entity_id), component_id);
 }
 
-void World::addComponent(id_type entity_id, PositionComponent&& pc) {
+void World::addComponent(id_type entity_id, PositionComponent pc) {
   pc.entity_id = entity_id;
   assert(entities.find(entity_id) != entities.end());
   Entity& entity = entities.at(entity_id);
@@ -51,7 +51,8 @@ void World::addComponent(id_type entity_id, PositionComponent&& pc) {
   entity.components.set(Component::POSITION, true);
   position_components.push_back(pc);
 }
-void World::addComponent(id_type entity_id, SpeedComponent&& sc) {
+
+void World::addComponent(id_type entity_id, SpeedComponent sc) {
   sc.entity_id = entity_id;
   assert(entities.find(entity_id) != entities.end());
   Entity& entity = entities.at(entity_id);
@@ -59,7 +60,8 @@ void World::addComponent(id_type entity_id, SpeedComponent&& sc) {
   entity.components.set(Component::SPEED, true);
   speed_components.push_back(sc);
 }
-void World::addComponent(id_type entity_id, RenderComponent&& rc) {
+
+void World::addComponent(id_type entity_id, RenderComponent rc) {
   rc.entity_id = entity_id;
   assert(entities.find(entity_id) != entities.end());
   Entity& entity = entities.at(entity_id);
@@ -67,7 +69,8 @@ void World::addComponent(id_type entity_id, RenderComponent&& rc) {
   entity.components.set(Component::RENDER, true);
   render_components.push_back(rc);
 }
-void World::addComponent(id_type entity_id, InputComponent&& ic) {
+
+void World::addComponent(id_type entity_id, InputComponent ic) {
   ic.entity_id = entity_id;
   assert(entities.find(entity_id) != entities.end());
   Entity& entity = entities.at(entity_id);

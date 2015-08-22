@@ -8,7 +8,7 @@ TitleState::TitleState(StateStack* stack, Context context) : State(stack, contex
   first_time(true) {
 
   text.setFont(*font);
-  text.setString("The Legend of Serda: A Limp to the Panco");
+  text.setString("The Legend of Serda: A Limb to the Panco");
   text.setCharacterSize(30);
   text.setColor(sf::Color::Blue);
   text.setStyle(sf::Text::Bold);

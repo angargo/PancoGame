@@ -24,6 +24,7 @@ public:
 
   Component();
   explicit Component(const id_type entity_id);
+
   virtual ~Component() = 0;
 
   id_type entity_id;

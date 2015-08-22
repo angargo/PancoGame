@@ -21,10 +21,10 @@ public:
   Component& mutableComponent(id_type entity_id, Component::Id component_id);
 
   // All methods to add each component.
-  void addComponent(id_type entity_id, PositionComponent&& pc);
-  void addComponent(id_type entity_id, SpeedComponent&& sc);
-  void addComponent(id_type entity_id, RenderComponent&& rc);
-  void addComponent(id_type entity_id, InputComponent&& ic);
+  void addComponent(id_type entity_id, PositionComponent pc);
+  void addComponent(id_type entity_id, SpeedComponent sc);
+  void addComponent(id_type entity_id, RenderComponent rc);
+  void addComponent(id_type entity_id, InputComponent ic);
 
   void createEntity(id_type entity_id);
   id_type createEntity();

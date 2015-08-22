@@ -26,6 +26,8 @@ class GameState : public State {
   private:
     Save save;
     World world;
+    // TODO: remove
+    sf::Texture texture;
 };
 
 #endif // SERDA_TITLE_STATE_H

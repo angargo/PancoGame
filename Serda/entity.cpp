@@ -16,8 +16,7 @@ bool Entity::hasComponent(Component::Id id) {
 PositionComponent::PositionComponent(float x, float y)
     : Component(), x(x), y(y) {}
 PositionComponent::PositionComponent(const id_type entity_id, float x, float y)
-    : Component(entity_id), x(x), y(y) {
-}
+    : Component(entity_id), x(x), y(y) {}
 
 SpeedComponent::SpeedComponent(float vx, float vy)
     : Component(), vx(vx), vy(vy) {}
@@ -28,8 +27,7 @@ SpeedComponent::SpeedComponent(const id_type entity_id, float vx, float vy)
 RenderComponent::RenderComponent(sf::Sprite sprite)
     : Component(), sprite(std::move(sprite)) {}
 RenderComponent::RenderComponent(const id_type entity_id, sf::Sprite sprite)
-    : Component(entity_id), sprite(std::move(sprite)) {
-}
+    : Component(entity_id), sprite(std::move(sprite)) {}
 
 InputComponent::InputComponent(const id_type entity_id) : Component(entity_id) {
 }
