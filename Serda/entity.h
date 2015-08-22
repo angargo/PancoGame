@@ -4,6 +4,8 @@
 #include <array>
 #include <bitset>
 
+#include <SFML/Graphics/Sprite.hpp>
+
 typedef int id_type;
 
 // Component base class.
@@ -11,7 +13,9 @@ class Component {
 public:
   enum Id {
     POSITION = 0,
-    NUM_IDS = 1,
+    SPEED = 1,
+    RENDER = 2,
+    NUM_IDS = 3,
   };
 
   explicit Component(const id_type entity_id);
@@ -24,7 +28,7 @@ public:
 class Entity {
 public:
   explicit Entity(const id_type id);
-  bool hasComponent(Component::ComponentId id);
+  bool hasComponent(Component::Id id);
 
   const id_type id;
   std::bitset<Component::NUM_IDS> components;
@@ -38,4 +42,19 @@ public:
 
   float x, y;
 };
+
+class SpeedComponent : public Component {
+public:
+  explicit SpeedComponent(const id_type entity_id, float vx, float vy);
+
+  float vx, vy;
+};
+
+class RenderComponent : public Component {
+public:
+  explicit RenderComponent(const id_type entity_id, sf::Sprite sprite);
+
+  sf::Sprite sprite;
+};
+
 #endif  // SERDA_ENTITY_H

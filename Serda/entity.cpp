@@ -15,3 +15,11 @@ bool Entity::hasComponent(Component::Id id) {
 PositionComponent::PositionComponent(const id_type entity_id, float x, float y)
     : Component(entity_id), x(x), y(y) {
 }
+
+SpeedComponent::SpeedComponent(const id_type entity_id, float vx, float vy)
+    : Component(entity_id), vx(vx), vy(vy) {
+}
+
+RenderComponent::RenderComponent(const id_type entity_id, sf::Sprite sprite)
+    : Component(entity_id), sprite(std::move(sprite)) {
+}
