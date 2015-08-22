@@ -1,10 +1,2 @@
-# PancoGame
-
-SnakeTest:
--Garbage
-
-myTest:
--Garbage^2
-
-Serda:
+# The legend of Serda: A limb to the panco
 ![image](Serda/media/img/Banner_flat.png)
