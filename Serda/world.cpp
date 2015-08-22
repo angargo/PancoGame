@@ -6,6 +6,24 @@
 const id_type World::DYNAMIC_ID_RANGE_FROM = 1u << 25;
 const id_type World::DYNAMIC_ID_RANGE_TO = (1u << 31) -1;
 
+// World iterator for entities.
+World::value_iterator::value_iterator() : World::entityMap::iterator() {}
+World::value_iterator::value_iterator(World::entityMap::iterator e)
+    : entityMap::iterator(e) {};
+Entity* World::value_iterator::operator->() {
+  return (Entity* const) & (entityMap::iterator::operator->()->second);
+}
+Entity World::value_iterator::operator*() {
+  return entityMap::iterator::operator*().second;
+}
+
+// World Range struct to iterate over entities with for range loop.
+World::Range::Range(std::unordered_map<id_type, Entity> &entities)
+    : entities(entities) {}
+World::value_iterator World::Range::begin() { return entities.begin(); }
+World::value_iterator World::Range::end() { return entities.end(); }
+
+// World class.
 World::World()
     : entities(),
       range(entities),
@@ -15,7 +33,6 @@ World::World()
 };
 
 World::~World() {}
-
 
 
 void World::createEntity(id_type entity_id) {
@@ -197,4 +214,3 @@ id_type World::getRandomEntityId() {
   }
   return id;
 }
-

@@ -13,23 +13,22 @@ private:
 
   class value_iterator : public entityMap::iterator {
   public:
-    value_iterator() : entityMap::iterator() {}
-    value_iterator(entityMap::iterator e) : entityMap::iterator(e) {};
-    Entity* operator->() {
-      return (Entity* const) & (entityMap::iterator::operator->()->second);
-    }
-    Entity operator*() { return entityMap::iterator::operator*().second; }
+    value_iterator();
+    value_iterator(entityMap::iterator e);
+    Entity* operator->();
+    Entity operator*();
   };
 
 public:
   // Range to allow for range loop in entities.
   struct Range {
     std::unordered_map<id_type, Entity>& entities;
-    Range(std::unordered_map<id_type, Entity>& entities) : entities(entities) {}
-    value_iterator begin() { return entities.begin(); }
-    value_iterator end() { return entities.end(); }
+    Range(std::unordered_map<id_type, Entity>& entities);
+    value_iterator begin();
+    value_iterator end();
   };
 
+  // Range of the entity ids that the game will use.
   static const id_type DYNAMIC_ID_RANGE_FROM;
   static const id_type DYNAMIC_ID_RANGE_TO;
 
