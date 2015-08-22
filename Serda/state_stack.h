@@ -4,6 +4,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <tuple>
 #include <vector>
 
 #include "state.h"
@@ -20,7 +21,9 @@ class StateStack {
     explicit StateStack(State::Context context);
     ~StateStack();
 
+    // TODO: make this work with variadic templates.
     template<typename T> void registerState(States::ID stateID);
+    template<typename T, typename Arg> void registerState(States::ID stateID, Arg arg);
 
     void update(sf::Time dt);
     void handleEvent(const sf::Event& event);
@@ -52,6 +55,13 @@ template<typename T>
 void StateStack::registerState(States::ID stateID) {
   factories[stateID] = [this]() {
     return std::unique_ptr<T>(new T(this, context));
+  };
+}
+
+template<typename T, typename Arg>
+void StateStack::registerState(States::ID stateID, Arg arg) {
+  factories[stateID] = [this, arg]() {
+    return std::unique_ptr<T>(new T(this, context, arg));
   };
 }
 

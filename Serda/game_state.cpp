@@ -2,7 +2,8 @@
 
 #include <cstdlib>
 
-GameState::GameState(StateStack* stack, Context context) : State(stack, context) {
+GameState::GameState(StateStack* stack, Context context, Save save)
+  : State(stack, context), save(std::move(save)) {
 }
 
 bool GameState::update(sf::Time dt) {
@@ -16,6 +17,5 @@ bool GameState::handleEvent(const sf::Event& event) {
 void GameState::draw() {
   const Context& context = getContext();
   context.window->clear(sf::Color::Green);
-  context.window->draw(text);
 }
 

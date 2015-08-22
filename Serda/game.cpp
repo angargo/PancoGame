@@ -60,5 +60,6 @@ void Game::render() {
 void Game::registerStates() {
   stack.registerState<TrollState>(States::Troll);
   stack.registerState<TitleState>(States::Title);
-  stack.registerState<GameState>(States::Game);
+  // TODO: load saved games.
+  stack.registerState<GameState>(States::Game, GameState::Save());
 }
