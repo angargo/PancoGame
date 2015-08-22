@@ -43,6 +43,23 @@ Component& World::mutableComponent(id_type entity_id,
   return mutableComponent(entities.at(entity_id), component_id);
 }
 
+void World::addComponent(id_type entity_id, PositionComponent&& pc) {
+  pc.entity_id = entity_id;
+  position_components.push_back(pc);
+}
+void World::addComponent(id_type entity_id, SpeedComponent&& sc) {
+  sc.entity_id = entity_id;
+  speed_components.push_back(sc);
+}
+void World::addComponent(id_type entity_id, RenderComponent&& rc) {
+  rc.entity_id = entity_id;
+  render_components.push_back(rc);
+}
+void World::addComponent(id_type entity_id, InputComponent&& ic) {
+  ic.entity_id = entity_id;
+  input_components.push_back(ic);
+}
+
 void World::createEntity(id_type entity_id) {
   entities.emplace(entity_id, Entity(entity_id));
 }
