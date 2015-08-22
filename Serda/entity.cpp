@@ -21,7 +21,9 @@ PositionComponent::PositionComponent(const id_type entity_id, float x, float y)
 SpeedComponent::SpeedComponent(float vx, float vy)
     : Component(), vx(vx), vy(vy) {}
 SpeedComponent::SpeedComponent(const id_type entity_id, float vx, float vy)
-    : Component(entity_id), vx(vx), vy(vy) {
+    : Component(entity_id), vx(vx), vy(vy) {}
+void SpeedComponent::setSpeed(float v_x, float v_y) {
+  vx = v_x; vy = v_y;
 }
 
 RenderComponent::RenderComponent(sf::Sprite sprite)
@@ -29,5 +31,5 @@ RenderComponent::RenderComponent(sf::Sprite sprite)
 RenderComponent::RenderComponent(const id_type entity_id, sf::Sprite sprite)
     : Component(entity_id), sprite(std::move(sprite)) {}
 
-InputComponent::InputComponent(const id_type entity_id) : Component(entity_id) {
-}
+InputComponent::InputComponent() : Component() {}
+InputComponent::InputComponent(const id_type entity_id) : Component(entity_id) {}

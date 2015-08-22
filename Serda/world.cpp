@@ -24,6 +24,7 @@ const Component& World::getComponent(const Entity& entity,
     case Component::POSITION: return position_components[index]; break;
     case Component::SPEED: return speed_components[index]; break;
     case Component::RENDER: return render_components[index]; break;
+    case Component::INPUT: return input_components[index]; break;
     default: std::cerr << "Error: invalid component id\n"; exit(0); break;
   }
 }
