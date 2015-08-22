@@ -3,8 +3,11 @@
 
 #include <array>
 #include <bitset>
+#include <functional>
+#include <map>
 
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 typedef int id_type;
 
@@ -15,7 +18,8 @@ public:
     POSITION = 0,
     SPEED = 1,
     RENDER = 2,
-    NUM_IDS = 3,
+    INPUT = 3,
+    NUM_IDS = 4,
   };
 
   explicit Component(const id_type entity_id);
@@ -55,6 +59,16 @@ public:
   explicit RenderComponent(const id_type entity_id, sf::Sprite sprite);
 
   sf::Sprite sprite;
+};
+
+class World;
+typedef std::function<void(World*,id_type)> Action;
+
+class InputComponent : public Component {
+public:
+  explicit InputComponent(const id_type entity_id);
+
+  std::map<sf::Keyboard::Key, Action> bindings;
 };
 
 #endif  // SERDA_ENTITY_H

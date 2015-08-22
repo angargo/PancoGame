@@ -23,3 +23,6 @@ SpeedComponent::SpeedComponent(const id_type entity_id, float vx, float vy)
 RenderComponent::RenderComponent(const id_type entity_id, sf::Sprite sprite)
     : Component(entity_id), sprite(std::move(sprite)) {
 }
+
+InputComponent::InputComponent(const id_type entity_id) : Component(entity_id) {
+}
