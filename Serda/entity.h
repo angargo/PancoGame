@@ -22,6 +22,7 @@ public:
     NUM_IDS = 4,
   };
 
+  Component();
   explicit Component(const id_type entity_id);
   virtual ~Component() = 0;
 
@@ -42,21 +43,24 @@ public:
 // Sample PositionComponent.
 class PositionComponent : public Component {
 public:
-  explicit PositionComponent(const id_type entity_id, float x, float y);
+  PositionComponent(float x, float y);
+  PositionComponent(const id_type entity_id, float x, float y);
 
   float x, y;
 };
 
 class SpeedComponent : public Component {
 public:
-  explicit SpeedComponent(const id_type entity_id, float vx, float vy);
+  SpeedComponent(float vx, float vy);
+  SpeedComponent(const id_type entity_id, float vx, float vy);
 
   float vx, vy;
 };
 
 class RenderComponent : public Component {
 public:
-  explicit RenderComponent(const id_type entity_id, sf::Sprite sprite);
+  explicit RenderComponent(sf::Sprite sprite);
+  RenderComponent(const id_type entity_id, sf::Sprite sprite);
 
   sf::Sprite sprite;
 };
