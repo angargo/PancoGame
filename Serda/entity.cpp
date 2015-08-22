@@ -7,7 +7,7 @@ Component::~Component() {}
 // Entity.
 Entity::Entity(const id_type id) : id(id), components(), component_indices() {}
 
-bool Entity::hasComponent(Component::ComponentId id) {
+bool Entity::hasComponent(Component::Id id) {
   return components[id];
 }
 

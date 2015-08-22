@@ -9,7 +9,7 @@ typedef int id_type;
 // Component base class.
 class Component {
 public:
-  enum ComponentId {
+  enum Id {
     POSITION = 0,
     NUM_IDS = 1,
   };
