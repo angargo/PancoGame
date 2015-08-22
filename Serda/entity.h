@@ -28,7 +28,7 @@ public:
   explicit Component(const id_type entity_id);
   virtual ~Component() = 0;
 
-  const int entity_id;
+  const id_type entity_id;
 };
 
 // Sample PositionComponent.
