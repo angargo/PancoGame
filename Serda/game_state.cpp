@@ -11,7 +11,7 @@ GameState::GameState(StateStack* stack, Context context, Save save)
   sf::Vector2u size = window->getSize();
   world.addComponent(link_id, PositionComponent(size.x / 2, size.y / 2));
 
-  texture.loadFromFile("media/img/link_front1.png");
+  texture.loadFromFile("media/images/link_front1.png");
   world.addComponent(link_id, RenderComponent(sf::Sprite(texture)));
 
   world.addComponent(link_id, SpeedComponent(0, 0));
