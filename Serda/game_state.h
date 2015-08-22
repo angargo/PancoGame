@@ -18,6 +18,10 @@ class GameState : public State {
     virtual bool handleEvent(const sf::Event& event);
     virtual void draw();
 
+    // ECS Systems.
+    void motionSystem(sf::Time dt);
+    void renderSystem();
+
   private:
     Save save;
     World world;
