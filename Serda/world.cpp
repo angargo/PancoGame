@@ -17,6 +17,25 @@ World::World()
 World::~World() {}
 
 
+
+void World::createEntity(id_type entity_id) {
+  entities.emplace(entity_id, Entity(entity_id));
+}
+id_type World::createEntity() {
+  id_type id = getRandomEntityId();
+  createEntity(id);
+  return id;
+}
+
+const Entity& World::getEntity(id_type entity_id) const {
+  return entities.at(entity_id);
+}
+World::Range World::getEntities() {
+  return range;
+}
+
+
+
 bool World::hasComponent(const Entity& entity, Component::Id cid) const {
   return entity.component_indices[cid] != -1;
 }
@@ -152,19 +171,8 @@ void World::addComponent(id_type entity_id, InputComponent ic) {
   input_components.push_back(ic);
 }
 
-void World::createEntity(id_type entity_id) {
-  entities.emplace(entity_id, Entity(entity_id));
-}
 
-id_type World::createEntity() {
-  id_type id = getRandomEntityId();
-  createEntity(id);
-  return id;
-}
 
-World::Range World::getEntities() {
-  return range;
-}
 
 id_type World::getRandomEntityId() {
   std::default_random_engine generator;
@@ -176,3 +184,4 @@ id_type World::getRandomEntityId() {
   }
   return id;
 }
+

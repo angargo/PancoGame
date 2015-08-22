@@ -7,11 +7,43 @@
 #include "entity.h"
 
 class World {
+private:
+  // Class to iterate over values of entities.
+  typedef std::unordered_map<id_type, Entity> entityMap;
+
+  class value_iterator : public entityMap::iterator {
+  public:
+    value_iterator() : entityMap::iterator() {}
+    value_iterator(entityMap::iterator e) : entityMap::iterator(e) {};
+    Entity* operator->() {
+      return (Entity* const) & (entityMap::iterator::operator->()->second);
+    }
+    Entity operator*() { return entityMap::iterator::operator*().second; }
+  };
+
 public:
+  // Range to allow for range loop in entities.
+  struct Range {
+    std::unordered_map<id_type, Entity>& entities;
+    Range(std::unordered_map<id_type, Entity>& entities) : entities(entities) {}
+    value_iterator begin() { return entities.begin(); }
+    value_iterator end() { return entities.end(); }
+  };
+
   static const id_type DYNAMIC_ID_RANGE_FROM;
   static const id_type DYNAMIC_ID_RANGE_TO;
+
+  // Constructors and destructors.
   World();
   ~World();
+
+  // Entity operations.
+  void createEntity(id_type entity_id);
+  id_type createEntity();
+
+  const Entity& getEntity(id_type entity_id) const;
+  Range getEntities();
+
 
   // Compenent queries.
   bool hasComponent(const Entity& entity, Component::Id cid) const;
@@ -63,36 +95,7 @@ public:
   void addComponent(id_type entity_id, RenderComponent rc);
   void addComponent(id_type entity_id, InputComponent ic);
 
-  void createEntity(id_type entity_id);
-  id_type createEntity();
-
 private:
-  // Class to iterate over values of entities.
-  typedef std::unordered_map<id_type, Entity> entityMap;
-
-  class value_iterator : public entityMap::iterator {
-  public:
-    value_iterator() : entityMap::iterator() {}
-    value_iterator(entityMap::iterator e) : entityMap::iterator(e) {};
-    Entity* operator->() {
-      return (Entity* const) & (entityMap::iterator::operator->()->second);
-    }
-    Entity operator*() { return entityMap::iterator::operator*().second; }
-  };
-
-public:
-  // Range to allow for range loop in entities.
-  struct Range {
-    std::unordered_map<id_type, Entity>& entities;
-    Range(std::unordered_map<id_type, Entity>& entities) : entities(entities) {}
-    value_iterator begin() { return entities.begin(); }
-    value_iterator end() { return entities.end(); }
-  };
-
-  Range getEntities();
-
-private:
-
   // Returns an random entityId not being used.
   id_type getRandomEntityId();
 

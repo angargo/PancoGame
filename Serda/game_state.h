@@ -5,6 +5,7 @@
 
 #include "state.h"
 #include "world.h"
+#include "world_manager.h"
 
 class GameState : public State {
   public:
