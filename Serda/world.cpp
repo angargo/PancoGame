@@ -45,18 +45,34 @@ Component& World::mutableComponent(id_type entity_id,
 
 void World::addComponent(id_type entity_id, PositionComponent&& pc) {
   pc.entity_id = entity_id;
+  assert(entities.find(entity_id) != entities.end());
+  Entity& entity = entities.at(entity_id);
+  entity.component_indices[Component::POSITION] = position_components.size();
+  entity.components.set(Component::POSITION, true);
   position_components.push_back(pc);
 }
 void World::addComponent(id_type entity_id, SpeedComponent&& sc) {
   sc.entity_id = entity_id;
+  assert(entities.find(entity_id) != entities.end());
+  Entity& entity = entities.at(entity_id);
+  entity.component_indices[Component::SPEED] = speed_components.size();
+  entity.components.set(Component::SPEED, true);
   speed_components.push_back(sc);
 }
 void World::addComponent(id_type entity_id, RenderComponent&& rc) {
   rc.entity_id = entity_id;
+  assert(entities.find(entity_id) != entities.end());
+  Entity& entity = entities.at(entity_id);
+  entity.component_indices[Component::RENDER] = render_components.size();
+  entity.components.set(Component::RENDER, true);
   render_components.push_back(rc);
 }
 void World::addComponent(id_type entity_id, InputComponent&& ic) {
   ic.entity_id = entity_id;
+  assert(entities.find(entity_id) != entities.end());
+  Entity& entity = entities.at(entity_id);
+  entity.component_indices[Component::INPUT] = input_components.size();
+  entity.components.set(Component::INPUT, true);
   input_components.push_back(ic);
 }
 
