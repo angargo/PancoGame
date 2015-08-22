@@ -1,5 +1,7 @@
 #include "entity.h"
 
+#include <iostream>
+
 // Base component.
 Component::Component() : entity_id(0) {}
 Component::Component(const id_type entity_id) : entity_id(entity_id) {}
@@ -15,17 +17,6 @@ bool Entity::hasComponent(Component::Id id) const {
   return components[id];
 }
 
-
-// Generic Entity.
-GenericEntity::GenericEntity() : components() {}
-
-const std::vector<Component*>& GenericEntity::getComponents() const {
-  return components;
-}
-
-void GenericEntity::addComponent(Component* component) {
-  components.push_back(component);
-}
 
 
 // Components.
@@ -51,4 +42,43 @@ RenderComponent::RenderComponent(const id_type entity_id, sf::Sprite sprite)
     : Component(entity_id), sprite(std::move(sprite)) {}
 
 InputComponent::InputComponent() : Component() {}
-InputComponent::InputComponent(const id_type entity_id) : Component(entity_id) {}
+InputComponent::InputComponent(const id_type entity_id)
+    : Component(entity_id) {}
+
+
+// Generic Entity.
+GenericEntity::GenericEntity() : components() {}
+
+bool GenericEntity::hasComponent(Component::Id id) const {
+  return component_bitset[id];
+}
+
+void GenericEntity::addComponent(const PositionComponent& component) {
+  component_bitset.set(Component::POSITION);
+  components[Component::POSITION].reset(new PositionComponent(component));
+}
+void GenericEntity::addComponent(const SpeedComponent& component) {
+  component_bitset.set(Component::SPEED);
+  components[Component::SPEED].reset(new SpeedComponent(component));
+}
+void GenericEntity::addComponent(const RenderComponent& component) {
+  component_bitset.set(Component::RENDER);
+  components[Component::RENDER].reset(new RenderComponent(component));
+}
+void GenericEntity::addComponent(const InputComponent& component) {
+  component_bitset.set(Component::INPUT);
+  components[Component::INPUT].reset(new InputComponent(component));
+}
+
+template<class Comp>
+const Comp& GenericEntity::get() const {
+  Comp* comp;
+  for (const auto& ptr : components) {
+    if ((comp = dynamic_cast<Comp*>(ptr.get())))
+      return *comp;
+  }
+  std::cerr << "Generic doesn't have requested component" << std::endl;
+  exit(0);
+}
+
+

@@ -5,6 +5,7 @@
 #include <bitset>
 #include <functional>
 #include <map>
+#include <memory>
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -41,16 +42,6 @@ public:
   const id_type id;
   std::bitset<Component::NUM_IDS> components;
   std::array<int, Component::NUM_IDS> component_indices;
-};
-
-class GenericEntity {
-public:
-  GenericEntity();
-  const std::vector<Component*>& getComponents() const;
-  void addComponent(Component* component);
-
-private:
-  std::vector<Component*> components;
 };
 
 // Sample PositionComponent.
@@ -110,6 +101,25 @@ public:
   explicit InputComponent(const id_type entity_id);
 
   std::map<InputEvent, Action> bindings;
+};
+
+class GenericEntity {
+public:
+  GenericEntity();
+
+  bool hasComponent(Component::Id id) const;
+
+  void addComponent(const PositionComponent& component);
+  void addComponent(const SpeedComponent& component);
+  void addComponent(const RenderComponent& component);
+  void addComponent(const InputComponent& component);
+
+  template<class Comp>
+  const Comp& get() const;
+
+private:
+  std::bitset<Component::NUM_IDS> component_bitset;
+  std::array<std::unique_ptr<Component>, Component::NUM_IDS> components;
 };
 
 #endif  // SERDA_ENTITY_H
