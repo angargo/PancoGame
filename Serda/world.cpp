@@ -16,10 +16,18 @@ World::World()
 
 World::~World() {}
 
+
+bool World::hasComponent(const Entity& entity, Component::Id cid) const {
+  return entity.component_indices[cid] != -1;
+}
+bool World::hasComponent(id_type entity_id, Component::Id cid) const {
+  return entities.at(entity_id).component_indices[cid] != -1;
+}
+
 // Getters.
 const Component& World::getComponent(const Entity& entity,
                                      Component::Id component_id) const {
-  assert(entity.components[component_id]);
+  assert(hasComponent(entity, component_id));
   const int index = entity.component_indices[component_id];
   switch (component_id) {
     case Component::POSITION: return position_components[index]; break;
@@ -46,7 +54,7 @@ Component& World::mutableComponent(id_type entity_id,
 // PositionComponent getters.
 const PositionComponent& World::getPositionComponent(const Entity& ent) const {
   static const Component::Id cid = Component::POSITION;
-  assert(ent.components[cid]);
+  assert(hasComponent(ent, cid));
   return position_components[ent.component_indices[cid]];
 }
 const PositionComponent& World::getPositionComponent(id_type entity_id) const {
@@ -62,7 +70,7 @@ PositionComponent& World::mutablePositionComponent(id_type entity_id) {
 // SpeedComponent getters.
 const SpeedComponent& World::getSpeedComponent(const Entity& entity) const {
   static const Component::Id cid = Component::SPEED;
-  assert(entity.components[cid]);
+  assert(hasComponent(entity, cid));
   return speed_components[entity.component_indices[cid]];
 }
 const SpeedComponent& World::getSpeedComponent(id_type entity_id) const {
@@ -78,7 +86,7 @@ SpeedComponent& World::mutableSpeedComponent(id_type entity_id) {
 // RenderComponent getters.
 const RenderComponent& World::getRenderComponent(const Entity& entity) const {
   static const Component::Id cid = Component::RENDER;
-  assert(entity.components[cid]);
+  assert(hasComponent(entity, cid));
   return render_components[entity.component_indices[cid]];
 }
 const RenderComponent& World::getRenderComponent(id_type entity_id) const {
@@ -94,7 +102,7 @@ RenderComponent& World::mutableRenderComponent(id_type entity_id) {
 // InputComponent getters.
 const InputComponent& World::getInputComponent(const Entity& entity) const {
   static const Component::Id cid = Component::INPUT;
-  assert(entity.components[cid]);
+  assert(hasComponent(entity, cid));
   return input_components[entity.component_indices[cid]];
 }
 const InputComponent& World::getInputComponent(id_type entity_id) const {

@@ -13,13 +13,25 @@ public:
   World();
   ~World();
 
+  // Compenent queries.
+  bool hasComponent(const Entity& entity, Component::Id cid) const;
+  bool hasComponent(id_type entity_id, Component::Id cid) const;
+
+  // TODO: implement these methods.
+  bool isActive(const Entity& entity, Component::Id cid) const;
+  bool isActive(id_type entity_id, Component::Id cid) const;
+
+  void activateComponent(const Entity& entity, Component::Id cid) const;
+  void activateComponent(id_type entity_id, Component::Id cid) const;
+
+  void deactivateComponent(const Entity& entity, Component::Id cid) const;
+  void deactivateComponent(id_type entity_id, Component::Id cid) const;
+
   // Component gettters.
-  const Component& getComponent(const Entity& entity,
-                                Component::Id component_id) const;
-  const Component& getComponent(id_type entity_id,
-                                Component::Id component_id) const;
-  Component& mutableComponent(const Entity& entity, Component::Id component_id);
-  Component& mutableComponent(id_type entity_id, Component::Id component_id);
+  const Component& getComponent(const Entity& entity, Component::Id cid) const;
+  const Component& getComponent(id_type entity_id, Component::Id cid) const;
+  Component& mutableComponent(const Entity& entity, Component::Id cid);
+  Component& mutableComponent(id_type entity_id, Component::Id cid);
 
   // PositionComponent getter specialization.
   const PositionComponent& getPositionComponent(const Entity& entity) const;

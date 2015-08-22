@@ -6,7 +6,9 @@ Component::Component(const id_type entity_id) : entity_id(entity_id) {}
 Component::~Component() {}
 
 // Entity.
-Entity::Entity(const id_type id) : id(id), components(), component_indices() {}
+Entity::Entity(const id_type id) : id(id), components(), component_indices() {
+  component_indices.fill(-1);
+}
 
 bool Entity::hasComponent(Component::Id id) {
   return components[id];
