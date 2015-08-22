@@ -9,8 +9,9 @@ Component::~Component() {}
 Entity::Entity(const id_type id) : id(id), components(), component_indices() {
   component_indices.fill(-1);
 }
-
-bool Entity::hasComponent(Component::Id id) {
+Entity::Entity() : Entity(0) {}
+bool Entity::hasId() const { return id != 0; }
+bool Entity::hasComponent(Component::Id id) const {
   return components[id];
 }
 

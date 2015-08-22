@@ -33,8 +33,10 @@ public:
 // Entity class.
 class Entity {
 public:
+  Entity();
   explicit Entity(const id_type id);
-  bool hasComponent(Component::Id id);
+  bool hasId() const;
+  bool hasComponent(Component::Id id) const;
 
   const id_type id;
   std::bitset<Component::NUM_IDS> components;
