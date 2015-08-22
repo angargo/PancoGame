@@ -16,6 +16,7 @@ World::World()
 
 World::~World() {}
 
+// Getters.
 const Component& World::getComponent(const Entity& entity,
                                      Component::Id component_id) const {
   assert(entity.components[component_id]);
@@ -28,21 +29,84 @@ const Component& World::getComponent(const Entity& entity,
     default: std::cerr << "Error: invalid component id\n"; exit(0); break;
   }
 }
-
 const Component& World::getComponent(id_type entity_id,
                                      Component::Id component_id) const {
   return getComponent(entities.at(entity_id), component_id);
 }
-
 Component& World::mutableComponent(const Entity &entity,
                                    Component::Id component_id) {
   return const_cast<Component&>(getComponent(entity, component_id));
 }
-
 Component& World::mutableComponent(id_type entity_id,
                                    Component::Id component_id) {
   return mutableComponent(entities.at(entity_id), component_id);
 }
+
+
+// PositionComponent getters.
+const PositionComponent& World::getPositionComponent(const Entity& ent) const {
+  static const Component::Id cid = Component::POSITION;
+  assert(ent.components[cid]);
+  return position_components[ent.component_indices[cid]];
+}
+const PositionComponent& World::getPositionComponent(id_type entity_id) const {
+  return getPositionComponent(entities.at(entity_id));
+}
+PositionComponent& World::mutablePositionComponent(const Entity& entity) {
+  return const_cast<PositionComponent&>(getPositionComponent(entity));
+}
+PositionComponent& World::mutablePositionComponent(id_type entity_id) {
+  return mutablePositionComponent(entities.at(entity_id));
+}
+
+// SpeedComponent getters.
+const SpeedComponent& World::getSpeedComponent(const Entity& entity) const {
+  static const Component::Id cid = Component::SPEED;
+  assert(entity.components[cid]);
+  return speed_components[entity.component_indices[cid]];
+}
+const SpeedComponent& World::getSpeedComponent(id_type entity_id) const {
+  return getSpeedComponent(entities.at(entity_id));
+}
+SpeedComponent& World::mutableSpeedComponent(const Entity& entity) {
+  return const_cast<SpeedComponent&>(getSpeedComponent(entity));
+}
+SpeedComponent& World::mutableSpeedComponent(id_type entity_id) {
+  return mutableSpeedComponent(entities.at(entity_id));
+}
+
+// RenderComponent getters.
+const RenderComponent& World::getRenderComponent(const Entity& entity) const {
+  static const Component::Id cid = Component::RENDER;
+  assert(entity.components[cid]);
+  return render_components[entity.component_indices[cid]];
+}
+const RenderComponent& World::getRenderComponent(id_type entity_id) const {
+  return getRenderComponent(entities.at(entity_id));
+}
+RenderComponent& World::mutableRenderComponent(const Entity& entity) {
+  return const_cast<RenderComponent&>(getRenderComponent(entity));
+}
+RenderComponent& World::mutableRenderComponent(id_type entity_id) {
+  return mutableRenderComponent(entities.at(entity_id));
+}
+
+// InputComponent getters.
+const InputComponent& World::getInputComponent(const Entity& entity) const {
+  static const Component::Id cid = Component::INPUT;
+  assert(entity.components[cid]);
+  return input_components[entity.component_indices[cid]];
+}
+const InputComponent& World::getInputComponent(id_type entity_id) const {
+  return getInputComponent(entities.at(entity_id));
+}
+InputComponent& World::mutableInputComponent(const Entity& entity) {
+  return const_cast<InputComponent&>(getInputComponent(entity));
+}
+InputComponent& World::mutableInputComponent(id_type entity_id) {
+  return mutableInputComponent(entities.at(entity_id));
+}
+
 
 void World::addComponent(id_type entity_id, PositionComponent pc) {
   pc.entity_id = entity_id;

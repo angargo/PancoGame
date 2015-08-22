@@ -13,12 +13,37 @@ public:
   World();
   ~World();
 
+  // Component gettters.
   const Component& getComponent(const Entity& entity,
                                 Component::Id component_id) const;
   const Component& getComponent(id_type entity_id,
                                 Component::Id component_id) const;
   Component& mutableComponent(const Entity& entity, Component::Id component_id);
   Component& mutableComponent(id_type entity_id, Component::Id component_id);
+
+  // PositionComponent getter specialization.
+  const PositionComponent& getPositionComponent(const Entity& entity) const;
+  const PositionComponent& getPositionComponent(id_type entity_id) const;
+  PositionComponent& mutablePositionComponent(const Entity& entity);
+  PositionComponent& mutablePositionComponent(id_type entity_id);
+
+  // SpeedComponent getter specialization.
+  const SpeedComponent& getSpeedComponent(const Entity& entity) const;
+  const SpeedComponent& getSpeedComponent(id_type entity_id) const;
+  SpeedComponent& mutableSpeedComponent(const Entity& entity);
+  SpeedComponent& mutableSpeedComponent(id_type entity_id);
+
+  // RenderComponent getter specialization.
+  const RenderComponent& getRenderComponent(const Entity& entity) const;
+  const RenderComponent& getRenderComponent(id_type entity_id) const;
+  RenderComponent& mutableRenderComponent(const Entity& entity);
+  RenderComponent& mutableRenderComponent(id_type entity_id);
+
+  // InputComponent getter specialization.
+  const InputComponent& getInputComponent(const Entity& entity) const;
+  const InputComponent& getInputComponent(id_type entity_id) const;
+  InputComponent& mutableInputComponent(const Entity& entity);
+  InputComponent& mutableInputComponent(id_type entity_id);
 
   // All methods to add each component.
   void addComponent(id_type entity_id, PositionComponent pc);
