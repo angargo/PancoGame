@@ -8,6 +8,8 @@
 
 class World {
 public:
+  static const id_type DYNAMIC_ID_RANGE_FROM;
+  static const id_type DYNAMIC_ID_RANGE_TO;
   World();
   ~World();
 
@@ -17,6 +19,9 @@ public:
                                 Component::Id component_id) const;
   Component& mutableComponent(const Entity& entity, Component::Id component_id);
   Component& mutableComponent(id_type entity_id, Component::Id component_id);
+
+  void createEntity(id_type entity_id);
+  id_type createEntity();
 
 private:
   // Class to iterate over values of entities.
@@ -44,6 +49,10 @@ public:
   Range getEntities();
 
 private:
+
+  // Returns an random entityId not being used.
+  id_type getRandomEntityId();
+
   // TODO: cache problems, maybe.
   std::unordered_map<id_type, Entity> entities;
 
