@@ -16,8 +16,10 @@ all: $(BNAME)
 run: $(BNAME)
 	@./$(BNAME)
 
-$(BNAME): $(OBJS)
+$(BNAME): objects
 	$(CC) $(CFLAGS) -o $(BNAME) $(OBJS) $(LFLAGS)
+
+objects: $(OBJS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c -o $@ $^
