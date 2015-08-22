@@ -20,6 +20,7 @@ class GameState : public State {
 
     // ECS Systems.
     void motionSystem(sf::Time dt);
+    void inputSystem(sf::Keyboard::Key key);
     void renderSystem();
 
   private:
