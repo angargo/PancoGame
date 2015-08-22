@@ -1,11 +1,5 @@
-ifneq (strip $(which clang++),)
-  CC=@clang++
-else
-  CC=@g++
-endif
 
-CFLAGS=-Wall -O2 -std=c++11
-#LFLAGS=-lsfml-system -lsfml-window -lsfml-graphics
+CXXFLAGS=-Wall -O2 -std=c++11
 LFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 BNAME=serda
 STATES=state_stack.o state.o troll_state.o title_state.o game_state.o
@@ -17,12 +11,12 @@ run: $(BNAME)
 	@./$(BNAME)
 
 $(BNAME): objects
-	$(CC) $(CFLAGS) -o $(BNAME) $(OBJS) $(LFLAGS)
+	$(CXX) $(CXXFLAGS) -o $(BNAME) $(OBJS) $(LFLAGS)
 
 objects: $(OBJS)
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c -o $@ $^
+	$(CXX) $(CXXFLAGS) -c -o $@ $^
 
 clean:
 	@rm *o $(BNAME)
