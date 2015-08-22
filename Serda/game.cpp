@@ -8,6 +8,7 @@ using namespace sf;
 
 Game::Game() : window(VideoMode(640, 480), "Serda"),
                stack(State::Context(&window, &media)) {
+  window.setKeyRepeatEnabled(false);
   registerStates();
   stack.pushState(States::Title);
 }

@@ -24,6 +24,9 @@ SpeedComponent::SpeedComponent(float vx, float vy)
     : Component(), vx(vx), vy(vy) {}
 SpeedComponent::SpeedComponent(const id_type entity_id, float vx, float vy)
     : Component(entity_id), vx(vx), vy(vy) {}
+void SpeedComponent::addSpeed(float v_x, float v_y) {
+  vx += v_x; vy += v_y;
+}
 void SpeedComponent::setSpeed(float v_x, float v_y) {
   vx = v_x; vy = v_y;
 }

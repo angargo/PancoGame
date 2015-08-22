@@ -55,6 +55,7 @@ public:
   SpeedComponent(float vx, float vy);
   SpeedComponent(const id_type entity_id, float vx, float vy);
 
+  void addSpeed(float v_x, float v_y);
   void setSpeed(float v_x, float v_y);
 
   float vx, vy;
@@ -71,12 +72,32 @@ public:
 class World;
 typedef std::function<void(World*,id_type)> Action;
 
+struct InputEvent {
+  enum KeyAction {
+    KEY_PRESSED = 0,
+    KEY_RELEASED = 1,
+  };
+  // If not pressed, it's implicitly released.
+  bool key_pressed;
+  sf::Keyboard::Key key;
+
+  InputEvent(KeyAction key_action, sf::Keyboard::Key key)
+      : key_pressed(key_action), key(key) {}
+
+  // Comparator function to use InputEvent as a map key.
+  bool operator<(const InputEvent& other) const {
+    if (key_pressed ^ other.key_pressed) return key_pressed < other.key_pressed;
+    return key < other.key;
+  }
+};
+
+
 class InputComponent : public Component {
 public:
   InputComponent();
   explicit InputComponent(const id_type entity_id);
 
-  std::map<sf::Keyboard::Key, Action> bindings;
+  std::map<InputEvent, Action> bindings;
 };
 
 #endif  // SERDA_ENTITY_H
