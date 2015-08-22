@@ -5,6 +5,7 @@
 
 World::World()
     : entities(),
+      range(entities),
       position_components(),
       speed_components(),
       render_components() {
@@ -37,4 +38,8 @@ Component& World::mutableComponent(const Entity &entity,
 Component& World::mutableComponent(id_type entity_id,
                                    Component::Id component_id) {
   return mutableComponent(entities.at(entity_id), component_id);
+}
+
+World::Range World::getEntities() {
+  return range;
 }
