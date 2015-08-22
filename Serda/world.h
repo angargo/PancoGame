@@ -19,8 +19,35 @@ public:
   Component& mutableComponent(id_type entity_id, Component::Id component_id);
 
 private:
+  // Class to iterate over values of entities.
+  typedef std::unordered_map<id_type, Entity> entityMap;
+
+  class value_iterator : public entityMap::iterator {
+  public:
+    value_iterator() : entityMap::iterator() {}
+    value_iterator(entityMap::iterator e) : entityMap::iterator(e) {};
+    Entity* operator->() {
+      return (Entity* const) & (entityMap::iterator::operator->()->second);
+    }
+    Entity operator*() { return entityMap::iterator::operator*().second; }
+  };
+
+public:
+  // Range to allow for range loop in entities.
+  struct Range {
+    std::unordered_map<id_type, Entity>& entities;
+    Range(std::unordered_map<id_type, Entity>& entities) : entities(entities) {}
+    value_iterator begin() { return entities.begin(); }
+    value_iterator end() { return entities.end(); }
+  };
+
+  Range getEntities();
+
+private:
   // TODO: cache problems, maybe.
   std::unordered_map<id_type, Entity> entities;
+
+  Range range;
 
   // Components go here.
   std::vector<PositionComponent> position_components;
