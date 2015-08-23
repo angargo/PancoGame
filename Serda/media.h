@@ -9,17 +9,6 @@
 class Media {
   public:
     Media();
-    struct Sound {
-      enum ID {
-        Error
-      };
-    };
-
-    struct Music {
-      enum ID {
-        Error
-      };
-    };
 
     struct Font {
       enum ID {
@@ -28,23 +17,24 @@ class Media {
       };
     };
 
-    struct Texture {
-      enum ID {
-        Error
-      };
-    };
-
+    const sf::Image* getImage(int imageID);
     const sf::Font* getFont(Font::ID fontID);
 
   private:
+    void loadDictionary(const std::string& path,
+                        std::map<int, std::string>& files);
+
     // Sounds.
     // TODO.
+    std::map<int, std::string> sound_files;
 
     // Music.
     // TODO. There will only be one music object.
+    std::map<int, std::string> music_files;
 
-    // Textures.
-    // TODO.
+    // Images
+    std::map<int, std::string> image_files;
+    std::map<int, std::unique_ptr<sf::Image>> images;
 
     // Fonts.
     std::map<Font::ID, std::string> font_files;
