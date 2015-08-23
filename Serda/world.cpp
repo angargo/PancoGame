@@ -171,7 +171,20 @@ void World::addComponent(id_type entity_id, InputComponent ic) {
   input_components.push_back(ic);
 }
 
-
+void World::addComponent(id_type entity_id, Component* c) {
+  // Try all different components.
+  if (auto pc = dynamic_cast<PositionComponent*>(c)) {
+    addComponent(entity_id, *pc);
+  } else if (auto sc = dynamic_cast<SpeedComponent*>(c)) {
+    addComponent(entity_id, *sc);
+  } else if (auto rc = dynamic_cast<RenderComponent*>(c)) {
+    addComponent(entity_id, *rc);
+  } else if (auto ic = dynamic_cast<InputComponent*>(c)) {
+    addComponent(entity_id, *ic);
+  } else {
+    std::cerr << "Error adding component to world: Bad component" << std::endl;
+  }
+}
 
 
 id_type World::getRandomEntityId() {

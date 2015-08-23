@@ -15,6 +15,19 @@ bool Entity::hasComponent(Component::Id id) const {
   return components[id];
 }
 
+
+// Generic Entity.
+GenericEntity::GenericEntity() : components() {}
+
+const std::vector<Component*>& GenericEntity::getComponents() const {
+  return components;
+}
+
+void GenericEntity::addComponent(Component* component) {
+  components.push_back(component);
+}
+
+
 // Components.
 PositionComponent::PositionComponent(float x, float y)
     : Component(), x(x), y(y) {}

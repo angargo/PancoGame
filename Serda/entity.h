@@ -43,6 +43,16 @@ public:
   std::array<int, Component::NUM_IDS> component_indices;
 };
 
+class GenericEntity {
+public:
+  GenericEntity();
+  const std::vector<Component*>& getComponents() const;
+  void addComponent(Component* component);
+
+private:
+  std::vector<Component*> components;
+};
+
 // Sample PositionComponent.
 class PositionComponent : public Component {
 public:

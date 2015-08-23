@@ -94,6 +94,7 @@ public:
   void addComponent(id_type entity_id, SpeedComponent sc);
   void addComponent(id_type entity_id, RenderComponent rc);
   void addComponent(id_type entity_id, InputComponent ic);
+  void addComponent(id_type entity_id, Component* c);
 
 private:
   // Returns an random entityId not being used.
