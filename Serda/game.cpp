@@ -5,8 +5,8 @@
 #include "troll_state.h"
 
 using namespace sf;
-
-Game::Game() : window(VideoMode(640, 480), "Serda"),
+//256x224 is default SNES resolution
+Game::Game() : window(VideoMode(256, 224), "Serda"),
                stack(State::Context(&window, &media)) {
   window.setKeyRepeatEnabled(false);
   registerStates();
