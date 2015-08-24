@@ -5,7 +5,7 @@ GTKLFLAGS=-lgtkmm-3.0 -latkmm-1.6 -lgdkmm-3.0 -lgiomm-2.4 -lpangomm-1.4 -lgtk-3 
 LFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 
 BNAME=serda
-OBJS=main.o mainWindow.o canvas.o 
+OBJS=main.o mainWindow.o canvas.o leftPane.o rightPane.o 
 
 all: $(BNAME)
 
