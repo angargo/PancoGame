@@ -20,35 +20,35 @@ GameState::GameState(StateStack* stack, Context context, Save save)
   const int sp = 100;
   input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Up)] =
       [](World *world, id_type link) {
-        world->mutableSpeedComponent(link).addSpeed(0, -sp);
+        world->variable<SpeedComponent>(link).addSpeed(0, -sp);
       };
   input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Up)] =
       [](World *world, id_type link) {
-        world->mutableSpeedComponent(link).addSpeed(0, sp);
+        world->variable<SpeedComponent>(link).addSpeed(0, sp);
       };
   input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Down)] =
       [](World *world, id_type link) {
-        world->mutableSpeedComponent(link).addSpeed(0, sp);
+        world->variable<SpeedComponent>(link).addSpeed(0, sp);
       };
   input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Down)] =
       [](World *world, id_type link) {
-        world->mutableSpeedComponent(link).addSpeed(0, -sp);
+        world->variable<SpeedComponent>(link).addSpeed(0, -sp);
       };
   input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Right)] =
       [](World *world, id_type link) {
-        world->mutableSpeedComponent(link).addSpeed(sp, 0);
+        world->variable<SpeedComponent>(link).addSpeed(sp, 0);
       };
   input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Right)] =
       [](World *world, id_type link) {
-        world->mutableSpeedComponent(link).addSpeed(-sp, 0);
+        world->variable<SpeedComponent>(link).addSpeed(-sp, 0);
       };
   input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Left)] =
       [](World *world, id_type link) {
-        world->mutableSpeedComponent(link).addSpeed(-sp, 0);
+        world->variable<SpeedComponent>(link).addSpeed(-sp, 0);
       };
   input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Left)] =
       [](World *world, id_type link) {
-        world->mutableSpeedComponent(link).addSpeed(sp, 0);
+        world->variable<SpeedComponent>(link).addSpeed(sp, 0);
       };
   world.addComponent(link_id, input);
 }
@@ -62,7 +62,8 @@ bool GameState::update(sf::Time dt) {
 }
 
 bool GameState::handleEvent(const sf::Event& event) {
-  if (event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased) {
+  if (event.type == sf::Event::KeyPressed
+      || event.type == sf::Event::KeyReleased) {
     InputEvent::KeyAction action = InputEvent::KEY_PRESSED;
     if (event.type == sf::Event::KeyReleased) action = InputEvent::KEY_RELEASED;
     InputEvent input_event(action, event.key.code);
@@ -96,8 +97,8 @@ void GameState::motionSystem(sf::Time dt) {
 
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
-      auto& pos = world.mutablePositionComponent(entity);
-      const auto& speed = world.getSpeedComponent(entity);
+      auto& pos = world.variable<PositionComponent>(entity);
+      const auto& speed = world.get<SpeedComponent>(entity);
       pos.x += (dt.asSeconds() * speed.vx);
       pos.y += (dt.asSeconds() * speed.vy);
     }
@@ -110,7 +111,7 @@ void GameState::inputSystem(InputEvent event) {
 
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
-      auto& input = world.mutableInputComponent(entity).bindings;
+      auto& input = world.variable<InputComponent>(entity).bindings;
       if (input.find(event) != input.end()) {
         input[event](&world, entity.id);
       }
@@ -125,8 +126,8 @@ void GameState::renderSystem() {
   sf::RenderWindow* window = getContext().window;
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
-      auto& render = world.mutableRenderComponent(entity);
-      const auto& position = world.getPositionComponent(entity);
+      auto& render = world.variable<RenderComponent>(entity);
+      const auto& position = world.get<PositionComponent>(entity);
       render.sprite.setPosition(position.x, position.y);
       window->draw(render.sprite);
     }

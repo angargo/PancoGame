@@ -1,6 +1,7 @@
 #ifndef SERDA_WORLD_H
 #define SERDA_WORLD_H
 
+#include <cassert>
 #include <vector>
 #include <unordered_map>
 
@@ -45,50 +46,37 @@ public:
 
 
   // Compenent queries.
-  bool hasComponent(const Entity& entity, Component::Id cid) const;
-  bool hasComponent(id_type entity_id, Component::Id cid) const;
+  template<typename C>
+  bool has(const Entity& entity) const { return entity.has<C>(); }
+  template<typename C>
+  bool has(id_type entity_id) const { return has<C>(entities.at(entity_id)); }
 
   // TODO: implement these methods.
-  bool isActive(const Entity& entity, Component::Id cid) const;
-  bool isActive(id_type entity_id, Component::Id cid) const;
+  template<typename C> bool isActive(const Entity& entity) const;
+  template<typename C> bool isActive(id_type entity_id) const;
 
-  void activateComponent(const Entity& entity, Component::Id cid) const;
-  void activateComponent(id_type entity_id, Component::Id cid) const;
+  template<typename C> void activate(const Entity& entity) const;
+  template<typename C> void activate(id_type entity_id) const;
 
-  void deactivateComponent(const Entity& entity, Component::Id cid) const;
-  void deactivateComponent(id_type entity_id, Component::Id cid) const;
+  template<typename C> void deactivate(const Entity& entity) const;
+  template<typename C> void deactivate(id_type entity_id) const;
 
   // Component gettters.
-  const Component& getComponent(const Entity& entity, Component::Id cid) const;
-  const Component& getComponent(id_type entity_id, Component::Id cid) const;
-  Component& mutableComponent(const Entity& entity, Component::Id cid);
-  Component& mutableComponent(id_type entity_id, Component::Id cid);
+  template<typename C>
+  const C& get(const Entity& entity) const {
+    assert(has<C>(entity));
+    return vect<C>()[entity.component_indices[Id<C>()]];
+  }
+  template<typename C>
+  const C& get(id_type entity_id) const { return get<C>(); }
 
-  // PositionComponent getter specialization.
-  const PositionComponent& getPositionComponent(const Entity& entity) const;
-  const PositionComponent& getPositionComponent(id_type entity_id) const;
-  PositionComponent& mutablePositionComponent(const Entity& entity);
-  PositionComponent& mutablePositionComponent(id_type entity_id);
-
-  // SpeedComponent getter specialization.
-  const SpeedComponent& getSpeedComponent(const Entity& entity) const;
-  const SpeedComponent& getSpeedComponent(id_type entity_id) const;
-  SpeedComponent& mutableSpeedComponent(const Entity& entity);
-  SpeedComponent& mutableSpeedComponent(id_type entity_id);
-
-  // RenderComponent getter specialization.
-  const RenderComponent& getRenderComponent(const Entity& entity) const;
-  const RenderComponent& getRenderComponent(id_type entity_id) const;
-  RenderComponent& mutableRenderComponent(const Entity& entity);
-  RenderComponent& mutableRenderComponent(id_type entity_id);
-
-  // InputComponent getter specialization.
-  const InputComponent& getInputComponent(const Entity& entity) const;
-  const InputComponent& getInputComponent(id_type entity_id) const;
-  InputComponent& mutableInputComponent(const Entity& entity);
-  InputComponent& mutableInputComponent(id_type entity_id);
+  template<typename C>
+  C& variable(const Entity& entity) {return const_cast<C&>(get<C>(entity)); }
+  template<typename C>
+  C& variable(id_type entity_id) { return variable<C>(entities.at(entity_id)); }
 
   // All methods to add each component.
+  
   void addComponent(id_type entity_id, PositionComponent pc);
   void addComponent(id_type entity_id, SpeedComponent sc);
   void addComponent(id_type entity_id, RenderComponent rc);
@@ -98,6 +86,9 @@ public:
 private:
   // Returns an random entityId not being used.
   id_type getRandomEntityId();
+  
+  // Container access.
+  template<typename C> const std::vector<C>& vect() const;
 
   // TODO: cache problems, maybe.
   std::unordered_map<id_type, Entity> entities;

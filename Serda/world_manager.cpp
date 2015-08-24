@@ -11,14 +11,17 @@ void WorldManager::serialize(std::ostream& out, const Entity& entity) const {
   if (entity.hasId()) out << " id=" << entity.id;
   out << ">";
 
-  if (entity.hasComponent(Component::POSITION))
-    serialize(out, world->getPositionComponent(entity));
-  if (entity.hasComponent(Component::SPEED))
-    serialize(out, world->getSpeedComponent(entity));
-  if (entity.hasComponent(Component::RENDER))
-    serialize(out, world->getRenderComponent(entity));
-  if (entity.hasComponent(Component::INPUT))
-    serialize(out, world->getInputComponent(entity));
+  if (entity.has<PositionComponent>())
+    serialize(out, world->get<PositionComponent>(entity));
+
+  if (entity.has<SpeedComponent>())
+    serialize(out, world->get<SpeedComponent>(entity));
+
+  if (entity.has<RenderComponent>())
+    serialize(out, world->get<RenderComponent>(entity));
+
+  if (entity.has<InputComponent>())
+    serialize(out, world->get<InputComponent>(entity));
 
   out << "</entity>";
 }
