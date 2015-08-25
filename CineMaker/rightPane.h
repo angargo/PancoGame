@@ -3,12 +3,11 @@
 
 #include <gtkmm.h>
 
-//class RightPane : public Gtk::Paned
-class RightPane : public Gtk::Frame
-{
-public:
+// class RightPane : public Gtk::Paned
+class RightPane : public Gtk::Frame {
+ public:
   RightPane();
   virtual ~RightPane();
 };
 
-#endif //RIGHTPANE_H
+#endif  // RIGHTPANE_H

@@ -25,3 +25,4 @@ objects: $(OBJS)
 
 clean:
 	@rm *o $(BNAME)
+

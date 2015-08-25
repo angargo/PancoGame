@@ -3,11 +3,10 @@
 
 #include <gtkmm.h>
 
-class Canvas : public Gtk::DrawingArea
-{
-public:
+class Canvas : public Gtk::DrawingArea {
+ public:
   Canvas();
   virtual ~Canvas();
 };
 
-#endif //CANVAS_H
+#endif  // CANVAS_H

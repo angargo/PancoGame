@@ -6,13 +6,12 @@
 #include "leftPane.h"
 #include "rightPane.h"
 
-class MainWindow : public Gtk::Window
-{
-public:
+class MainWindow : public Gtk::Window {
+ public:
   MainWindow();
   virtual ~MainWindow();
 
-private:
+ private:
   Gtk::Box m_Box;
   Glib::RefPtr<Gtk::Builder> m_refBuilder;
   Glib::RefPtr<Gio::SimpleActionGroup> m_refActionGroup;
@@ -37,7 +36,6 @@ private:
   void make_actions();
   void make_menu_bar();
   void make_toolbar();
-  
 };
 
-#endif //MAINWINDOW_H
+#endif  // MAINWINDOW_H
