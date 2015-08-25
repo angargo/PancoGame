@@ -9,12 +9,12 @@ GameState::GameState(StateStack* stack, Context context, Save save)
   id_type link_id = world.createEntity();
 
   sf::Vector2u size = window->getSize();
-  world.addComponent(link_id, PositionComponent(size.x / 2, size.y / 2));
+  world.add(link_id, PositionComponent(size.x / 2, size.y / 2));
 
   texture.loadFromFile("media/images/link_front1.png");
-  world.addComponent(link_id, RenderComponent(sf::Sprite(texture)));
+  world.add(link_id, RenderComponent(sf::Sprite(texture)));
 
-  world.addComponent(link_id, SpeedComponent(0, 0));
+  world.add(link_id, SpeedComponent(0, 0));
 
   InputComponent input;
   const int sp = 100;
@@ -50,7 +50,7 @@ GameState::GameState(StateStack* stack, Context context, Save save)
       [](World *world, id_type link) {
         world->variable<SpeedComponent>(link).addSpeed(sp, 0);
       };
-  world.addComponent(link_id, input);
+  world.add(link_id, input);
 }
 
 bool GameState::update(sf::Time dt) {

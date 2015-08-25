@@ -51,60 +51,6 @@ World::Range World::getEntities() {
   return range;
 }
 
-
-
-void World::addComponent(id_type entity_id, PositionComponent pc) {
-  pc.entity_id = entity_id;
-  assert(entities.find(entity_id) != entities.end());
-  Entity& entity = entities.at(entity_id);
-  entity.component_indices[Component::POSITION] = position_components.size();
-  entity.components.set(Component::POSITION, true);
-  position_components.push_back(pc);
-}
-
-void World::addComponent(id_type entity_id, SpeedComponent sc) {
-  sc.entity_id = entity_id;
-  assert(entities.find(entity_id) != entities.end());
-  Entity& entity = entities.at(entity_id);
-  entity.component_indices[Component::SPEED] = speed_components.size();
-  entity.components.set(Component::SPEED, true);
-  speed_components.push_back(sc);
-}
-
-void World::addComponent(id_type entity_id, RenderComponent rc) {
-  rc.entity_id = entity_id;
-  assert(entities.find(entity_id) != entities.end());
-  Entity& entity = entities.at(entity_id);
-  entity.component_indices[Component::RENDER] = render_components.size();
-  entity.components.set(Component::RENDER, true);
-  render_components.push_back(rc);
-}
-
-void World::addComponent(id_type entity_id, InputComponent ic) {
-  ic.entity_id = entity_id;
-  assert(entities.find(entity_id) != entities.end());
-  Entity& entity = entities.at(entity_id);
-  entity.component_indices[Component::INPUT] = input_components.size();
-  entity.components.set(Component::INPUT, true);
-  input_components.push_back(ic);
-}
-
-void World::addComponent(id_type entity_id, Component* c) {
-  // Try all different components.
-  if (auto pc = dynamic_cast<PositionComponent*>(c)) {
-    addComponent(entity_id, *pc);
-  } else if (auto sc = dynamic_cast<SpeedComponent*>(c)) {
-    addComponent(entity_id, *sc);
-  } else if (auto rc = dynamic_cast<RenderComponent*>(c)) {
-    addComponent(entity_id, *rc);
-  } else if (auto ic = dynamic_cast<InputComponent*>(c)) {
-    addComponent(entity_id, *ic);
-  } else {
-    std::cerr << "Error adding component to world: Bad component" << std::endl;
-  }
-}
-
-
 id_type World::getRandomEntityId() {
   std::default_random_engine generator;
   std::uniform_int_distribution<id_type> distribution(DYNAMIC_ID_RANGE_FROM,
@@ -117,18 +63,18 @@ id_type World::getRandomEntityId() {
 }
 
 template<> const std::vector<PositionComponent>&
-  World::vect<PositionComponent>() const { return position_components; }
+  World::getVect<PositionComponent>() const { return position_components; }
 
 template<> const std::vector<SpeedComponent>&
-  World::vect<SpeedComponent>() const { return speed_components; }
+  World::getVect<SpeedComponent>() const { return speed_components; }
 
 template<> const std::vector<RenderComponent>&
-  World::vect<RenderComponent>() const { return render_components; }
+  World::getVect<RenderComponent>() const { return render_components; }
 
 template<> const std::vector<InputComponent>&
-  World::vect<InputComponent>() const { return input_components; }
+  World::getVect<InputComponent>() const { return input_components; }
 
-template<typename C> const std::vector<C>& World::vect() const {
+template<typename C> const std::vector<C>& World::getVect() const {
  std::cerr << "World::vect with unknown type" << std::endl;
  exit(0);
 }

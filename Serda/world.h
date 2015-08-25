@@ -65,7 +65,7 @@ public:
   template<typename C>
   const C& get(const Entity& entity) const {
     assert(has<C>(entity));
-    return vect<C>()[entity.component_indices[Id<C>()]];
+    return getVect<C>()[entity.component_indices[Id<C>()]];
   }
   template<typename C>
   const C& get(id_type entity_id) const { return get<C>(); }
@@ -75,20 +75,26 @@ public:
   template<typename C>
   C& variable(id_type entity_id) { return variable<C>(entities.at(entity_id)); }
 
-  // All methods to add each component.
-  
-  void addComponent(id_type entity_id, PositionComponent pc);
-  void addComponent(id_type entity_id, SpeedComponent sc);
-  void addComponent(id_type entity_id, RenderComponent rc);
-  void addComponent(id_type entity_id, InputComponent ic);
-  void addComponent(id_type entity_id, Component* c);
+  // Add a component to an entity.
+  template<typename C>
+  void add(id_type entity_id, C component) {
+    component.entity_id = entity_id;
+    Entity& entity = entities.at(entity_id);
+    assert(not has<C>(entity));
+    entity.component_indices[Id<C>()] = getVect<C>().size();
+    entity.components.set(Id<C>(), true);
+    mutVect<C>().push_back(component);
+  }
 
 private:
   // Returns an random entityId not being used.
   id_type getRandomEntityId();
-  
+
   // Container access.
-  template<typename C> const std::vector<C>& vect() const;
+  template<typename C> const std::vector<C>& getVect() const;
+  template<typename C> std::vector<C>& mutVect() {
+    return const_cast<std::vector<C>&>(getVect<C>());
+  }
 
   // TODO: cache problems, maybe.
   std::unordered_map<id_type, Entity> entities;
