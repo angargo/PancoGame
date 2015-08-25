@@ -11,8 +11,12 @@ Game::Game()
       images("media/images/dictionary"),
       fonts("media/fonts/dictionary"),
       stack(State::Context(&window, &images, &fonts)) {
+  window.setSize(Vector2u(window.getSize().x * 2, window.getSize().y * 2));
+
   fonts.load(Fonts::Menu, "media/fonts/arial.ttf");
+
   window.setKeyRepeatEnabled(false);
+
   registerStates();
   stack.pushState(States::Title);
 }

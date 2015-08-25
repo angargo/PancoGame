@@ -12,7 +12,7 @@ TitleState::TitleState(StateStack* stack, Context context)
   sf::FloatRect rect = banner.getLocalBounds();
   banner.setOrigin(rect.left + rect.width / 2,
                  rect.top + rect.height / 2);
-  sf::Vector2i size(context.window->getSize());
+  sf::Vector2f size(context.window->getView().getSize());
   banner.setPosition(size.x / 2, size.y / 2);
 }
 

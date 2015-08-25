@@ -8,7 +8,7 @@ GameState::GameState(StateStack* stack, Context context, Save save)
   auto window = context.window;
   id_type link_id = world.createEntity();
 
-  sf::Vector2u size = window->getSize();
+  sf::Vector2f size = window->getView().getSize();
   world.add(link_id, PositionComponent(size.x / 2, size.y / 2));
 
   texture.loadFromFile("media/images/link_front1.png");
