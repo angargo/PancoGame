@@ -1,25 +1,20 @@
 #ifndef RESOURCE_MANAGER_H
 #define RESOURCE_MANAGER_H
 
+#include <cassert>
 #include <exception>
+#include <fstream>
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <unordered_map>
 
 template <class K, class T> class ResourceManager {
 public:
-  ResourceManager() {}
-  ~ResourceManager() {}
-
-  void load(const K& key, const std::string& filename) {
-    std::unique_ptr<T> resource(new T());
-    if (!resource->loadFromFile(filename)) {
-      throw std::runtime_error("ResourceManager::load - cannot load file " +
-                               filename);
-    }
-    auto it = resources.insert(std::make_pair(key, std::move(resource)));
-    assert(it->second);
+  ResourceManager(const std::string& filename) {
+    loadDictionary(filename);
   }
+  ~ResourceManager() {}
 
   T& get(const K& key) {
     auto it = resources.find(key);
@@ -38,6 +33,32 @@ public:
   }
 
 private:
+  void loadDictionary(const std::string& filename) {
+    std::ifstream in(filename);
+    if (!in.good()) {
+      throw std::runtime_error("ResourceManager - cannot load dictionary " +
+                               filename);
+    }
+    std::string line;
+    while (getline(in, line)) {
+      std::stringstream ss(line);
+      K key;
+      std::string file;
+      ss >> key >> file;
+      load(key, file);
+    }
+  }
+
+  void load(const K& key, const std::string& filename) {
+    std::unique_ptr<T> resource(new T());
+    if (!resource->loadFromFile(filename)) {
+      throw std::runtime_error("ResourceManager::load - cannot load file " +
+                               filename);
+    }
+    auto it = resources.insert(std::make_pair(key, std::move(resource)));
+    assert(it.second);
+  }
+
   std::unordered_map<K, std::unique_ptr<T>> resources;
 };
 
