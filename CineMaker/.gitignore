@@ -2,3 +2,4 @@ serda
 CineMaker
 *.o
 *.swp
+.clang-format

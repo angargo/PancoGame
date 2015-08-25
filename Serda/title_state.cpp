@@ -4,32 +4,22 @@
 
 TitleState::TitleState(StateStack* stack, Context context)
     : State(stack, context),
-      elapsed_time(sf::Time::Zero),
-      color(sf::Color::White),
-      font(context.fonts->get(Fonts::Menu)),
       first_time(true) {
-  text.setFont(*font);
-  text.setString("The Legend of Serda: A Limb to the Panco");
-  text.setCharacterSize(30);
-  text.setColor(sf::Color::Blue);
-  text.setStyle(sf::Text::Bold);
+  texture.loadFromImage(*context.images->get(1));
+  banner.setTexture(texture);
 
   // Center text.
-  sf::FloatRect textRect = text.getLocalBounds();
-  text.setOrigin(textRect.left + textRect.width / 2,
-                 textRect.top + textRect.height / 2);
+  sf::FloatRect rect = banner.getLocalBounds();
+  banner.setOrigin(rect.left + rect.width / 2,
+                 rect.top + rect.height / 2);
   sf::Vector2i size(context.window->getSize());
-  text.setPosition(size.x / 2, size.y / 2);
+  banner.setPosition(size.x / 2, size.y / 2);
 }
 
 bool TitleState::update(sf::Time dt) {
   if (first_time) {
     requestStackPush(States::Troll);
     first_time = false;
-  }
-
-  elapsed_time += dt;
-  if (elapsed_time > sf::seconds(3)) {
   }
   return false;
 }
@@ -49,5 +39,5 @@ bool TitleState::handleEvent(const sf::Event& event) {
 void TitleState::draw() {
   const Context& context = getContext();
   context.window->clear(sf::Color::White);
-  context.window->draw(text);
+  context.window->draw(banner);
 }

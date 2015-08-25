@@ -1,7 +1,8 @@
 #ifndef SERDA_TITLE_STATE_H
 #define SERDA_TITLE_STATE_H
 
-#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 #include "state.h"
 
@@ -14,10 +15,8 @@ class TitleState : public State {
   virtual void draw();
 
  private:
-  sf::Time elapsed_time;
-  sf::Color color;
-  const sf::Font* font;
-  sf::Text text;
+  sf::Sprite banner;
+  sf::Texture texture;
   bool first_time;
 };
 
