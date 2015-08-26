@@ -4,11 +4,11 @@
 
 using namespace sf;
 
-State::Context::Context(RenderWindow *window, TextureManager *textures,
-                        FontManager *fonts)
+State::Context::Context(RenderWindow* window, TextureManager* textures,
+                        FontManager* fonts)
     : window(window), textures(textures), fonts(fonts) {}
 
-State::State(StateStack *stack, Context context)
+State::State(StateStack* stack, Context context)
     : stack(stack), context(std::move(context)) {}
 
 State::~State() {}
