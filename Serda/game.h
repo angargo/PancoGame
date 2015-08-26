@@ -5,6 +5,8 @@
 #include <SFML/Window.hpp>
 
 #include "state_stack.h"
+#include "resource_manager.h"
+#include "SFML/Graphics.hpp"
 
 class Game {
   public:
@@ -21,7 +23,12 @@ class Game {
 
   private:
     sf::RenderWindow window;
-    Media media;
+    // Resources.
+    TextureManager textures;
+    FontManager fonts;
+
+    // Stack needs to be last member, because previous members have to be
+    // initialized.
     StateStack stack;
 };
 

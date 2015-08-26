@@ -4,7 +4,7 @@
 
 TitleState::TitleState(StateStack* stack, Context context) : State(stack, context),
   elapsed_time(sf::Time::Zero), color(sf::Color::White),
-  font(context.media->getFont(Media::Font::Arial)),
+  font(context.fonts->get(Fonts::Menu)),
   first_time(true) {
 
   text.setFont(*font);

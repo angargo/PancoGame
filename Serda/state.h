@@ -8,7 +8,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "state_ids.h"
-#include "media.h"
+#include "resource_manager.h"
 
 // Forward declaration.
 class StateStack;
@@ -16,9 +16,11 @@ class StateStack;
 class State {
   public:
     struct Context {
-      explicit Context(sf::RenderWindow* window, Media* media);
+      explicit Context(sf::RenderWindow *window, TextureManager *textures,
+                       FontManager *fonts);
       sf::RenderWindow* window;
-      Media* media;
+      TextureManager* textures;
+      FontManager* fonts;
     };
 
     State(StateStack* stack, Context context);
