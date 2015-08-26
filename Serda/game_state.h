@@ -8,27 +8,25 @@
 #include "world_manager.h"
 
 class GameState : public State {
-  public:
-    class Save {
+ public:
+  class Save {};
 
-    };
+  GameState(StateStack* stack, Context context, Save save);
 
-    GameState(StateStack* stack, Context context, Save save);
+  virtual bool update(sf::Time dt);
+  virtual bool handleEvent(const sf::Event& event);
+  virtual void draw();
 
-    virtual bool update(sf::Time dt);
-    virtual bool handleEvent(const sf::Event& event);
-    virtual void draw();
+  // ECS Systems.
+  void motionSystem(sf::Time dt);
+  void inputSystem(InputEvent input_event);
+  void renderSystem();
 
-    // ECS Systems.
-    void motionSystem(sf::Time dt);
-    void inputSystem(InputEvent input_event);
-    void renderSystem();
-
-  private:
-    Save save;
-    World world;
-    // TODO: remove
-    sf::Texture texture;
+ private:
+  Save save;
+  World world;
+  // TODO: remove
+  sf::Texture texture;
 };
 
-#endif // SERDA_TITLE_STATE_H
+#endif  // SERDA_TITLE_STATE_H

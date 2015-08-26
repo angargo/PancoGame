@@ -2,22 +2,22 @@
 
 #include <cstdlib>
 
-TitleState::TitleState(StateStack* stack, Context context) : State(stack, context),
-  elapsed_time(sf::Time::Zero), color(sf::Color::White),
-  font(context.fonts->get(Fonts::Menu)),
-  first_time(true) {
-
+TitleState::TitleState(StateStack* stack, Context context)
+    : State(stack, context),
+      elapsed_time(sf::Time::Zero),
+      color(sf::Color::White),
+      font(context.fonts->get(Fonts::Menu)),
+      first_time(true) {
   text.setFont(*font);
   text.setString("The Legend of Serda: A Limb to the Panco");
   text.setCharacterSize(30);
   text.setColor(sf::Color::Blue);
   text.setStyle(sf::Text::Bold);
 
-
   // Center text.
   sf::FloatRect textRect = text.getLocalBounds();
   text.setOrigin(textRect.left + textRect.width / 2,
-                 textRect.top  + textRect.height / 2);
+                 textRect.top + textRect.height / 2);
   sf::Vector2i size(context.window->getSize());
   text.setPosition(size.x / 2, size.y / 2);
 }
@@ -30,7 +30,6 @@ bool TitleState::update(sf::Time dt) {
 
   elapsed_time += dt;
   if (elapsed_time > sf::seconds(3)) {
-    
   }
   return false;
 }
@@ -52,4 +51,3 @@ void TitleState::draw() {
   context.window->clear(sf::Color::White);
   context.window->draw(text);
 }
-

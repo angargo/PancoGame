@@ -9,27 +9,27 @@
 #include "SFML/Graphics.hpp"
 
 class Game {
-  public:
-    Game();
-    ~Game();
+ public:
+  Game();
+  ~Game();
 
-    void run();
+  void run();
 
-    void processEvents();
-    void update(sf::Time dt);
-    void render();
+  void processEvents();
+  void update(sf::Time dt);
+  void render();
 
-    void registerStates();
+  void registerStates();
 
-  private:
-    sf::RenderWindow window;
-    // Resources.
-    TextureManager textures;
-    FontManager fonts;
+ private:
+  sf::RenderWindow window;
+  // Resources.
+  TextureManager textures;
+  FontManager fonts;
 
-    // Stack needs to be last member, because previous members have to be
-    // initialized.
-    StateStack stack;
+  // Stack needs to be last member, because previous members have to be
+  // initialized.
+  StateStack stack;
 };
 
-#endif // SERDA_GAME_H
+#endif  // SERDA_GAME_H

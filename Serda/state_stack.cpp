@@ -8,7 +8,7 @@ StateStack::~StateStack() {}
 
 void StateStack::update(sf::Time dt) {
   for (auto itr = stack.rbegin(); itr != stack.rend(); ++itr) {
-    if (not (*itr)->update(dt)) break;
+    if (not(*itr)->update(dt)) break;
   }
 
   applyPendingChanges();
@@ -16,7 +16,7 @@ void StateStack::update(sf::Time dt) {
 
 void StateStack::handleEvent(const sf::Event& event) {
   for (auto itr = stack.rbegin(); itr != stack.rend(); ++itr) {
-    if (not (*itr)->handleEvent(event)) break;
+    if (not(*itr)->handleEvent(event)) break;
   }
 
   applyPendingChanges();
@@ -32,17 +32,11 @@ void StateStack::pushState(States::ID stateID) {
   pending_list.push_back(PendingChange(Push, stateID));
 }
 
-void StateStack::popState() {
-  pending_list.push_back(PendingChange(Pop));
-}
+void StateStack::popState() { pending_list.push_back(PendingChange(Pop)); }
 
-void StateStack::clearStates() {
-  pending_list.push_back(PendingChange(Clear));
-}
+void StateStack::clearStates() { pending_list.push_back(PendingChange(Clear)); }
 
-bool StateStack::isEmpty() const {
-  return stack.empty();
-}
+bool StateStack::isEmpty() const { return stack.empty(); }
 
 std::unique_ptr<State> StateStack::createState(States::ID stateID) {
   assert(factories.count(stateID));
@@ -76,6 +70,5 @@ void StateStack::applyPendingChanges() {
   pending_list.clear();
 }
 
-StateStack::PendingChange::PendingChange(Action action, States::ID stateID) : action(action),
-  stateID(stateID) {}
-
+StateStack::PendingChange::PendingChange(Action action, States::ID stateID)
+    : action(action), stateID(stateID) {}

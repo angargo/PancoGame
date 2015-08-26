@@ -3,8 +3,7 @@
 
 #include <sstream>
 
-WorldManager::WorldManager(World* world) : world(world) {
-}
+WorldManager::WorldManager(World* world) : world(world) {}
 
 void WorldManager::serialize(std::ostream& out, const Entity& entity) const {
   out << "<entity";

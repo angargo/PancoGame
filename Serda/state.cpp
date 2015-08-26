@@ -17,18 +17,10 @@ void State::activate() {}
 
 void State::destroy() {}
 
-void State::requestStackPush(States::ID stateID) {
-  stack->pushState(stateID);
-}
+void State::requestStackPush(States::ID stateID) { stack->pushState(stateID); }
 
-void State::requestStackPop() {
-  stack->popState();
-}
+void State::requestStackPop() { stack->popState(); }
 
-void State::requestStackClear() {
-  stack->clearStates();
-}
+void State::requestStackClear() { stack->clearStates(); }
 
-State::Context State::getContext() const {
-  return context;
-}
+State::Context State::getContext() const { return context; }

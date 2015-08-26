@@ -15,14 +15,8 @@ typedef int id_type;
 
 // Component base class.
 class Component {
-public:
-  enum Id {
-    POSITION,
-    SPEED,
-    RENDER,
-    INPUT,
-    NUM_IDS
-  };
+ public:
+  enum Id { POSITION, SPEED, RENDER, INPUT, NUM_IDS };
 
   Component();
   explicit Component(const id_type entity_id);
@@ -31,7 +25,8 @@ public:
 
   id_type entity_id;
 };
-template <typename C> struct Id {
+template <typename C>
+struct Id {
   operator int() {
     std::cerr << "Id::operator int() with unknown type" << std::endl;
     exit(0);
@@ -40,13 +35,13 @@ template <typename C> struct Id {
 
 // Entity class.
 class Entity {
-public:
+ public:
   Entity();
   explicit Entity(const id_type id);
   bool hasId() const;
 
   // Check if this entity has component C.
-  template<typename C>
+  template <typename C>
   bool has() const {
     return components[Id<C>()];
   }
@@ -58,20 +53,20 @@ public:
 
 // Sample PositionComponent.
 class PositionComponent : public Component {
-public:
+ public:
   PositionComponent();
   PositionComponent(float x, float y);
   PositionComponent(const id_type entity_id, float x, float y);
 
   float x, y;
 };
-template<>
+template <>
 struct Id<PositionComponent> {
   operator int() { return Component::POSITION; }
 };
 
 class SpeedComponent : public Component {
-public:
+ public:
   SpeedComponent();
   SpeedComponent(float vx, float vy);
   SpeedComponent(const id_type entity_id, float vx, float vy);
@@ -81,24 +76,26 @@ public:
 
   float vx, vy;
 };
-template<> struct Id<SpeedComponent> {
+template <>
+struct Id<SpeedComponent> {
   operator int() { return Component::SPEED; }
 };
 
 class RenderComponent : public Component {
-public:
+ public:
   RenderComponent();
   explicit RenderComponent(sf::Sprite sprite);
   RenderComponent(const id_type entity_id, sf::Sprite sprite);
 
   sf::Sprite sprite;
 };
-template<> struct Id<RenderComponent> {
+template <>
+struct Id<RenderComponent> {
   operator int() { return Component::RENDER; }
 };
 
 class World;
-typedef std::function<void(World*,id_type)> Action;
+typedef std::function<void(World*, id_type)> Action;
 
 struct InputEvent {
   enum KeyAction {
@@ -120,36 +117,40 @@ struct InputEvent {
 };
 
 class InputComponent : public Component {
-public:
+ public:
   InputComponent();
   explicit InputComponent(const id_type entity_id);
 
   std::map<InputEvent, Action> bindings;
 };
-template<> struct Id<InputComponent> {
+template <>
+struct Id<InputComponent> {
   operator int() { return Component::INPUT; }
 };
 
-
 class GenericEntity {
-public:
+ public:
   GenericEntity();
 
-  template<class C> bool has() const { return components[Id<C>()]; }
+  template <class C>
+  bool has() const {
+    return components[Id<C>()];
+  }
 
   void addComponent(const PositionComponent& component);
   void addComponent(const SpeedComponent& component);
   void addComponent(const RenderComponent& component);
   void addComponent(const InputComponent& component);
 
-  template<class C> C& get() {
+  template <class C>
+  C& get() {
     std::cerr << "GenericEntity::get with unknown type" << std::endl;
     exit(0);
   }
 
-private:
+ private:
   std::bitset<Component::NUM_IDS> components;
-  
+
   PositionComponent position;
   SpeedComponent speed;
   RenderComponent render;

@@ -5,9 +5,12 @@
 
 using namespace sf;
 
-TrollState::TrollState(StateStack* stack, Context context) : State(stack, context),
-  elapsed_time(sf::Time::Zero), num_circles(10),
-  circles(num_circles), angles(num_circles) {
+TrollState::TrollState(StateStack* stack, Context context)
+    : State(stack, context),
+      elapsed_time(sf::Time::Zero),
+      num_circles(10),
+      circles(num_circles),
+      angles(num_circles) {
   Vector2u size = context.window->getSize();
   width = size.x;
   height = size.y;
@@ -18,14 +21,13 @@ TrollState::TrollState(StateStack* stack, Context context) : State(stack, contex
     circles[i].setRadius(10);
   }
   speed = 2;
-
 }
 
 bool TrollState::update(Time dt) {
   elapsed_time += dt;
   for (auto& circle : circles) {
     if (rand() % 60 == 0) {
-      circle.setFillColor(Color(rand()%256, rand()%256, rand()%256));
+      circle.setFillColor(Color(rand() % 256, rand() % 256, rand() % 256));
     }
   }
 
@@ -54,6 +56,5 @@ bool TrollState::handleEvent(const Event& event) {
 void TrollState::draw() {
   const Context& context = getContext();
   RenderWindow& window = *context.window;
-  for (const auto& circle : circles)
-    window.draw(circle);
+  for (const auto& circle : circles) window.draw(circle);
 }

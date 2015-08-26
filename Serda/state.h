@@ -14,35 +14,35 @@
 class StateStack;
 
 class State {
-  public:
-    struct Context {
-      explicit Context(sf::RenderWindow *window, TextureManager *textures,
-                       FontManager *fonts);
-      sf::RenderWindow* window;
-      TextureManager* textures;
-      FontManager* fonts;
-    };
+ public:
+  struct Context {
+    explicit Context(sf::RenderWindow* window, TextureManager* textures,
+                     FontManager* fonts);
+    sf::RenderWindow* window;
+    TextureManager* textures;
+    FontManager* fonts;
+  };
 
-    State(StateStack* stack, Context context);
-    virtual ~State();
+  State(StateStack* stack, Context context);
+  virtual ~State();
 
-    virtual void draw() = 0;
-    virtual bool update(sf::Time dt) = 0;
-    virtual bool handleEvent(const sf::Event& event) = 0;
+  virtual void draw() = 0;
+  virtual bool update(sf::Time dt) = 0;
+  virtual bool handleEvent(const sf::Event& event) = 0;
 
-    virtual void activate();
-    virtual void destroy();
+  virtual void activate();
+  virtual void destroy();
 
-  protected:
-    void requestStackPush(States::ID stateID);
-    void requestStackPop();
-    void requestStackClear();
+ protected:
+  void requestStackPush(States::ID stateID);
+  void requestStackPop();
+  void requestStackClear();
 
-    Context getContext() const;
+  Context getContext() const;
 
-  private:
-    StateStack* stack;
-    Context context;
+ private:
+  StateStack* stack;
+  Context context;
 };
 
-#endif // SERDA_STATE_H
+#endif  // SERDA_STATE_H

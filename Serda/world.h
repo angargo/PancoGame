@@ -8,19 +8,19 @@
 #include "entity.h"
 
 class World {
-private:
+ private:
   // Class to iterate over values of entities.
   typedef std::unordered_map<id_type, Entity> entityMap;
 
   class value_iterator : public entityMap::iterator {
-  public:
+   public:
     value_iterator();
     value_iterator(entityMap::iterator e);
     Entity* operator->();
     Entity operator*();
   };
 
-public:
+ public:
   // Range to allow for range loop in entities.
   struct Range {
     std::unordered_map<id_type, Entity>& entities;
@@ -44,39 +44,54 @@ public:
   const Entity& getEntity(id_type entity_id) const;
   Range getEntities();
 
-
   // Compenent queries.
-  template<typename C>
-  bool has(const Entity& entity) const { return entity.has<C>(); }
-  template<typename C>
-  bool has(id_type entity_id) const { return has<C>(entities.at(entity_id)); }
+  template <typename C>
+  bool has(const Entity& entity) const {
+    return entity.has<C>();
+  }
+  template <typename C>
+  bool has(id_type entity_id) const {
+    return has<C>(entities.at(entity_id));
+  }
 
   // TODO: implement these methods.
-  template<typename C> bool isActive(const Entity& entity) const;
-  template<typename C> bool isActive(id_type entity_id) const;
+  template <typename C>
+  bool isActive(const Entity& entity) const;
+  template <typename C>
+  bool isActive(id_type entity_id) const;
 
-  template<typename C> void activate(const Entity& entity) const;
-  template<typename C> void activate(id_type entity_id) const;
+  template <typename C>
+  void activate(const Entity& entity) const;
+  template <typename C>
+  void activate(id_type entity_id) const;
 
-  template<typename C> void deactivate(const Entity& entity) const;
-  template<typename C> void deactivate(id_type entity_id) const;
+  template <typename C>
+  void deactivate(const Entity& entity) const;
+  template <typename C>
+  void deactivate(id_type entity_id) const;
 
   // Component gettters.
-  template<typename C>
+  template <typename C>
   const C& get(const Entity& entity) const {
     assert(has<C>(entity));
     return getVect<C>()[entity.component_indices[Id<C>()]];
   }
-  template<typename C>
-  const C& get(id_type entity_id) const { return get<C>(); }
+  template <typename C>
+  const C& get(id_type entity_id) const {
+    return get<C>();
+  }
 
-  template<typename C>
-  C& variable(const Entity& entity) {return const_cast<C&>(get<C>(entity)); }
-  template<typename C>
-  C& variable(id_type entity_id) { return variable<C>(entities.at(entity_id)); }
+  template <typename C>
+  C& variable(const Entity& entity) {
+    return const_cast<C&>(get<C>(entity));
+  }
+  template <typename C>
+  C& variable(id_type entity_id) {
+    return variable<C>(entities.at(entity_id));
+  }
 
   // Add a component to an entity.
-  template<typename C>
+  template <typename C>
   void add(id_type entity_id, C component) {
     component.entity_id = entity_id;
     Entity& entity = entities.at(entity_id);
@@ -86,13 +101,15 @@ public:
     mutVect<C>().push_back(component);
   }
 
-private:
+ private:
   // Returns an random entityId not being used.
   id_type getRandomEntityId();
 
   // Container access.
-  template<typename C> const std::vector<C>& getVect() const;
-  template<typename C> std::vector<C>& mutVect() {
+  template <typename C>
+  const std::vector<C>& getVect() const;
+  template <typename C>
+  std::vector<C>& mutVect() {
     return const_cast<std::vector<C>&>(getVect<C>());
   }
 

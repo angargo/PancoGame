@@ -5,9 +5,10 @@
 #include "troll_state.h"
 
 using namespace sf;
-//256x224 is default SNES resolution
-Game::Game() : window(VideoMode(256, 224), "Serda"),
-               stack(State::Context(&window, &textures, &fonts)) {
+// 256x224 is default SNES resolution
+Game::Game()
+    : window(VideoMode(256, 224), "Serda"),
+      stack(State::Context(&window, &textures, &fonts)) {
   fonts.load(Fonts::Menu, "media/fonts/arial.ttf");
   window.setKeyRepeatEnabled(false);
   registerStates();
@@ -20,7 +21,7 @@ void Game::run() {
   Clock clock;
   Time time_since_last_update = Time::Zero;
   // TODO: create options, get time_per_frame from the options.
-  Time time_per_frame = seconds(1./60.);
+  Time time_per_frame = seconds(1. / 60.);
 
   while (window.isOpen()) {
     Time dt = clock.restart();
@@ -42,14 +43,12 @@ void Game::processEvents() {
   Event event;
   while (window.pollEvent(event)) {
     stack.handleEvent(event);
-    
+
     if (event.type == Event::Closed) window.close();
   }
 }
 
-void Game::update(Time dt) {
-  stack.update(dt);
-}
+void Game::update(Time dt) { stack.update(dt); }
 
 void Game::render() {
   window.clear();

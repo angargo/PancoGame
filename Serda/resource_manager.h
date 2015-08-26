@@ -17,12 +17,11 @@ enum {
 };
 }
 
-template <class K, class T> class ResourceManager {
-public:
+template <class K, class T>
+class ResourceManager {
+ public:
   ResourceManager() {}
-  ResourceManager(const std::string& filename) {
-    loadDictionary(filename);
-  }
+  ResourceManager(const std::string& filename) { loadDictionary(filename); }
   ~ResourceManager() {}
 
   T* get(const K& key) {
@@ -51,7 +50,7 @@ public:
     assert(it.second);
   }
 
-private:
+ private:
   void loadDictionary(const std::string& filename) {
     std::ifstream in(filename);
     if (!in.good()) {

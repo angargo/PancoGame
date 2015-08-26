@@ -7,7 +7,7 @@
 #include "world.h"
 
 class WorldManager {
-public:  
+ public:
   WorldManager(World* world);
 
   void serialize(std::ostream& out, const Entity& entity) const;
@@ -20,8 +20,8 @@ public:
   void serialize(std::ostream& out, const RenderComponent& render) const;
   void serialize(std::ostream& out, const InputComponent& input) const;
 
-private:
+ private:
   World* world;
 };
 
-#endif // SERDA_WORLD_MANAGER_H
+#endif  // SERDA_WORLD_MANAGER_H

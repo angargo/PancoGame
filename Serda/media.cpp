@@ -10,7 +10,6 @@ Media::Media() {
   loadDictionary("media/sounds/dictionary", sound_files);
   loadDictionary("media/music/dictionary", sound_files);
   loadDictionary("media/images/dictionary", sound_files);
-
 }
 
 const sf::Image* Media::getImage(int imageID) {
@@ -40,7 +39,8 @@ void Media::loadDictionary(const std::string& path,
   std::string line;
   while (getline(in, line)) {
     std::stringstream ss(line);
-    int id; std::string file;
+    int id;
+    std::string file;
     ss >> id >> file;
     files.emplace(id, file);
   }

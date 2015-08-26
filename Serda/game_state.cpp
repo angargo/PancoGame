@@ -19,35 +19,35 @@ GameState::GameState(StateStack* stack, Context context, Save save)
   InputComponent input;
   const int sp = 100;
   input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Up)] =
-      [](World *world, id_type link) {
+      [](World* world, id_type link) {
         world->variable<SpeedComponent>(link).addSpeed(0, -sp);
       };
   input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Up)] =
-      [](World *world, id_type link) {
+      [](World* world, id_type link) {
         world->variable<SpeedComponent>(link).addSpeed(0, sp);
       };
   input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Down)] =
-      [](World *world, id_type link) {
+      [](World* world, id_type link) {
         world->variable<SpeedComponent>(link).addSpeed(0, sp);
       };
   input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Down)] =
-      [](World *world, id_type link) {
+      [](World* world, id_type link) {
         world->variable<SpeedComponent>(link).addSpeed(0, -sp);
       };
   input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Right)] =
-      [](World *world, id_type link) {
+      [](World* world, id_type link) {
         world->variable<SpeedComponent>(link).addSpeed(sp, 0);
       };
   input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Right)] =
-      [](World *world, id_type link) {
+      [](World* world, id_type link) {
         world->variable<SpeedComponent>(link).addSpeed(-sp, 0);
       };
   input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Left)] =
-      [](World *world, id_type link) {
+      [](World* world, id_type link) {
         world->variable<SpeedComponent>(link).addSpeed(-sp, 0);
       };
   input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Left)] =
-      [](World *world, id_type link) {
+      [](World* world, id_type link) {
         world->variable<SpeedComponent>(link).addSpeed(sp, 0);
       };
   world.add(link_id, input);
@@ -56,14 +56,14 @@ GameState::GameState(StateStack* stack, Context context, Save save)
 bool GameState::update(sf::Time dt) {
   motionSystem(dt);
 
-  //world.update();
+  // world.update();
 
   return false;
 }
 
 bool GameState::handleEvent(const sf::Event& event) {
-  if (event.type == sf::Event::KeyPressed
-      || event.type == sf::Event::KeyReleased) {
+  if (event.type == sf::Event::KeyPressed ||
+      event.type == sf::Event::KeyReleased) {
     InputEvent::KeyAction action = InputEvent::KEY_PRESSED;
     if (event.type == sf::Event::KeyReleased) action = InputEvent::KEY_RELEASED;
     InputEvent input_event(action, event.key.code);
@@ -83,7 +83,7 @@ static std::bitset<Component::NUM_IDS> createBitset() {
   return std::bitset<Component::NUM_IDS>();
 }
 
-template<typename... Args>
+template <typename... Args>
 static std::bitset<Component::NUM_IDS> createBitset(Component::Id first,
                                                     Args... args) {
   auto result = createBitset(args...);
@@ -92,8 +92,8 @@ static std::bitset<Component::NUM_IDS> createBitset(Component::Id first,
 }
 
 void GameState::motionSystem(sf::Time dt) {
-  static const std::bitset<Component::NUM_IDS> skey(createBitset(
-        Component::POSITION, Component::SPEED));
+  static const std::bitset<Component::NUM_IDS> skey(
+      createBitset(Component::POSITION, Component::SPEED));
 
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
@@ -106,8 +106,8 @@ void GameState::motionSystem(sf::Time dt) {
 }
 
 void GameState::inputSystem(InputEvent event) {
-  static const std::bitset<Component::NUM_IDS> skey(createBitset(
-        Component::INPUT));
+  static const std::bitset<Component::NUM_IDS> skey(
+      createBitset(Component::INPUT));
 
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
@@ -120,8 +120,8 @@ void GameState::inputSystem(InputEvent event) {
 }
 
 void GameState::renderSystem() {
-  static const std::bitset<Component::NUM_IDS> skey(createBitset(
-        Component::POSITION, Component::RENDER));
+  static const std::bitset<Component::NUM_IDS> skey(
+      createBitset(Component::POSITION, Component::RENDER));
 
   sf::RenderWindow* window = getContext().window;
   for (const Entity& entity : world.getEntities()) {

@@ -14,8 +14,6 @@ Entity::Entity(const id_type id) : id(id), components(), component_indices() {
 Entity::Entity() : Entity(0) {}
 bool Entity::hasId() const { return id != 0; }
 
-
-
 // Components.
 PositionComponent::PositionComponent() : Component() {}
 PositionComponent::PositionComponent(float x, float y)
@@ -29,10 +27,12 @@ SpeedComponent::SpeedComponent(float vx, float vy)
 SpeedComponent::SpeedComponent(const id_type entity_id, float vx, float vy)
     : Component(entity_id), vx(vx), vy(vy) {}
 void SpeedComponent::addSpeed(float v_x, float v_y) {
-  vx += v_x; vy += v_y;
+  vx += v_x;
+  vy += v_y;
 }
 void SpeedComponent::setSpeed(float v_x, float v_y) {
-  vx = v_x; vy = v_y;
+  vx = v_x;
+  vy = v_y;
 }
 
 RenderComponent::RenderComponent() : Component() {}
@@ -45,20 +45,25 @@ InputComponent::InputComponent() : Component() {}
 InputComponent::InputComponent(const id_type entity_id)
     : Component(entity_id) {}
 
-
 // Generic Entity.
 GenericEntity::GenericEntity() : components() {}
 
-template<> PositionComponent&
-  GenericEntity::get<PositionComponent>() { return position; }
+template <>
+PositionComponent& GenericEntity::get<PositionComponent>() {
+  return position;
+}
 
-template<> SpeedComponent&
-  GenericEntity::get<SpeedComponent>() { return speed; }
+template <>
+SpeedComponent& GenericEntity::get<SpeedComponent>() {
+  return speed;
+}
 
-template<> RenderComponent&
-  GenericEntity::get<RenderComponent>() { return render; }
+template <>
+RenderComponent& GenericEntity::get<RenderComponent>() {
+  return render;
+}
 
-template<> InputComponent&
-  GenericEntity::get<InputComponent>() { return input; }
-
-
+template <>
+InputComponent& GenericEntity::get<InputComponent>() {
+  return input;
+}
