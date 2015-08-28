@@ -108,6 +108,8 @@ class RenderComponent : public Component {
   int tx() const;
   int ty() const;
   bool rotated() const;
+  const Frame& getFrame() const;
+  Frame& getFrame();
 
  private:
   void init();

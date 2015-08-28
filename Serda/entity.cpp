@@ -67,6 +67,8 @@ int RenderComponent::height() const { return frame.height; }
 int RenderComponent::tx() const { return frame.tx; }
 int RenderComponent::ty() const { return frame.ty; }
 bool RenderComponent::rotated() const { return frame.rotated; }
+const Frame& RenderComponent::getFrame() const { return frame; }
+Frame& RenderComponent::getFrame() { return frame; }
 
 // Animation Component.
 AnimFrame::AnimFrame()

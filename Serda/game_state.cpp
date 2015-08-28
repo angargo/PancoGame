@@ -133,6 +133,8 @@ void GameState::animSystem(sf::Time dt) {
               anim.index = 0;
             }
           }
+          // Set new frame.
+          render.getFrame() = animation.frames[anim.index].frame;
         }
       }
     }
