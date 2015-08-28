@@ -29,7 +29,9 @@ World::World()
       range(entities),
       position_components(),
       speed_components(),
-      render_components(){};
+      render_components() {
+  registerLuaFunctions(L);
+};
 
 World::~World() {}
 

@@ -33,4 +33,13 @@ if(SFML_FOUND)
 endif()
 
 
+# Find and add LUA
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+# Find at least version 2.0
+find_package(LUA 2 COMPONENTS system window graphics audio REQUIRED)
+if(LUA_FOUND)
+  include_directories(${LUA_INCLUDE_DIR})
+  target_link_libraries(${EXECUTABLE_NAME} ${LUA_LIBRARIES})
+endif()
+
 
