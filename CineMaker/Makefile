@@ -14,13 +14,13 @@ run: $(BNAME)
 
 $(BNAME): objects
 	@echo "Building executable $(BNAME)..."
-	$(CXX) $(ADDED_CXXFLAGS) $(CXXFLAGS) -o $(BNAME) $(OBJS) $(LFLAGS) $(GTKLFLAGS)
+	@$(CXX) $(ADDED_CXXFLAGS) $(CXXFLAGS) -o $(BNAME) $(OBJS) $(LFLAGS) $(GTKLFLAGS)
 
 objects: $(OBJS)
 
 %.o: %.cpp
 	@echo "Building $@..."
-	$(CXX) $(GTKCFLAGS) $(ADDED_CXXFLAGS)  $(CXXFLAGS) -c -o $@ $^
+	@$(CXX) $(GTKCFLAGS) $(ADDED_CXXFLAGS)  $(CXXFLAGS) -c -o $@ $^
 
 clean:
 	@rm *o $(BNAME)
