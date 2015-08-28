@@ -117,7 +117,7 @@ void GameState::animSystem(sf::Time dt) {
       Animation& animation = anim.getAnimation();
       sf::Time remaining = dt;
       while (remaining > sf::Time::Zero &&
-             anim.index < animation.frames.size()) {
+             unsigned(anim.index) < animation.frames.size()) {
         AnimFrame& frame = animation.frames[anim.index];
         sf::Time diff =
             std::min(frame.duration - frame.elapsed_time, remaining);
@@ -127,7 +127,7 @@ void GameState::animSystem(sf::Time dt) {
         if (frame.elapsed_time >= frame.duration) {
           frame.elapsed_time = sf::Time::Zero;
           ++anim.index;
-          if (uint(anim.index) > animation.frames.size()) {
+          if (unsigned(anim.index) > animation.frames.size()) {
             --anim.index;
             if (animation.repeated) {
               anim.index = 0;
