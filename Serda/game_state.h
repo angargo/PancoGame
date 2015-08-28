@@ -19,6 +19,7 @@ class GameState : public State {
 
   // ECS Systems.
   void motionSystem(sf::Time dt);
+  void animSystem(sf::Time dt);
   void inputSystem(InputEvent input_event);
   void renderSystem();
 

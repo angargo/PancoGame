@@ -69,9 +69,10 @@ int RenderComponent::ty() const { return frame.ty; }
 bool RenderComponent::rotated() const { return frame.rotated; }
 
 // Animation Component.
-AnimFrame::AnimFrame() : duration(0), elapsed_time(0), frame() {}
-AnimFrame::AnimFrame(float duration, float elapsed_time, Frame frame)
-    : duration(duration), elapsed_time(elapsed_time), frame(frame) {}
+AnimFrame::AnimFrame()
+    : duration(sf::seconds(1.0f)), frame(), elapsed_time(sf::Time::Zero) {}
+AnimFrame::AnimFrame(sf::Time duration, Frame frame)
+    : duration(duration), frame(frame), elapsed_time(sf::Time::Zero) {}
 
 Animation::Animation() : frames() {}
 Animation::Animation(const std::vector<AnimFrame>& frames, bool repeated)
@@ -105,6 +106,11 @@ SpeedComponent& Generic::get<SpeedComponent>() {
 template <>
 RenderComponent& Generic::get<RenderComponent>() {
   return render;
+}
+
+template <>
+AnimComponent& Generic::get<AnimComponent>() {
+  return anim;
 }
 
 template <>

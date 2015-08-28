@@ -56,6 +56,7 @@ GameState::GameState(StateStack* stack, Context context, Save save)
 
 bool GameState::update(sf::Time dt) {
   motionSystem(dt);
+  animSystem(dt);
 
   // world.update();
 
@@ -102,6 +103,38 @@ void GameState::motionSystem(sf::Time dt) {
       const auto& speed = world.get<SpeedComponent>(entity);
       pos.x += (dt.asSeconds() * speed.vx);
       pos.y += (dt.asSeconds() * speed.vy);
+    }
+  }
+}
+
+void GameState::animSystem(sf::Time dt) {
+  static const std::bitset<Component::NUM_IDS> skey(
+      createBitset(Component::RENDER, Component::ANIM));
+  for (const Entity& entity : world.getEntities()) {
+    if ((entity.components & skey) == skey) {
+      auto& anim = world.variable<AnimComponent>(entity);
+      auto& render = world.variable<RenderComponent>(entity);
+      Animation& animation = anim.getAnimation();
+      sf::Time remaining = dt;
+      while (remaining > sf::Time::Zero &&
+             anim.index < animation.frames.size()) {
+        AnimFrame& frame = animation.frames[anim.index];
+        sf::Time diff =
+            std::min(frame.duration - frame.elapsed_time, remaining);
+        remaining -= diff;
+        frame.elapsed_time -= diff;
+        // Advance frame.
+        if (frame.elapsed_time >= frame.duration) {
+          frame.elapsed_time = sf::Time::Zero;
+          ++anim.index;
+          if (uint(anim.index) > animation.frames.size()) {
+            --anim.index;
+            if (animation.repeated) {
+              anim.index = 0;
+            }
+          }
+        }
+      }
     }
   }
 }

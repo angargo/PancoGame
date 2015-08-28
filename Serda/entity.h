@@ -10,6 +10,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/System/Time.hpp>
 
 typedef int id_type;
 
@@ -120,10 +121,10 @@ struct Id<RenderComponent> {
 // Animation.
 struct AnimFrame {
   AnimFrame();
-  AnimFrame(float duration, float elapsed_time, Frame frame);
-  float duration;
-  float elapsed_time;
+  AnimFrame(sf::Time duration, Frame frame);
+  sf::Time duration;
   Frame frame;
+  sf::Time elapsed_time;
 };
 struct Animation {
   Animation();
@@ -139,6 +140,8 @@ class AnimComponent : public Component {
 
   const Animation& getAnimation() const;
   Animation& getAnimation();
+
+  int index;
  private:
   Animation animation;
 };
@@ -196,6 +199,7 @@ class Generic {
   void addComponent(const PositionComponent& component);
   void addComponent(const SpeedComponent& component);
   void addComponent(const RenderComponent& component);
+  void addComponent(const AnimComponent& component);
   void addComponent(const InputComponent& component);
 
   std::string getType() const { return type; }
@@ -213,6 +217,7 @@ class Generic {
   PositionComponent position;
   SpeedComponent speed;
   RenderComponent render;
+  AnimComponent anim;
   InputComponent input;
 };
 
