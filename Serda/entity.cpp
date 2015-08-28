@@ -35,27 +35,38 @@ void SpeedComponent::setSpeed(float v_x, float v_y) {
   vy = v_y;
 }
 
-RenderComponent::RenderComponent() : texture_id(-1) { init(); }
-RenderComponent::RenderComponent(int texture_id, int width, int height, int tx,
-                                 int ty, bool rotated)
-    : Component(),
-      texture_id(texture_id),
+// Render Component.
+Frame::Frame() : texture_id(-1) { init(); }
+Frame::Frame(int texture_id, int width, int height, int tx, int ty,
+             bool rotated)
+    : texture_id(texture_id),
       width(width),
       height(height),
       tx(tx),
       ty(ty),
       rotated(rotated) {}
 
-RenderComponent::RenderComponent(const id_type entity_id, int texture_id)
-    : Component(entity_id), texture_id(texture_id) {}
+Frame::Frame(int texture_id) : texture_id(texture_id) {}
 
-void RenderComponent::init() {
+void Frame::init() {
   tx = 0;
   ty = 0;
   width = -1;
   height = -1;
   rotated = false;
 }
+
+RenderComponent::RenderComponent() : Component() {}
+RenderComponent::RenderComponent(int texture_id, int width, int height, int tx,
+                                 int ty, bool rotated)
+    : Component(), frame(texture_id, width, height, tx, ty, rotated) {}
+
+int RenderComponent::textureId() const { return frame.texture_id; }
+int RenderComponent::width() const { return frame.width; }
+int RenderComponent::height() const { return frame.height; }
+int RenderComponent::tx() const { return frame.tx; }
+int RenderComponent::ty() const { return frame.ty; }
+bool RenderComponent::rotated() const { return frame.rotated; }
 
 InputComponent::InputComponent() : Component() {}
 InputComponent::InputComponent(const id_type entity_id)

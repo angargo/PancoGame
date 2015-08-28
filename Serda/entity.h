@@ -80,6 +80,20 @@ struct Id<SpeedComponent> {
   operator int() { return Component::SPEED; }
 };
 
+// Frame Class for RenderComponent.
+struct Frame {
+  Frame();
+  explicit Frame(int texture_id);
+  explicit Frame(int texture_id, int width = 0, int height = 0,
+                           int tx = 0, int ty = 0, bool rotated = false);
+  void init();
+  int texture_id;
+  int width;     // Width of the sprite.
+  int height;    // Height of the sprite.
+  int tx;        // X offset inside texture.
+  int ty;        // Y offset inside texture.
+  bool rotated;  // Is a rotated loaded image.
+};
 class RenderComponent : public Component {
  public:
   RenderComponent();
@@ -87,15 +101,16 @@ class RenderComponent : public Component {
                            int tx = 0, int ty = 0, bool rotated = false);
   RenderComponent(const id_type entity_id, int texture_id);
 
-  int texture_id;
-  int width;     // Width of the sprite.
-  int height;    // Height of the sprite.
-  int tx;        // X offset inside texture.
-  int ty;        // Y offset inside texture.
-  bool rotated;  // Is a rotated loaded image.
+  int textureId() const;
+  int width() const;
+  int height() const;
+  int tx() const;
+  int ty() const;
+  bool rotated() const;
 
  private:
   void init();
+  Frame frame;
 };
 template <>
 struct Id<RenderComponent> {

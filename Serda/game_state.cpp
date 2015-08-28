@@ -130,9 +130,9 @@ void GameState::renderSystem() {
     if ((entity.components & skey) == skey) {
       auto& render = world.variable<RenderComponent>(entity);
       const auto& position = world.get<PositionComponent>(entity);
-      sf::Sprite sprite(*textures.get(render.texture_id));
+      sf::Sprite sprite(*textures.get(render.textureId()));
       sprite.setTextureRect(
-          sf::IntRect(render.tx, render.ty, render.width, render.height));
+          sf::IntRect(render.tx(), render.ty(), render.width(), render.height()));
       sprite.setPosition(position.x, position.y);
       window->draw(sprite);
     }
