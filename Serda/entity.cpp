@@ -68,6 +68,22 @@ int RenderComponent::tx() const { return frame.tx; }
 int RenderComponent::ty() const { return frame.ty; }
 bool RenderComponent::rotated() const { return frame.rotated; }
 
+// Animation Component.
+AnimFrame::AnimFrame() : duration(0), elapsed_time(0), frame() {}
+AnimFrame::AnimFrame(float duration, float elapsed_time, Frame frame)
+    : duration(duration), elapsed_time(elapsed_time), frame(frame) {}
+
+Animation::Animation() : frames() {}
+Animation::Animation(const std::vector<AnimFrame>& frames, bool repeated)
+    : frames(frames), repeated(repeated) {}
+
+AnimComponent::AnimComponent() : Component() {}
+AnimComponent::AnimComponent(const Animation& animation)
+    : animation(animation) {}
+const Animation& AnimComponent::getAnimation() const { return animation; }
+Animation& AnimComponent::getAnimation() { return animation; }
+
+// Input Component.
 InputComponent::InputComponent() : Component() {}
 InputComponent::InputComponent(const id_type entity_id)
     : Component(entity_id) {}

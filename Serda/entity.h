@@ -16,7 +16,7 @@ typedef int id_type;
 // Component base class.
 class Component {
  public:
-  enum Id { POSITION, SPEED, RENDER, INPUT, NUM_IDS };
+  enum Id { POSITION, SPEED, RENDER, ANIM, INPUT, NUM_IDS };
 
   Component();
   explicit Component(const id_type entity_id);
@@ -112,10 +112,42 @@ class RenderComponent : public Component {
   void init();
   Frame frame;
 };
+
 template <>
 struct Id<RenderComponent> {
   operator int() { return Component::RENDER; }
 };
+// Animation.
+struct AnimFrame {
+  AnimFrame();
+  AnimFrame(float duration, float elapsed_time, Frame frame);
+  float duration;
+  float elapsed_time;
+  Frame frame;
+};
+struct Animation {
+  Animation();
+  Animation(const std::vector<AnimFrame>& frames, bool repeated = false);
+
+  std::vector<AnimFrame> frames;
+  bool repeated;  // Whether this animation repeats infinitely.
+};
+class AnimComponent : public Component {
+ public:
+  AnimComponent();
+  AnimComponent(const Animation& animation);
+
+  const Animation& getAnimation() const;
+  Animation& getAnimation();
+ private:
+  Animation animation;
+};
+
+template<>
+struct Id<AnimComponent> {
+  operator int() { return Component::ANIM; }
+};
+
 
 class World;
 typedef std::function<void(World*, id_type)> Action;
