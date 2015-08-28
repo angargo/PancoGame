@@ -61,7 +61,18 @@ void WorldManager::serialize(std::ostream& out,
 
 void WorldManager::serialize(std::ostream& out,
                              const InputComponent& input) const {
-  out << "<input";
-  // TODO
-  out << "/>";
+  out << "<input>";
+  for (const auto& binding : input.bindings)
+  //out << "<binding key=\"" << binding.key << "\" action=" << binding.action_id
+  //    << ">";
+  out << "</input>";
+}
+
+void WorldManager::serialize(std::ostream& out, const Generic& generic) const {
+  out << "<generic";
+  out << " type=\"" << generic.getType() << '\"';
+
+  out << ">";
+
+  out << "</generic>";
 }

@@ -131,6 +131,7 @@ struct Id<InputComponent> {
 class Generic {
  public:
   Generic();
+  Generic(std::string type);
 
   template <class C>
   bool has() const {
@@ -142,6 +143,8 @@ class Generic {
   void addComponent(const RenderComponent& component);
   void addComponent(const InputComponent& component);
 
+  std::string getType() const { return type; }
+
   template <class C>
   C& get() {
     std::cerr << "Generic::get with unknown type" << std::endl;
@@ -150,6 +153,8 @@ class Generic {
 
  private:
   std::bitset<Component::NUM_IDS> components;
+
+  std::string type;
 
   PositionComponent position;
   SpeedComponent speed;

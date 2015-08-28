@@ -47,6 +47,7 @@ InputComponent::InputComponent(const id_type entity_id)
 
 // Generic Entity.
 Generic::Generic() : components() {}
+Generic::Generic(std::string type) : type(std::move(type)), components() {}
 
 template <>
 PositionComponent& Generic::get<PositionComponent>() {

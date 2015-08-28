@@ -20,6 +20,8 @@ class WorldManager {
   void serialize(std::ostream& out, const RenderComponent& render) const;
   void serialize(std::ostream& out, const InputComponent& input) const;
 
+  void serialize(std::ostream& out, const Generic& generic) const;
+
  private:
   World* world;
   std::vector<Generic> generics;
