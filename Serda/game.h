@@ -26,6 +26,7 @@ class Game {
   // Resources.
   ImageManager images;
   FontManager fonts;
+  LuaManager scripts;
 
   // Stack needs to be last member, because previous members have to be
   // initialized.

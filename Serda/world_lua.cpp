@@ -7,7 +7,8 @@ void World::registerLuaFunctions(lua_State* L) {
   L = luaL_newstate();
   luaL_openlibs(L);
 
-  lua_register(L, "sayHello", [](lua_State* L) -> int {
-    std::cout << "Hello" << std::endl;
+  lua_register(L, "sayHelloWorld", [](lua_State* L) -> int {
+    std::cout << "Hello World!" << std::endl;
+    return 0;
   });
 }

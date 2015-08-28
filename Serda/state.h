@@ -17,10 +17,11 @@ class State {
  public:
   struct Context {
     explicit Context(sf::RenderWindow* window, ImageManager* images,
-                     FontManager* fonts);
+                     FontManager* fonts, LuaManager* scripts);
     sf::RenderWindow* window;
     ImageManager* images;
     FontManager* fonts;
+    LuaManager* scripts;
   };
 
   State(StateStack* stack, Context context);

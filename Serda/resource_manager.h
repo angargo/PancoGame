@@ -5,9 +5,11 @@
 #include <exception>
 #include <fstream>
 #include <memory>
+#include <set>
 #include <sstream>
 #include <unordered_map>
 
+#include "lua.hpp"
 #include <SFML/Graphics.hpp>
 
 namespace Fonts {
@@ -21,7 +23,9 @@ template <class K, class T>
 class ResourceManager {
  public:
   ResourceManager() {}
-  ResourceManager(const std::string& filename) { loadDictionary(filename); }
+  explicit ResourceManager(const std::string& filename) {
+    loadDictionary(filename);
+  }
   ~ResourceManager() {}
 
   T* get(const K& key) {
@@ -72,5 +76,17 @@ class ResourceManager {
 
 typedef ResourceManager<int, sf::Image> ImageManager;
 typedef ResourceManager<int, sf::Font> FontManager;
+
+class LuaManager {
+  public:
+    explicit LuaManager(const std::string& filename);
+    // TODO: if entity_id changes, change this.
+    void runScript(lua_State* L, int script_id, int entity_id);
+    void loadDictionary(const std::string& filename);
+
+  private:
+    std::unordered_map<int, std::string> files;
+    std::set<int> loaded;
+};
 
 #endif  // RESOURCE_MANAGER_H
