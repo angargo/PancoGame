@@ -128,9 +128,9 @@ struct Id<InputComponent> {
   operator int() { return Component::INPUT; }
 };
 
-class GenericEntity {
+class Generic {
  public:
-  GenericEntity();
+  Generic();
 
   template <class C>
   bool has() const {
@@ -144,7 +144,7 @@ class GenericEntity {
 
   template <class C>
   C& get() {
-    std::cerr << "GenericEntity::get with unknown type" << std::endl;
+    std::cerr << "Generic::get with unknown type" << std::endl;
     exit(0);
   }
 

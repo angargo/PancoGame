@@ -46,24 +46,24 @@ InputComponent::InputComponent(const id_type entity_id)
     : Component(entity_id) {}
 
 // Generic Entity.
-GenericEntity::GenericEntity() : components() {}
+Generic::Generic() : components() {}
 
 template <>
-PositionComponent& GenericEntity::get<PositionComponent>() {
+PositionComponent& Generic::get<PositionComponent>() {
   return position;
 }
 
 template <>
-SpeedComponent& GenericEntity::get<SpeedComponent>() {
+SpeedComponent& Generic::get<SpeedComponent>() {
   return speed;
 }
 
 template <>
-RenderComponent& GenericEntity::get<RenderComponent>() {
+RenderComponent& Generic::get<RenderComponent>() {
   return render;
 }
 
 template <>
-InputComponent& GenericEntity::get<InputComponent>() {
+InputComponent& Generic::get<InputComponent>() {
   return input;
 }

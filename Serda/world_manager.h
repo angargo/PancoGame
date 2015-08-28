@@ -22,6 +22,7 @@ class WorldManager {
 
  private:
   World* world;
+  std::vector<Generic> generics;
 };
 
 #endif  // SERDA_WORLD_MANAGER_H
