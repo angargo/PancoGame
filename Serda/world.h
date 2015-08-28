@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "entity.h"
+#include "lua.hpp"
 
 class World {
  private:
@@ -36,6 +37,9 @@ class World {
   // Constructors and destructors.
   World();
   ~World();
+
+  // Register functions that are going to be called from Lua.
+  void registerLuaFunctions();
 
   // Entity operations.
   void createEntity(id_type entity_id);
@@ -112,6 +116,8 @@ class World {
   std::vector<C>& mutVect() {
     return const_cast<std::vector<C>&>(getVect<C>());
   }
+
+  lua_State* L;
 
   // TODO: cache problems, maybe.
   std::unordered_map<id_type, Entity> entities;
