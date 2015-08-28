@@ -16,6 +16,14 @@ GameState::GameState(StateStack* stack, Context context, Save save)
   sf::Vector2u link_size = context.textures->get(2)->getSize();
   world.add(link_id, RenderComponent(2, link_size.x, link_size.y));
   world.add(link_id, SpeedComponent(0, 0));
+  // Setup link test animation.
+  std::vector<AnimFrame> frames;
+  const int num_frames = 8;
+  const sf::Time frame_time(sf::seconds(0.08));
+  for (int i = 0; i < num_frames; ++i) {
+    frames.push_back(AnimFrame(frame_time, Frame(3, 16, 25, 3 + 30*i, 32)));
+  }
+  world.add(link_id, AnimComponent(Animation(frames, true)));
 
   InputComponent input;
   const int sp = 100;
@@ -122,12 +130,12 @@ void GameState::animSystem(sf::Time dt) {
         sf::Time diff =
             std::min(frame.duration - frame.elapsed_time, remaining);
         remaining -= diff;
-        frame.elapsed_time -= diff;
+        frame.elapsed_time += diff;
         // Advance frame.
         if (frame.elapsed_time >= frame.duration) {
           frame.elapsed_time = sf::Time::Zero;
           ++anim.index;
-          if (unsigned(anim.index) > animation.frames.size()) {
+          if (unsigned(anim.index) >= animation.frames.size()) {
             --anim.index;
             if (animation.repeated) {
               anim.index = 0;
