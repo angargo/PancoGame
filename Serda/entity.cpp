@@ -35,11 +35,27 @@ void SpeedComponent::setSpeed(float v_x, float v_y) {
   vy = v_y;
 }
 
-RenderComponent::RenderComponent() : Component() {}
-RenderComponent::RenderComponent(sf::Sprite sprite)
-    : Component(), sprite(std::move(sprite)) {}
-RenderComponent::RenderComponent(const id_type entity_id, sf::Sprite sprite)
-    : Component(entity_id), sprite(std::move(sprite)) {}
+RenderComponent::RenderComponent() : texture_id(-1) { init(); }
+RenderComponent::RenderComponent(int texture_id, int width, int height, int tx,
+                                 int ty, bool rotated)
+    : Component(),
+      texture_id(texture_id),
+      width(width),
+      height(height),
+      tx(tx),
+      ty(ty),
+      rotated(rotated) {}
+
+RenderComponent::RenderComponent(const id_type entity_id, int texture_id)
+    : Component(entity_id), texture_id(texture_id) {}
+
+void RenderComponent::init() {
+  tx = 0;
+  ty = 0;
+  width = -1;
+  height = -1;
+  rotated = false;
+}
 
 InputComponent::InputComponent() : Component() {}
 InputComponent::InputComponent(const id_type entity_id)

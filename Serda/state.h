@@ -16,10 +16,10 @@ class StateStack;
 class State {
  public:
   struct Context {
-    explicit Context(sf::RenderWindow* window, ImageManager* images,
+    explicit Context(sf::RenderWindow* window, TextureManager* images,
                      FontManager* fonts);
     sf::RenderWindow* window;
-    ImageManager* images;
+    TextureManager* textures;
     FontManager* fonts;
   };
 

@@ -5,8 +5,7 @@
 TitleState::TitleState(StateStack* stack, Context context)
     : State(stack, context),
       first_time(true) {
-  texture.loadFromImage(*context.images->get(1));
-  banner.setTexture(texture);
+  banner.setTexture(*context.textures->get(1));
 
   // Center text.
   sf::FloatRect rect = banner.getLocalBounds();

@@ -3,8 +3,8 @@
 
 #include <array>
 #include <bitset>
+#include <exception>
 #include <functional>
-#include <iostream>
 #include <map>
 #include <memory>
 
@@ -28,8 +28,7 @@ class Component {
 template <typename C>
 struct Id {
   operator int() {
-    std::cerr << "Id::operator int() with unknown type" << std::endl;
-    exit(0);
+    throw std::runtime_error("Id::operator int() with unknown type");
   }
 };
 
@@ -84,10 +83,19 @@ struct Id<SpeedComponent> {
 class RenderComponent : public Component {
  public:
   RenderComponent();
-  explicit RenderComponent(sf::Sprite sprite);
-  RenderComponent(const id_type entity_id, sf::Sprite sprite);
+  explicit RenderComponent(int texture_id, int width = 0, int height = 0,
+                           int tx = 0, int ty = 0, bool rotated = false);
+  RenderComponent(const id_type entity_id, int texture_id);
 
-  sf::Sprite sprite;
+  int texture_id;
+  int width;     // Width of the sprite.
+  int height;    // Height of the sprite.
+  int tx;        // X offset inside texture.
+  int ty;        // Y offset inside texture.
+  bool rotated;  // Is a rotated loaded image.
+
+ private:
+  void init();
 };
 template <>
 struct Id<RenderComponent> {
@@ -147,8 +155,7 @@ class Generic {
 
   template <class C>
   C& get() {
-    std::cerr << "Generic::get with unknown type" << std::endl;
-    exit(0);
+    throw std::exception("Error Generic::get - Unknown type");
   }
 
  private:

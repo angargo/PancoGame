@@ -8,9 +8,9 @@ using namespace sf;
 // 256x224 is default SNES resolution
 Game::Game()
     : window(VideoMode(256, 224), "Serda"),
-      images("media/images/dictionary"),
+      textures("media/images/dictionary"),
       fonts("media/fonts/dictionary"),
-      stack(State::Context(&window, &images, &fonts)) {
+      stack(State::Context(&window, &textures, &fonts)) {
   window.setSize(Vector2u(window.getSize().x * 2, window.getSize().y * 2));
 
   fonts.load(Fonts::Menu, "media/fonts/arial.ttf");

@@ -13,9 +13,8 @@ GameState::GameState(StateStack* stack, Context context, Save save)
   sf::Vector2f size = window->getView().getSize();
   world.add(link_id, PositionComponent(size.x / 2, size.y / 2));
 
-  texture.loadFromFile("media/images/link_front1.png");
-  world.add(link_id, RenderComponent(sf::Sprite(texture)));
-
+  sf::Vector2u link_size = context.textures->get(2)->getSize();
+  world.add(link_id, RenderComponent(2, link_size.x, link_size.y));
   world.add(link_id, SpeedComponent(0, 0));
 
   InputComponent input;
@@ -126,12 +125,16 @@ void GameState::renderSystem() {
       createBitset(Component::POSITION, Component::RENDER));
 
   sf::RenderWindow* window = getContext().window;
+  const auto& textures = *getContext().textures;
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
       auto& render = world.variable<RenderComponent>(entity);
       const auto& position = world.get<PositionComponent>(entity);
-      render.sprite.setPosition(position.x, position.y);
-      window->draw(render.sprite);
+      sf::Sprite sprite(*textures.get(render.texture_id));
+      sprite.setTextureRect(
+          sf::IntRect(render.tx, render.ty, render.width, render.height));
+      sprite.setPosition(position.x, position.y);
+      window->draw(sprite);
     }
   }
 }

@@ -70,7 +70,7 @@ class ResourceManager {
   std::unordered_map<K, std::unique_ptr<T>> resources;
 };
 
-typedef ResourceManager<int, sf::Image> ImageManager;
+typedef ResourceManager<int, sf::Texture> TextureManager;
 typedef ResourceManager<int, sf::Font> FontManager;
 
 #endif  // RESOURCE_MANAGER_H

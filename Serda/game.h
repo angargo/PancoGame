@@ -24,7 +24,7 @@ class Game {
  private:
   sf::RenderWindow window;
   // Resources.
-  ImageManager images;
+  TextureManager textures;
   FontManager fonts;
 
   // Stack needs to be last member, because previous members have to be
