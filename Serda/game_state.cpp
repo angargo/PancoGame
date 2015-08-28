@@ -2,6 +2,8 @@
 
 #include <cstdlib>
 
+#include "keyboard.h"
+
 GameState::GameState(StateStack* stack, Context context, Save save)
     : State(stack, context), save(std::move(save)) {
   // Temporal code for testing. TODO: remove.
