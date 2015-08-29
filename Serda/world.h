@@ -52,10 +52,10 @@ class World {
   const Entity& getEntity(id_type entity_id) const;
   Range getEntities();
 
-  const sf::Vector2f& xBounds() const;
-  sf::Vector2f& variableXBounds();
-  const sf::Vector2f& yBounds() const;
-  sf::Vector2f& variableYBounds();
+  const sf::Vector2f& lowerBounds() const;
+  sf::Vector2f& variableLowerBounds();
+  const sf::Vector2f& upperBounds() const;
+  sf::Vector2f& variableUpperBounds();
 
 
   // Compenent queries.
@@ -136,8 +136,8 @@ class World {
 
   Range range;
 
-  sf::Vector2f x_bounds;
-  sf::Vector2f y_bounds;
+  sf::Vector2f lower_bounds;
+  sf::Vector2f upper_bounds;;
 
   // Components go here.
   std::vector<PositionComponent> position_components;

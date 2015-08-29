@@ -29,8 +29,8 @@ World::World()
       L(nullptr),
       entities(),
       range(entities),
-      x_bounds(0.0f, 1e9f),
-      y_bounds(0.0f, 1e9f),
+      lower_bounds(0.0f, 0.0f),
+      upper_bounds(1e9f, 1e9f),
       position_components(),
       speed_components(),
       render_components(),
@@ -74,17 +74,17 @@ id_type World::getRandomEntityId() {
   return id;
 }
 
-const sf::Vector2f& World::xBounds() const {
-  return x_bounds;
+const sf::Vector2f& World::lowerBounds() const {
+  return lower_bounds;
 }
-sf::Vector2f& World::variableXBounds() {
-  return x_bounds;
+sf::Vector2f& World::variableLowerBounds() {
+  return lower_bounds;
 }
-const sf::Vector2f& World::yBounds() const {
-  return y_bounds;
+const sf::Vector2f& World::upperBounds() const {
+  return upper_bounds;
 }
-sf::Vector2f& World::variableYBounds() {
-  return y_bounds;
+sf::Vector2f& World::variableUpperBounds() {
+  return upper_bounds;
 }
 
 template <>

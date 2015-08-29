@@ -1,5 +1,4 @@
 #include "game_state.h"
-#include <iostream>
 
 #include <cstdlib>
 
@@ -32,8 +31,8 @@ GameState::GameState(StateStack* stack, Context context, Save save)
   sf::Vector2u map_size = context.textures->get(5)->getSize();
   world.add(map, RenderComponent(5, map_size.x, map_size.y));
   // Set boundaries.
-  world.variableXBounds().y = 6.0f * window->getView().getSize().x;
-  world.variableYBounds().y = 4.0f * window->getView().getSize().y;
+  world.variableUpperBounds().x = 6.0f * window->getView().getSize().x;
+  world.variableUpperBounds().y = 4.0f * window->getView().getSize().y;
 
   InputComponent input(2);
   world.add(link_id, input);
@@ -165,7 +164,7 @@ void GameState::renderSystem() {
   sf::RenderWindow* window = getContext().window;
   const sf::Vector2f pos(world.get<PositionComponent>(world.linkId()).x,
                          world.get<PositionComponent>(world.linkId()).y);
-  const sf::Vector2f bounds(world.xBounds().y, world.yBounds().y);
+  const sf::Vector2f bounds(world.upperBounds().x, world.upperBounds().y);
   const sf::Vector2f view(window->getView().getSize());
   sf::Vector2f offset(
       std::max(std::min(0.0f, view.x / 2.0f - pos.x), view.x - bounds.x),
