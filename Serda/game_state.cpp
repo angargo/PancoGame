@@ -116,6 +116,11 @@ void GameState::animSystem(sf::Time dt) {
       auto& anim = world.variable<AnimComponent>(entity);
       auto& render = world.variable<RenderComponent>(entity);
       Animation& animation = anim.variableAnimation();
+      // If RenderComponent has no frame set, set the first from Animation.
+      // This is detected by texture_id being -1.
+      if (render.getFrame().texture_id == Frame::NONE) {
+        render.variableFrame() = animation.frames.begin()->frame;
+      }
       sf::Time remaining = dt;
       while (remaining > sf::Time::Zero &&
              unsigned(anim.index) < animation.frames.size()) {

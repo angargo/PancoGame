@@ -83,6 +83,9 @@ struct Id<SpeedComponent> {
 
 // Frame Class for RenderComponent.
 struct Frame {
+  enum TextureId {
+    NONE = -1,
+  };
   Frame();
   explicit Frame(int texture_id);
   explicit Frame(int texture_id, int width = 0, int height = 0,

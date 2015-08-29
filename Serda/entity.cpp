@@ -36,7 +36,7 @@ void SpeedComponent::setSpeed(float v_x, float v_y) {
 }
 
 // Render Component.
-Frame::Frame() : texture_id(-1) { init(); }
+Frame::Frame() : texture_id(TextureId::NONE) { init(); }
 Frame::Frame(int texture_id, int width, int height, int tx, int ty,
              bool rotated)
     : texture_id(texture_id),
