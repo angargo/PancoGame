@@ -2,6 +2,7 @@
 #define WORLD_XML_PARSER_H
 
 #include <istream>
+#include <ostream>
 #include <sstream>
 
 #include "rapidxml/rapidxml.hpp"
@@ -17,6 +18,18 @@ class WorldXmlParser {
  public:
   WorldXmlParser(World* world);
 
+  void serialize(std::ostream& out, const Entity& entity) const;
+  void serialize(std::ostream& out, id_type entity_id) const;
+  std::string serializeToString(const Entity& entity) const;
+  std::string serializeToString(id_type entity_id) const;
+
+  void serialize(std::ostream& out, const PositionComponent& pos) const;
+  void serialize(std::ostream& out, const SpeedComponent& speed) const;
+  void serialize(std::ostream& out, const RenderComponent& render) const;
+  void serialize(std::ostream& out, const InputComponent& input) const;
+
+  void serialize(std::ostream& out, const Generic& generic) const;
+
   void deserializeEntity(const xml_node* node);
 
   PositionComponent deserializePosition(const xml_node* node);
@@ -26,6 +39,7 @@ class WorldXmlParser {
 
  private:
   World* world;
+  std::vector<Generic> generics;
 
   template <typename C>
   C getFromString(const char* value) {
