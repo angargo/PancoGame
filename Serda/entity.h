@@ -159,8 +159,8 @@ typedef std::function<void(World*, id_type)> Action;
 
 struct InputEvent {
   enum KeyAction {
-    KEY_PRESSED = 0,
-    KEY_RELEASED = 1,
+    KEY_RELEASED = 0,
+    KEY_PRESSED = 1,
   };
   // If not pressed, it's implicitly released.
   bool key_pressed;
