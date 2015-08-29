@@ -5,6 +5,7 @@
 
 #include "entity.h"
 #include "world.h"
+#include "world_xml_parser.h"
 
 class WorldManager {
  public:
