@@ -78,6 +78,18 @@ bool GameState::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyReleased) action = InputEvent::KEY_RELEASED;
     InputEvent input_event(action, event.key.code);
     inputSystem(input_event);
+  } else if (event.type == sf::Event::LostFocus ||
+             event.type == sf::Event::GainedFocus) {
+    // On focus gain, send all keys to be pressed, on focus lost, send all keys
+    // to be released, to avoid weird behaviour.
+    for (int idx = 0; idx < sf::Keyboard::Key::KeyCount; ++idx) {
+      InputEvent::KeyAction ievent = event.type == sf::Event::GainedFocus ?
+          InputEvent::KEY_PRESSED : InputEvent::KEY_RELEASED;
+      sf::Keyboard::Key key = sf::Keyboard::Key(idx);
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(key))) {
+        inputSystem(InputEvent(ievent, key));
+      }
+    }
   }
   return false;
 }
