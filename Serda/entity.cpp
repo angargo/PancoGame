@@ -68,7 +68,7 @@ int RenderComponent::tx() const { return frame.tx; }
 int RenderComponent::ty() const { return frame.ty; }
 bool RenderComponent::rotated() const { return frame.rotated; }
 const Frame& RenderComponent::getFrame() const { return frame; }
-Frame& RenderComponent::getFrame() { return frame; }
+Frame& RenderComponent::variableFrame() { return frame; }
 
 // Animation Component.
 AnimFrame::AnimFrame()
@@ -84,7 +84,7 @@ AnimComponent::AnimComponent() : Component(), index(0) {}
 AnimComponent::AnimComponent(const Animation& animation)
     : index(0), animation(animation) {}
 const Animation& AnimComponent::getAnimation() const { return animation; }
-Animation& AnimComponent::getAnimation() { return animation; }
+Animation& AnimComponent::variableAnimation() { return animation; }
 
 // Input Component.
 InputComponent::InputComponent() : Component(), script_id(-1) {}

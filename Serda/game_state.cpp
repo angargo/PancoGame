@@ -106,7 +106,7 @@ void GameState::animSystem(sf::Time dt) {
     if ((entity.components & skey) == skey) {
       auto& anim = world.variable<AnimComponent>(entity);
       auto& render = world.variable<RenderComponent>(entity);
-      Animation& animation = anim.getAnimation();
+      Animation& animation = anim.variableAnimation();
       sf::Time remaining = dt;
       while (remaining > sf::Time::Zero &&
              unsigned(anim.index) < animation.frames.size()) {
@@ -126,7 +126,7 @@ void GameState::animSystem(sf::Time dt) {
             }
           }
           // Set new frame.
-          render.getFrame() = animation.frames[anim.index].frame;
+          render.variableFrame() = animation.frames[anim.index].frame;
         }
       }
     }

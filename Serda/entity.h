@@ -109,7 +109,7 @@ class RenderComponent : public Component {
   int ty() const;
   bool rotated() const;
   const Frame& getFrame() const;
-  Frame& getFrame();
+  Frame& variableFrame();
 
  private:
   void init();
@@ -141,7 +141,7 @@ class AnimComponent : public Component {
   AnimComponent(const Animation& animation);
 
   const Animation& getAnimation() const;
-  Animation& getAnimation();
+  Animation& variableAnimation();
 
   int index;
  private:
