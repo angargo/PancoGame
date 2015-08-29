@@ -1,4 +1,7 @@
 #include "world.h"
+
+#include <iostream>
+
 #include "lua.hpp"
 
 namespace {

@@ -35,12 +35,58 @@ void SpeedComponent::setSpeed(float v_x, float v_y) {
   vy = v_y;
 }
 
-RenderComponent::RenderComponent() : Component() {}
-RenderComponent::RenderComponent(sf::Sprite sprite)
-    : Component(), sprite(std::move(sprite)) {}
-RenderComponent::RenderComponent(id_type entity_id, sf::Sprite sprite)
-    : Component(entity_id), sprite(std::move(sprite)) {}
+// Render Component.
+Frame::Frame() : texture_id(-1) { init(); }
+Frame::Frame(int texture_id, int width, int height, int tx, int ty,
+             bool rotated)
+    : texture_id(texture_id),
+      width(width),
+      height(height),
+      tx(tx),
+      ty(ty),
+      rotated(rotated) {}
 
+Frame::Frame(int texture_id) : texture_id(texture_id) {}
+
+void Frame::init() {
+  tx = 0;
+  ty = 0;
+  width = -1;
+  height = -1;
+  rotated = false;
+}
+
+RenderComponent::RenderComponent() : Component() {}
+RenderComponent::RenderComponent(int texture_id, int width, int height, int tx,
+                                 int ty, bool rotated)
+    : Component(), frame(texture_id, width, height, tx, ty, rotated) {}
+
+int RenderComponent::textureId() const { return frame.texture_id; }
+int RenderComponent::width() const { return frame.width; }
+int RenderComponent::height() const { return frame.height; }
+int RenderComponent::tx() const { return frame.tx; }
+int RenderComponent::ty() const { return frame.ty; }
+bool RenderComponent::rotated() const { return frame.rotated; }
+const Frame& RenderComponent::getFrame() const { return frame; }
+Frame& RenderComponent::getFrame() { return frame; }
+
+// Animation Component.
+AnimFrame::AnimFrame()
+    : duration(sf::seconds(1.0f)), frame(), elapsed_time(sf::Time::Zero) {}
+AnimFrame::AnimFrame(sf::Time duration, Frame frame)
+    : duration(duration), frame(frame), elapsed_time(sf::Time::Zero) {}
+
+Animation::Animation() : frames() {}
+Animation::Animation(const std::vector<AnimFrame>& frames, bool repeated)
+    : frames(frames), repeated(repeated) {}
+
+AnimComponent::AnimComponent() : Component() {}
+AnimComponent::AnimComponent(const Animation& animation)
+    : animation(animation) {}
+const Animation& AnimComponent::getAnimation() const { return animation; }
+Animation& AnimComponent::getAnimation() { return animation; }
+
+// Input Component.
 InputComponent::InputComponent() : Component(), script_id(-1) {}
 InputComponent::InputComponent(int script_id)
     : Component(), script_id(script_id) {}
@@ -64,6 +110,11 @@ SpeedComponent& Generic::get<SpeedComponent>() {
 template <>
 RenderComponent& Generic::get<RenderComponent>() {
   return render;
+}
+
+template <>
+AnimComponent& Generic::get<AnimComponent>() {
+  return anim;
 }
 
 template <>

@@ -129,6 +129,7 @@ class World {
   std::vector<PositionComponent> position_components;
   std::vector<SpeedComponent> speed_components;
   std::vector<RenderComponent> render_components;
+  std::vector<AnimComponent> anim_components;
   std::vector<InputComponent> input_components;
 };
 

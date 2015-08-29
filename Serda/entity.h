@@ -3,20 +3,21 @@
 
 #include <array>
 #include <bitset>
+#include <exception>
 #include <functional>
-#include <iostream>
 #include <map>
 #include <memory>
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/System/Time.hpp>
 
 typedef int id_type;
 
 // Component base class.
 class Component {
  public:
-  enum Id { POSITION, SPEED, RENDER, INPUT, NUM_IDS };
+  enum Id { POSITION, SPEED, RENDER, ANIM, INPUT, NUM_IDS };
 
   Component();
   explicit Component(id_type entity_id);
@@ -28,8 +29,7 @@ class Component {
 template <typename C>
 struct Id {
   operator int() {
-    std::cerr << "Id::operator int() with unknown type" << std::endl;
-    exit(0);
+    throw std::runtime_error("Id::operator int() with unknown type");
   }
 };
 
@@ -81,18 +81,78 @@ struct Id<SpeedComponent> {
   operator int() { return Component::SPEED; }
 };
 
+// Frame Class for RenderComponent.
+struct Frame {
+  Frame();
+  explicit Frame(int texture_id);
+  explicit Frame(int texture_id, int width = 0, int height = 0,
+                           int tx = 0, int ty = 0, bool rotated = false);
+  void init();
+  int texture_id;
+  int width;     // Width of the sprite.
+  int height;    // Height of the sprite.
+  int tx;        // X offset inside texture.
+  int ty;        // Y offset inside texture.
+  bool rotated;  // Is a rotated loaded image.
+};
 class RenderComponent : public Component {
  public:
   RenderComponent();
-  explicit RenderComponent(sf::Sprite sprite);
-  RenderComponent(id_type entity_id, sf::Sprite sprite);
+  explicit RenderComponent(int texture_id, int width = 0, int height = 0,
+                           int tx = 0, int ty = 0, bool rotated = false);
+  RenderComponent(id_type entity_id, int texture_id);
 
-  sf::Sprite sprite;
+  int textureId() const;
+  int width() const;
+  int height() const;
+  int tx() const;
+  int ty() const;
+  bool rotated() const;
+  const Frame& getFrame() const;
+  Frame& getFrame();
+
+ private:
+  void init();
+  Frame frame;
 };
+
 template <>
 struct Id<RenderComponent> {
   operator int() { return Component::RENDER; }
 };
+// Animation.
+struct AnimFrame {
+  AnimFrame();
+  AnimFrame(sf::Time duration, Frame frame);
+  sf::Time duration;
+  Frame frame;
+  sf::Time elapsed_time;
+};
+struct Animation {
+  Animation();
+  Animation(const std::vector<AnimFrame>& frames, bool repeated = false);
+
+  std::vector<AnimFrame> frames;
+  bool repeated;  // Whether this animation repeats infinitely.
+};
+class AnimComponent : public Component {
+ public:
+  AnimComponent();
+  AnimComponent(const Animation& animation);
+
+  const Animation& getAnimation() const;
+  Animation& getAnimation();
+
+  int index;
+ private:
+  Animation animation;
+};
+
+template<>
+struct Id<AnimComponent> {
+  operator int() { return Component::ANIM; }
+};
+
 
 struct InputEvent {
   enum KeyAction {
@@ -139,14 +199,14 @@ class Generic {
   void addComponent(const PositionComponent& component);
   void addComponent(const SpeedComponent& component);
   void addComponent(const RenderComponent& component);
+  void addComponent(const AnimComponent& component);
   void addComponent(const InputComponent& component);
 
   std::string getType() const { return type; }
 
   template <class C>
   C& get() {
-    std::cerr << "Generic::get with unknown type" << std::endl;
-    exit(0);
+    throw std::exception("Error Generic::get - Unknown type");
   }
 
  private:
@@ -157,6 +217,7 @@ class Generic {
   PositionComponent position;
   SpeedComponent speed;
   RenderComponent render;
+  AnimComponent anim;
   InputComponent input;
 };
 

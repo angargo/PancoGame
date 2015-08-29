@@ -77,6 +77,11 @@ const std::vector<RenderComponent>& World::getVect<RenderComponent>() const {
 }
 
 template <>
+const std::vector<AnimComponent>& World::getVect<AnimComponent>() const {
+  return anim_components;
+}
+
+template <>
 const std::vector<InputComponent>& World::getVect<InputComponent>() const {
   return input_components;
 }

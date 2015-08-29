@@ -4,9 +4,9 @@
 
 using namespace sf;
 
-State::Context::Context(RenderWindow* window, ImageManager* images,
+State::Context::Context(RenderWindow* window, TextureManager* textures,
                         FontManager* fonts, LuaManager* scripts)
-    : window(window), images(images), fonts(fonts), scripts(scripts) {}
+    : window(window), textures(textures), fonts(fonts), scripts(scripts) {}
 
 State::State(StateStack* stack, Context context)
     : stack(stack), context(std::move(context)) {}
