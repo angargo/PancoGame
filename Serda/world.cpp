@@ -30,10 +30,10 @@ World::World()
       position_components(),
       speed_components(),
       render_components() {
-  registerLuaFunctions(L);
+  registerLuaFunctions();
 };
 
-World::~World() {}
+World::~World() { lua_close(L); }
 
 void World::createEntity(id_type entity_id) {
   entities.emplace(entity_id, Entity(entity_id));

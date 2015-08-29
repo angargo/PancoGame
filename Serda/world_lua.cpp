@@ -1,7 +1,7 @@
 #include "world.h"
 #include "lua.hpp"
 
-void World::registerLuaFunctions(lua_State* L) {
+void World::registerLuaFunctions() {
   World* world(this);
 
   L = luaL_newstate();

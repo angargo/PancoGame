@@ -39,7 +39,8 @@ class World {
   ~World();
 
   // Register functions that are going to be called from Lua.
-  void registerLuaFunctions(lua_State* L);
+  void registerLuaFunctions();
+  lua_State* getL() { return L; }
 
   // Entity operations.
   void createEntity(id_type entity_id);

@@ -70,6 +70,10 @@ bool GameState::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyReleased) action = InputEvent::KEY_RELEASED;
     InputEvent input_event(action, event.key.code);
     inputSystem(input_event);
+    // TODO: remove
+    if (event.key.code == sf::Keyboard::H) {
+      getContext().scripts->runScript(world.getL(), 1);
+    }
   }
   return false;
 }

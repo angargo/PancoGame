@@ -4,6 +4,7 @@
 #include <cassert>
 #include <exception>
 #include <fstream>
+#include <iostream>
 #include <memory>
 #include <set>
 #include <sstream>
@@ -81,7 +82,36 @@ class LuaManager {
   public:
     explicit LuaManager(const std::string& filename);
     // TODO: if entity_id changes, change this.
-    void runScript(lua_State* L, int script_id, int entity_id);
+    void loadScript(lua_State* L, int script_id);
+
+    void callScript(lua_State* L, int nargs) {
+      if (lua_pcall(L, nargs, 0, 0)) {
+        std::cerr << lua_tostring(L, -1) << std::endl;
+        lua_pop(L, 1);
+      }
+    }
+
+    template<typename... Args>
+    void callScript(lua_State* L, int nargs, int p, Args... args) {
+      lua_pushinteger(L, p);
+      callScript(L, nargs + 1, args...);
+    }
+    template<typename... Args>
+    void callScript(lua_State* L, int nargs, bool p, Args... args) {
+      lua_pushboolean(L, p);
+      callScript(L, nargs + 1, args...);
+    }
+
+    template<typename... Args>
+    void runScript(lua_State* L, int script_id, Args... args) {
+      loadScript(L, script_id);
+
+      lua_getglobal(L, "game");
+      lua_getfield(L, -1, std::to_string(script_id).c_str());
+
+      callScript(L, 0, args...);
+    }
+
     void loadDictionary(const std::string& filename);
 
   private:
