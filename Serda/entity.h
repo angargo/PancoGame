@@ -85,8 +85,8 @@ struct Id<SpeedComponent> {
 struct Frame {
   Frame();
   explicit Frame(int texture_id);
-  explicit Frame(int texture_id, int width = 0, int height = 0,
-                           int tx = 0, int ty = 0, bool rotated = false);
+  explicit Frame(int texture_id, int width = 0, int height = 0, int tx = 0,
+                 int ty = 0, bool rotated = false);
   void init();
   int texture_id;
   int width;     // Width of the sprite.
@@ -98,6 +98,7 @@ struct Frame {
 class RenderComponent : public Component {
  public:
   RenderComponent();
+  explicit RenderComponent(Frame frame);
   explicit RenderComponent(int texture_id, int width = 0, int height = 0,
                            int tx = 0, int ty = 0, bool rotated = false);
   RenderComponent(id_type entity_id, int texture_id);
@@ -144,15 +145,15 @@ class AnimComponent : public Component {
   Animation& variableAnimation();
 
   int index;
+
  private:
   Animation animation;
 };
 
-template<>
+template <>
 struct Id<AnimComponent> {
   operator int() { return Component::ANIM; }
 };
-
 
 struct InputEvent {
   enum KeyAction {
@@ -218,7 +219,9 @@ class Generic {
   std::string getType() const { return type; }
 
   template <class C>
-  C& get() { throw std::exception("Error Generic::get - Unknown type"); }
+  C& get() {
+    throw std::exception("Error Generic::get - Unknown type");
+  }
 
  private:
   std::bitset<Component::NUM_IDS> components;

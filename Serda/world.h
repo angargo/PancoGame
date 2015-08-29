@@ -38,6 +38,10 @@ class World {
   World();
   ~World();
 
+  // Reset the world.
+  void reset();
+
+  // Link handlers.
   int linkId() const;
   int& variableLinkId();
 

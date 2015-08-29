@@ -1,45 +1,55 @@
 <!-- Sentinel generic entity -->
 <generic type="sentinel">
-  <render> <frame id=2 width=16 height=22/> </render>
-  <logic id=3/>
+  <speed/>
+  <render> <frame tex_id="2" width="16" height="22"/> </render>
+  <logic script_id="3"/>
 </generic>
 
 <!-- Map -->
-<entity>
-  <position x=0 y=0/>
-  <render> <frame id=5 width=1536 height=896/> </render>
+<entity id="2">
+  <position x="0" y="0"/>
+  <render> <frame tex_id="5" width="1536" height="896"/> </render>
 </entity>
 
 <!-- Link -->
-<entity id=1>
-  <position x=128 y=112/>
-  <render> <frame id=2 width=16 height=22/> </render>
+<entity id="1">
+  <position x="128" y="112"/>
+  <speed/>
+  <render> <frame tex_id="2" width="16" height="22"/> </render>
   <anim>
     <!-- Link walking down -->
     <animation>
-      <animframe duration=0.08> <frame id=3 width=16 height=25 tx=3 ty=32/>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="3" ty="32"/>
       </animframe>
-      <animframe duration=0.08> <frame id=3 width=16 height=25 tx=33 ty=32/>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="33" ty="32"/>
       </animframe>
-      <animframe duration=0.08> <frame id=3 width=16 height=25 tx=63 ty=32/>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="63" ty="32"/>
       </animframe>
-      <animframe duration=0.08> <frame id=3 width=16 height=25 tx=93 ty=32/>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="93" ty="32"/>
       </animframe>
-      <animframe duration=0.08> <frame id=3 width=16 height=25 tx=123 ty=32/>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="123" ty="32"/>
       </animframe>
-      <animframe duration=0.08> <frame id=3 width=16 height=25 tx=153 ty=32/>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="153" ty="32"/>
       </animframe>
-      <animframe duration=0.08> <frame id=3 width=16 height=25 tx=183 ty=32/>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="183" ty="32"/>
       </animframe>
-      <animframe duration=0.08> <frame id=3 width=16 height=25 tx=213 ty=32/>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="213" ty="32"/>
       </animframe>
     </animation>
   </anim>
-  <input id=2/>
+  <input script_id="2"/>
 </entity>
 
-<entity type="sentinel"> <position x=170  y=112/> </entity>
-<entity type="sentinel"> <position x=110  y=81 /> </entity>
-<entity type="sentinel"> <position x=1100 y=81 /> </entity>
-<entity type="sentinel"> <position x=510  y=481/> </entity>
-<entity type="sentinel"> <position x=310  y=481/> </entity>
+<entity type="sentinel"> <position x="170"  y="112"/> </entity>
+<entity type="sentinel"> <position x="110"  y="81" /> </entity>
+<entity type="sentinel"> <position x="1100" y="81" /> </entity>
+<entity type="sentinel"> <position x="510"  y="481"/> </entity>
+<entity type="sentinel"> <position x="310"  y="481"/> </entity>

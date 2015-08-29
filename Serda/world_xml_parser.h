@@ -1,9 +1,7 @@
 #ifndef WORLD_XML_PARSER_H
 #define WORLD_XML_PARSER_H
 
-#include <istream>
 #include <ostream>
-#include <sstream>
 
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
@@ -18,6 +16,12 @@ class WorldXmlParser {
  public:
   WorldXmlParser(World* world);
 
+  void loadDictionary(const std::string& filename);
+
+  void loadWorld(int world_id);
+  void dumpWorld(const std::string& filename) const;
+
+ private:
   // Serialize entities.
   void serialize(std::ostream& out, const Entity& entity) const;
   void serialize(std::ostream& out, id_type entity_id) const;
@@ -48,6 +52,7 @@ class WorldXmlParser {
  private:
   World* world;
   std::vector<Generic> generics;
+  std::map<int, std::string> files;
 };
 
 #endif  // WORLD_XML_PARSER_H

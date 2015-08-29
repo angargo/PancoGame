@@ -6,6 +6,12 @@
 
 GameState::GameState(StateStack* stack, Context context, Save save)
     : State(stack, context), save(std::move(save)), wxp(&world) {
+
+  // TODO: I don't like this.
+  wxp.loadWorld(1);
+  world.variableLinkId() = 1;
+  return;
+
   // Temporal code for testing. TODO: remove.
   auto window = context.window;
   id_type link_id = world.createEntity();
@@ -167,6 +173,7 @@ void GameState::renderSystem() {
   const auto& textures = *getContext().textures;
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
+      // TODO: put this into a function.
       auto& render = world.variable<RenderComponent>(entity);
       const auto& position = world.get<PositionComponent>(entity);
       sf::Sprite sprite(*textures.get(render.textureId()));

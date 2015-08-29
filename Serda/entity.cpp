@@ -57,6 +57,8 @@ void Frame::init() {
 }
 
 RenderComponent::RenderComponent() : Component() {}
+RenderComponent::RenderComponent(Frame frame)
+    : Component(), frame(std::move(frame)) {}
 RenderComponent::RenderComponent(int texture_id, int width, int height, int tx,
                                  int ty, bool rotated)
     : Component(), frame(texture_id, width, height, tx, ty, rotated) {}

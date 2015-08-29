@@ -1,5 +1,8 @@
 #include "world_xml_parser.h"
 
+#include <istream>
+#include <sstream>
+
 template <typename C>
 static C getFromString(const char* value) {
   std::stringstream ss(value);
@@ -8,7 +11,66 @@ static C getFromString(const char* value) {
   return aux;
 }
 
-WorldXmlParser::WorldXmlParser(World* world) : world(world) {}
+template <typename C>
+static C getAttribOrDefault(const xml_node* node, const char* name, C def) {
+  const rapidxml::xml_attribute<> *attr = node->first_attribute(name);
+  if (attr) return getFromString<C>(attr->value());
+  return def;
+}
+
+static std::string loadFile(const std::string& filename) {
+  std::ifstream in(filename);
+  std::stringstream ss;
+  ss << in.rdbuf();
+  return ss.str();
+}
+
+WorldXmlParser::WorldXmlParser(World* world) : world(world) {
+  loadDictionary("media/maps/dictionary");
+}
+
+void WorldXmlParser::loadDictionary(const std::string& filename) {
+  std::ifstream in(filename);
+  if (!in.good()) {
+    throw std::runtime_error("WorldXmlParser - cannot load dictionary " +
+                             filename);
+  }
+  std::string line;
+  while (getline(in, line)) {
+    std::stringstream ss(line);
+    int world_id;
+    std::string file;
+    ss >> world_id >> file;
+    files[world_id] = file;
+  }
+}
+
+void WorldXmlParser::loadWorld(int world_id) {
+  // Reset everything.
+  generics.clear();
+  world->reset();
+  world->variableLinkId() = 1 << 31 - 1;
+
+  const auto it = files.find(world_id);
+  if (it == files.end()) {
+    throw std::runtime_error("WorldXmlParser - Cannot find map " +
+                             std::to_string(world_id));
+  }
+
+  const std::string& filename = it->second;
+  std::string worldstr = loadFile(filename);
+  rapidxml::xml_document<> doc;
+  doc.parse<0>(&worldstr[0]);
+
+  for (const auto* node = doc.first_node(); node; node = node->next_sibling()) {
+    std::string name = node->name();
+    if (name == "entity") {
+      deserializeEntity(node);
+    } else if (name == "generic") {
+      deserializeGeneric(node);
+    }
+  }
+}
 
 void WorldXmlParser::serialize(std::ostream& out, const Entity& entity) const {
   out << "<entity";
@@ -82,9 +144,11 @@ void WorldXmlParser::serialize(std::ostream& out,
 }
 
 void WorldXmlParser::deserializeEntity(const xml_node* node) {
+  // TODO: remove.
+  if (node->first_attribute("type")) return;
   id_type id;
   if (node->first_attribute("id")) {
-    id = getFromString<int>(node->first_attribute("id")->value());
+    id = getFromString<id_type>(node->first_attribute("id")->value());
     world->createEntity(id);
   } else {
     id = world->createEntity();
@@ -103,6 +167,8 @@ void WorldXmlParser::deserializeEntity(const xml_node* node) {
     world->add(id, deserializeInput(cnode));
 }
 
+void WorldXmlParser::deserializeGeneric(const xml_node* node) {}
+
 PositionComponent WorldXmlParser::deserializePosition(
     const xml_node* node) const {
   float x = getFromString<float>(node->first_attribute("x")->value());
@@ -111,13 +177,13 @@ PositionComponent WorldXmlParser::deserializePosition(
 }
 
 SpeedComponent WorldXmlParser::deserializeSpeed(const xml_node* node) const {
-  float vx = getFromString<float>(node->first_attribute("vx")->value());
-  float vy = getFromString<float>(node->first_attribute("vy")->value());
+  auto vx = getAttribOrDefault<float>(node, "vx", 0);
+  auto vy = getAttribOrDefault<float>(node, "vy", 0);
   return SpeedComponent(vx, vy);
 }
 
 RenderComponent WorldXmlParser::deserializeRender(const xml_node* node) const {
-  // TODO
+  return RenderComponent(deserializeFrame(node->first_node("frame")));
 }
 
 InputComponent WorldXmlParser::deserializeInput(const xml_node* node) const {
@@ -128,4 +194,13 @@ InputComponent WorldXmlParser::deserializeInput(const xml_node* node) const {
 LogicComponent WorldXmlParser::deserializeLogic(const xml_node* node) const {
   int id = getFromString<int>(node->first_attribute("script_id")->value());
   return LogicComponent(id);
+}
+
+Frame WorldXmlParser::deserializeFrame(const xml_node* node) const {
+  auto tex_id = getFromString<int>(node->first_attribute("tex_id")->value());
+  auto width = getFromString<int>(node->first_attribute("width")->value());
+  auto height = getFromString<int>(node->first_attribute("height")->value());
+  auto tx = getAttribOrDefault<int>(node, "tx", 0);
+  auto ty = getAttribOrDefault<int>(node, "ty", 0);
+  return Frame(tex_id, width, height, tx, ty);
 }
