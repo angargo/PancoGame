@@ -80,9 +80,9 @@ Animation::Animation() : frames() {}
 Animation::Animation(const std::vector<AnimFrame>& frames, bool repeated)
     : frames(frames), repeated(repeated) {}
 
-AnimComponent::AnimComponent() : Component() {}
+AnimComponent::AnimComponent() : Component(), index(0) {}
 AnimComponent::AnimComponent(const Animation& animation)
-    : animation(animation) {}
+    : index(0), animation(animation) {}
 const Animation& AnimComponent::getAnimation() const { return animation; }
 Animation& AnimComponent::getAnimation() { return animation; }
 
