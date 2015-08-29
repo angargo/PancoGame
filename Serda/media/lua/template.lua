@@ -1,7 +1,7 @@
 if game==nil then game = {} end
 
 local f
-function f(entity)
+function f()
   -- Definition
 end
 

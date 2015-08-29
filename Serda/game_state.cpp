@@ -18,40 +18,7 @@ GameState::GameState(StateStack* stack, Context context, Save save)
 
   world.add(link_id, SpeedComponent(0, 0));
 
-  InputComponent input;
-  const int sp = 100;
-  input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Up)] =
-      [](World* world, id_type link) {
-        world->variable<SpeedComponent>(link).addSpeed(0, -sp);
-      };
-  input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Up)] =
-      [](World* world, id_type link) {
-        world->variable<SpeedComponent>(link).addSpeed(0, sp);
-      };
-  input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Down)] =
-      [](World* world, id_type link) {
-        world->variable<SpeedComponent>(link).addSpeed(0, sp);
-      };
-  input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Down)] =
-      [](World* world, id_type link) {
-        world->variable<SpeedComponent>(link).addSpeed(0, -sp);
-      };
-  input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Right)] =
-      [](World* world, id_type link) {
-        world->variable<SpeedComponent>(link).addSpeed(sp, 0);
-      };
-  input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Right)] =
-      [](World* world, id_type link) {
-        world->variable<SpeedComponent>(link).addSpeed(-sp, 0);
-      };
-  input.bindings[InputEvent(InputEvent::KEY_PRESSED, sf::Keyboard::Left)] =
-      [](World* world, id_type link) {
-        world->variable<SpeedComponent>(link).addSpeed(-sp, 0);
-      };
-  input.bindings[InputEvent(InputEvent::KEY_RELEASED, sf::Keyboard::Left)] =
-      [](World* world, id_type link) {
-        world->variable<SpeedComponent>(link).addSpeed(sp, 0);
-      };
+  InputComponent input(2);
   world.add(link_id, input);
 }
 
@@ -70,6 +37,7 @@ bool GameState::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyReleased) action = InputEvent::KEY_RELEASED;
     InputEvent input_event(action, event.key.code);
     inputSystem(input_event);
+
     // TODO: remove
     if (event.key.code == sf::Keyboard::H) {
       getContext().scripts->runScript(world.getL(), 1);
@@ -117,10 +85,10 @@ void GameState::inputSystem(InputEvent event) {
 
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
-      auto& input = world.variable<InputComponent>(entity).bindings;
-      if (input.find(event) != input.end()) {
-        input[event](&world, entity.id);
-      }
+      const auto& input = world.variable<InputComponent>(entity);
+      getContext().scripts->runScript(world.getL(), input.script_id, entity.id,
+                                      KeyToStr.at(event.key),
+                                      event.key_pressed);
     }
   }
 }

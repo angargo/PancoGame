@@ -62,9 +62,7 @@ void WorldManager::serialize(std::ostream& out,
 void WorldManager::serialize(std::ostream& out,
                              const InputComponent& input) const {
   out << "<input>";
-  for (const auto& binding : input.bindings)
-  //out << "<binding key=\"" << binding.key << "\" action=" << binding.action_id
-  //    << ">";
+  // TODO
   out << "</input>";
 }
 

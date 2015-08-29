@@ -101,6 +101,11 @@ class LuaManager {
       lua_pushboolean(L, p);
       callScript(L, nargs + 1, args...);
     }
+    template<typename... Args>
+    void callScript(lua_State* L, int nargs, std::string p, Args... args) {
+      lua_pushstring(L, p.c_str());
+      callScript(L, nargs + 1, args...);
+    }
 
     template<typename... Args>
     void runScript(lua_State* L, int script_id, Args... args) {
@@ -116,7 +121,7 @@ class LuaManager {
 
   private:
     std::unordered_map<int, std::string> files;
-    std::set<int> loaded;
+    std::set<std::string> loaded;
 };
 
 #endif  // RESOURCE_MANAGER_H

@@ -22,15 +22,18 @@ void LuaManager::loadDictionary(const std::string& filename) {
 
 void LuaManager::loadScript(lua_State* L, int script_id) {
   // We can choose to load the script anyway.
-  if (loaded.count(script_id) == 0) {
-    if (files.count(script_id) == 0) {
-      throw std::runtime_error("LuaManager - Cannot find script " +
-                               std::to_string(script_id));
-    }
-    if (luaL_dofile(L, files[script_id].c_str())) {
+  const auto it = files.find(script_id);
+  if (it == files.end()) {
+    throw std::runtime_error("LuaManager - Cannot find script " +
+        std::to_string(script_id));
+  }
+
+  const std::string& filename = it->second;
+  if (loaded.count(filename) == 0 or true) {
+    if (luaL_dofile(L, filename.c_str())) {
       std::cerr << lua_tostring(L, -1) << std::endl;
       lua_pop(L, 1);
     }
-    else loaded.insert(script_id);
+    else loaded.insert(filename);
   }
 }

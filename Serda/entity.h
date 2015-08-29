@@ -19,7 +19,7 @@ class Component {
   enum Id { POSITION, SPEED, RENDER, INPUT, NUM_IDS };
 
   Component();
-  explicit Component(const id_type entity_id);
+  explicit Component(id_type entity_id);
 
   virtual ~Component() = 0;
 
@@ -37,7 +37,7 @@ struct Id {
 class Entity {
  public:
   Entity();
-  explicit Entity(const id_type id);
+  explicit Entity(id_type id);
   bool hasId() const;
 
   // Check if this entity has component C.
@@ -56,7 +56,7 @@ class PositionComponent : public Component {
  public:
   PositionComponent();
   PositionComponent(float x, float y);
-  PositionComponent(const id_type entity_id, float x, float y);
+  PositionComponent(id_type entity_id, float x, float y);
 
   float x, y;
 };
@@ -69,7 +69,7 @@ class SpeedComponent : public Component {
  public:
   SpeedComponent();
   SpeedComponent(float vx, float vy);
-  SpeedComponent(const id_type entity_id, float vx, float vy);
+  SpeedComponent(id_type entity_id, float vx, float vy);
 
   void addSpeed(float v_x, float v_y);
   void setSpeed(float v_x, float v_y);
@@ -85,7 +85,7 @@ class RenderComponent : public Component {
  public:
   RenderComponent();
   explicit RenderComponent(sf::Sprite sprite);
-  RenderComponent(const id_type entity_id, sf::Sprite sprite);
+  RenderComponent(id_type entity_id, sf::Sprite sprite);
 
   sf::Sprite sprite;
 };
@@ -94,13 +94,10 @@ struct Id<RenderComponent> {
   operator int() { return Component::RENDER; }
 };
 
-class World;
-typedef std::function<void(World*, id_type)> Action;
-
 struct InputEvent {
   enum KeyAction {
-    KEY_PRESSED = 0,
-    KEY_RELEASED = 1,
+    KEY_RELEASED = 0,
+    KEY_PRESSED = 1,
   };
   // If not pressed, it's implicitly released.
   bool key_pressed;
@@ -119,9 +116,10 @@ struct InputEvent {
 class InputComponent : public Component {
  public:
   InputComponent();
-  explicit InputComponent(const id_type entity_id);
+  explicit InputComponent(int script_id);
+  InputComponent(id_type entity_id, int script_id);
 
-  std::map<InputEvent, Action> bindings;
+  int script_id;
 };
 template <>
 struct Id<InputComponent> {
