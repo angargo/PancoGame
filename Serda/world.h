@@ -38,6 +38,9 @@ class World {
   World();
   ~World();
 
+  int linkId() const;
+  int& variableLinkId();
+
   // Register functions that are going to be called from Lua.
   void registerLuaFunctions();
   lua_State* getL() { return L; }
@@ -89,7 +92,7 @@ class World {
   }
   template <typename C>
   const C& get(id_type entity_id) const {
-    return get<C>();
+    return get<C>(entities.at(entity_id));
   }
 
   template <typename C>
@@ -123,6 +126,8 @@ class World {
   std::vector<C>& mutVect() {
     return const_cast<std::vector<C>&>(getVect<C>());
   }
+
+  id_type link_id;
 
   lua_State* L;
 

@@ -25,7 +25,8 @@ World::value_iterator World::Range::end() { return entities.end(); }
 
 // World class.
 World::World()
-    : L(nullptr),
+    : link_id(0),
+      L(nullptr),
       entities(),
       range(entities),
       x_bounds(0.0f, 1e9f),
@@ -39,6 +40,14 @@ World::World()
 };
 
 World::~World() { lua_close(L); }
+
+int World::linkId() const {
+  return link_id;
+}
+
+int& World::variableLinkId() {
+  return link_id;
+}
 
 void World::createEntity(id_type entity_id) {
   entities.emplace(entity_id, Entity(entity_id));

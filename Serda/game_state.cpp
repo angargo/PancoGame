@@ -1,4 +1,5 @@
 #include "game_state.h"
+#include <iostream>
 
 #include <cstdlib>
 
@@ -9,6 +10,7 @@ GameState::GameState(StateStack* stack, Context context, Save save)
   // Temporal code for testing. TODO: remove.
   auto window = context.window;
   id_type link_id = world.createEntity();
+  world.variableLinkId() = link_id;
 
   sf::Vector2f size = window->getView().getSize();
   world.add(link_id, PositionComponent(size.x / 2, size.y / 2));
@@ -24,6 +26,14 @@ GameState::GameState(StateStack* stack, Context context, Save save)
     frames.push_back(AnimFrame(frame_time, Frame(3, 16, 25, 3 + 30*i, 32)));
   }
   world.add(link_id, AnimComponent(Animation(frames, true)));
+  // Setup background.
+  id_type map = world.createEntity();
+  world.add(map, PositionComponent(0, 0));
+  sf::Vector2u map_size = context.textures->get(5)->getSize();
+  world.add(map, RenderComponent(5, map_size.x, map_size.y));
+  // Set boundaries.
+  world.variableXBounds().y = 6.0f * window->getView().getSize().x;
+  world.variableYBounds().y = 4.0f * window->getView().getSize().y;
 
   InputComponent input(2);
   world.add(link_id, input);
@@ -151,7 +161,15 @@ void GameState::renderSystem() {
   static const std::bitset<Component::NUM_IDS> skey(
       createBitset(Component::POSITION, Component::RENDER));
 
+  // Get link position to calculate offset.
   sf::RenderWindow* window = getContext().window;
+  const sf::Vector2f pos(world.get<PositionComponent>(world.linkId()).x,
+                         world.get<PositionComponent>(world.linkId()).y);
+  const sf::Vector2f bounds(world.xBounds().y, world.yBounds().y);
+  const sf::Vector2f view(window->getView().getSize());
+  sf::Vector2f offset(
+      std::max(std::min(0.0f, view.x / 2.0f - pos.x), view.x - bounds.x),
+      std::max(std::min(0.0f, view.y / 2.0f - pos.y), view.y - bounds.y));
   const auto& textures = *getContext().textures;
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
@@ -160,7 +178,7 @@ void GameState::renderSystem() {
       sf::Sprite sprite(*textures.get(render.textureId()));
       sprite.setTextureRect(
           sf::IntRect(render.tx(), render.ty(), render.width(), render.height()));
-      sprite.setPosition(position.x, position.y);
+      sprite.setPosition(position.x + offset.x, position.y + offset.y);
       window->draw(sprite);
     }
   }
