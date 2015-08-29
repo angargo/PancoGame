@@ -25,11 +25,16 @@ World::value_iterator World::Range::end() { return entities.end(); }
 
 // World class.
 World::World()
-    : entities(),
+    : L(nullptr),
+      entities(),
       range(entities),
+      x_bounds(0.0f, 1e9f),
+      y_bounds(0.0f, 1e9f),
       position_components(),
       speed_components(),
-      render_components() {
+      render_components(),
+      anim_components(),
+      input_components() {
   registerLuaFunctions();
 };
 
@@ -58,6 +63,19 @@ id_type World::getRandomEntityId() {
     id = distribution(generator);
   }
   return id;
+}
+
+const sf::Vector2f& World::xBounds() const {
+  return x_bounds;
+}
+sf::Vector2f& World::variableXBounds() {
+  return x_bounds;
+}
+const sf::Vector2f& World::yBounds() const {
+  return y_bounds;
+}
+sf::Vector2f& World::variableYBounds() {
+  return y_bounds;
 }
 
 template <>

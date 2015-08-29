@@ -49,6 +49,12 @@ class World {
   const Entity& getEntity(id_type entity_id) const;
   Range getEntities();
 
+  const sf::Vector2f& xBounds() const;
+  sf::Vector2f& variableXBounds();
+  const sf::Vector2f& yBounds() const;
+  sf::Vector2f& variableYBounds();
+
+
   // Compenent queries.
   template <typename C>
   bool has(const Entity& entity) const {
@@ -124,6 +130,9 @@ class World {
   std::unordered_map<id_type, Entity> entities;
 
   Range range;
+
+  sf::Vector2f x_bounds;
+  sf::Vector2f y_bounds;
 
   // Components go here.
   std::vector<PositionComponent> position_components;
