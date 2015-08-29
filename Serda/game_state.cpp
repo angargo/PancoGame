@@ -167,8 +167,10 @@ void GameState::renderSystem() {
   const sf::Vector2f bounds(world.upperBounds().x, world.upperBounds().y);
   const sf::Vector2f view(window->getView().getSize());
   sf::Vector2f offset(
-      std::max(std::min(0.0f, view.x / 2.0f - pos.x), view.x - bounds.x),
-      std::max(std::min(0.0f, view.y / 2.0f - pos.y), view.y - bounds.y));
+      std::max(std::min(world.lowerBounds().x, view.x / 2.0f - pos.x),
+               view.x - bounds.x),
+      std::max(std::min(world.lowerBounds().y, view.y / 2.0f - pos.y),
+               view.y - bounds.y));
   const auto& textures = *getContext().textures;
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
