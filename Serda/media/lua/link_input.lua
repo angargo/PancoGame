@@ -24,7 +24,6 @@ end
 
 local input
 function input(entity, key, pressed)
-  print(entity, key, pressed)
   if key == "Up" then up(entity, pressed) end
   if key == "Down" then down(entity, pressed) end
   if key == "Right" then right(entity, pressed) end
