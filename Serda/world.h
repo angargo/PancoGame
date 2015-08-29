@@ -145,6 +145,7 @@ class World {
   std::vector<RenderComponent> render_components;
   std::vector<AnimComponent> anim_components;
   std::vector<InputComponent> input_components;
+  std::vector<LogicComponent> logic_components;
 };
 
 #endif  // SERDA_WORLD_H

@@ -113,6 +113,11 @@ const std::vector<InputComponent>& World::getVect<InputComponent>() const {
   return input_components;
 }
 
+template <>
+const std::vector<LogicComponent>& World::getVect<LogicComponent>() const {
+  return logic_components;
+}
+
 template <typename C>
 const std::vector<C>& World::getVect() const {
   std::cerr << "World::vect with unknown type" << std::endl;

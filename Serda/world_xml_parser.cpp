@@ -1,8 +1,14 @@
-
 #include "world_xml_parser.h"
 
-WorldXmlParser::WorldXmlParser(World* world) : world(world) {}
+template <typename C>
+static C getFromString(const char* value) {
+  std::stringstream ss(value);
+  C aux;
+  ss >> aux;
+  return aux;
+}
 
+WorldXmlParser::WorldXmlParser(World* world) : world(world) {}
 
 void WorldXmlParser::serialize(std::ostream& out, const Entity& entity) const {
   out << "<entity";
@@ -36,7 +42,7 @@ std::string WorldXmlParser::serializeToString(id_type entity_id) const {
 }
 
 void WorldXmlParser::serialize(std::ostream& out,
-                             const PositionComponent& pos) const {
+                               const PositionComponent& pos) const {
   out << "<position";
   out << " x=" << pos.x;
   out << " y=" << pos.y;
@@ -44,7 +50,7 @@ void WorldXmlParser::serialize(std::ostream& out,
 }
 
 void WorldXmlParser::serialize(std::ostream& out,
-                             const SpeedComponent& speed) const {
+                               const SpeedComponent& speed) const {
   out << "<speed";
   out << " vx=" << speed.vx;
   out << " vy=" << speed.vy;
@@ -52,20 +58,21 @@ void WorldXmlParser::serialize(std::ostream& out,
 }
 
 void WorldXmlParser::serialize(std::ostream& out,
-                             const RenderComponent& render) const {
+                               const RenderComponent& render) const {
   out << "<render";
   // TODO
   out << "/>";
 }
 
 void WorldXmlParser::serialize(std::ostream& out,
-                             const InputComponent& input) const {
+                               const InputComponent& input) const {
   out << "<input>";
   // TODO
   out << "</input>";
 }
 
-void WorldXmlParser::serialize(std::ostream& out, const Generic& generic) const {
+void WorldXmlParser::serialize(std::ostream& out,
+                               const Generic& generic) const {
   out << "<generic";
   out << " type=\"" << generic.getType() << '\"';
 
@@ -96,22 +103,29 @@ void WorldXmlParser::deserializeEntity(const xml_node* node) {
     world->add(id, deserializeInput(cnode));
 }
 
-PositionComponent WorldXmlParser::deserializePosition(const xml_node* node) {
+PositionComponent WorldXmlParser::deserializePosition(
+    const xml_node* node) const {
   float x = getFromString<float>(node->first_attribute("x")->value());
   float y = getFromString<float>(node->first_attribute("y")->value());
   return PositionComponent(x, y);
 }
 
-SpeedComponent WorldXmlParser::deserializeSpeed(const xml_node* node) {
+SpeedComponent WorldXmlParser::deserializeSpeed(const xml_node* node) const {
   float vx = getFromString<float>(node->first_attribute("vx")->value());
   float vy = getFromString<float>(node->first_attribute("vy")->value());
   return SpeedComponent(vx, vy);
 }
 
-RenderComponent WorldXmlParser::deserializeRender(const xml_node* node) {
+RenderComponent WorldXmlParser::deserializeRender(const xml_node* node) const {
   // TODO
 }
 
-InputComponent WorldXmlParser::deserializeInput(const xml_node* node) {
-  // TODO
+InputComponent WorldXmlParser::deserializeInput(const xml_node* node) const {
+  int id = getFromString<int>(node->first_attribute("script_id")->value());
+  return InputComponent(id);
+}
+
+LogicComponent WorldXmlParser::deserializeLogic(const xml_node* node) const {
+  int id = getFromString<int>(node->first_attribute("script_id")->value());
+  return LogicComponent(id);
 }

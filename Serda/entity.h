@@ -186,6 +186,19 @@ struct Id<InputComponent> {
   operator int() { return Component::INPUT; }
 };
 
+class LogicComponent : public Component {
+ public:
+  LogicComponent();
+  explicit LogicComponent(int script_id);
+  LogicComponent(id_type entity_id, int script_id);
+
+  int script_id;
+};
+template <>
+struct Id<LogicComponent> {
+  operator int() { return Component::INPUT; }
+};
+
 class Generic {
  public:
   Generic();
@@ -205,9 +218,7 @@ class Generic {
   std::string getType() const { return type; }
 
   template <class C>
-  C& get() {
-    throw std::exception("Error Generic::get - Unknown type");
-  }
+  C& get() { throw std::exception("Error Generic::get - Unknown type"); }
 
  private:
   std::bitset<Component::NUM_IDS> components;
@@ -219,6 +230,7 @@ class Generic {
   RenderComponent render;
   AnimComponent anim;
   InputComponent input;
+  LogicComponent logic;
 };
 
 #endif  // SERDA_ENTITY_H

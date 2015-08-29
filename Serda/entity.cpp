@@ -93,6 +93,13 @@ InputComponent::InputComponent(int script_id)
 InputComponent::InputComponent(id_type entity_id, int script_id)
     : Component(entity_id), script_id(script_id) {}
 
+// Logic Component.
+LogicComponent::LogicComponent() : Component(), script_id(-1) {}
+LogicComponent::LogicComponent(int script_id)
+    : Component(), script_id(script_id) {}
+LogicComponent::LogicComponent(id_type entity_id, int script_id)
+    : Component(entity_id), script_id(script_id) {}
+
 // Generic Entity.
 Generic::Generic() : components() {}
 Generic::Generic(std::string type) : type(std::move(type)), components() {}
@@ -120,4 +127,9 @@ AnimComponent& Generic::get<AnimComponent>() {
 template <>
 InputComponent& Generic::get<InputComponent>() {
   return input;
+}
+
+template <>
+LogicComponent& Generic::get<LogicComponent>() {
+  return logic;
 }

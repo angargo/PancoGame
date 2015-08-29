@@ -5,7 +5,7 @@
 #include "keyboard.h"
 
 GameState::GameState(StateStack* stack, Context context, Save save)
-    : State(stack, context), save(std::move(save)) {
+    : State(stack, context), save(std::move(save)), wxp(&world) {
   // Temporal code for testing. TODO: remove.
   auto window = context.window;
   id_type link_id = world.createEntity();
@@ -42,8 +42,6 @@ bool GameState::update(sf::Time dt) {
   motionSystem(dt);
   animSystem(dt);
 
-  // world.update();
-
   return false;
 }
 
@@ -54,11 +52,6 @@ bool GameState::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyReleased) action = InputEvent::KEY_RELEASED;
     InputEvent input_event(action, event.key.code);
     inputSystem(input_event);
-
-    // TODO: remove
-    if (event.key.code == sf::Keyboard::H) {
-      getContext().scripts->runScript(world.getL(), 1);
-    }
   } else if (event.type == sf::Event::LostFocus ||
              event.type == sf::Event::GainedFocus) {
     // On focus gain, send all keys to be pressed, on focus lost, send all keys
