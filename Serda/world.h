@@ -144,7 +144,6 @@ class World {
 
   sf::Vector2f lower_bounds;
   sf::Vector2f upper_bounds;
-  ;
 
   // Components go here.
   std::vector<PositionComponent> position_components;

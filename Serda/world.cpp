@@ -1,4 +1,3 @@
-#include <iostream>
 #include <cassert>
 
 #include "world.h"
@@ -136,6 +135,5 @@ const std::vector<LogicComponent>& World::getVect<LogicComponent>() const {
 
 template <typename C>
 const std::vector<C>& World::getVect() const {
-  std::cerr << "World::vect with unknown type" << std::endl;
-  exit(0);
+  std::runtime_error("World::vect with unknown type");
 }

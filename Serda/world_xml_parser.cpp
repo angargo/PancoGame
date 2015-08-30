@@ -3,6 +3,8 @@
 #include <istream>
 #include <sstream>
 
+#include <SFML/System/Vector2.hpp>
+
 namespace {
 
 template <typename C>
@@ -87,6 +89,8 @@ void WorldXmlParser::loadWorld(int world_id) {
       deserializeEntity(node);
     } else if (name == "generic") {
       deserializeGeneric(node);
+    } else if (name == "map_bounds") {
+      deserializeMapBounds(node);
     }
   }
 }
@@ -290,4 +294,13 @@ Animation WorldXmlParser::deserializeAnimation(const xml_node* node) const {
 AnimFrame WorldXmlParser::deserializeAnimFrame(const xml_node* node) const {
   auto duration_secs = getAttrib<float>(node, "duration");
   return AnimFrame(duration_secs, deserializeFrame(node->first_node("frame")));
+}
+
+void WorldXmlParser::deserializeMapBounds(const xml_node* node) const {
+  sf::Vector2f lower(getAttrib<float>(node, "lower_x"),
+                     getAttrib<float>(node, "lower_y"));
+  sf::Vector2f upper(getAttrib<float>(node, "upper_x"),
+                     getAttrib<float>(node, "upper_y"));
+  world->variableLowerBounds() = lower;
+  world->variableUpperBounds() = upper;
 }

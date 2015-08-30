@@ -53,6 +53,9 @@ class WorldXmlParser {
   Animation deserializeAnimation(const xml_node* node) const;
   AnimFrame deserializeAnimFrame(const xml_node* node) const;
 
+  // Map attributes
+  void deserializeMapBounds(const xml_node* node) const;
+
  private:
   World* world;
   std::map<std::string, Generic> generics;

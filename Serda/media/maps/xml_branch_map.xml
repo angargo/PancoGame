@@ -10,6 +10,7 @@
   <position x="0" y="0" z="-1"/>
   <render> <frame tex_id="5" width="1536" height="896"/> </render>
 </entity>
+<map_bounds lower_x="0" lower_y="0" upper_x="1536" upper_y="896"> </map_bounds>
 
 <!-- Link -->
 <entity id="1">
