@@ -16,10 +16,10 @@ bool Entity::hasId() const { return id != 0; }
 
 // Components.
 PositionComponent::PositionComponent() : Component() {}
-PositionComponent::PositionComponent(float x, float y)
-    : Component(), x(x), y(y) {}
-PositionComponent::PositionComponent(id_type entity_id, float x, float y)
-    : Component(entity_id), x(x), y(y) {}
+PositionComponent::PositionComponent(float x, float y, float z)
+    : Component(), x(x), y(y), z(z){}
+PositionComponent::PositionComponent(id_type entity_id, float x, float y, float z)
+    : Component(entity_id), x(x), y(y), z(z) {}
 
 SpeedComponent::SpeedComponent() : Component() {}
 SpeedComponent::SpeedComponent(float vx, float vy)

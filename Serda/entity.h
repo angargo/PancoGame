@@ -55,10 +55,10 @@ class Entity {
 class PositionComponent : public Component {
  public:
   PositionComponent();
-  PositionComponent(float x, float y);
-  PositionComponent(id_type entity_id, float x, float y);
+  PositionComponent(float x, float y, float z);
+  PositionComponent(id_type entity_id, float x, float y, float z);
 
-  float x, y;
+  float x, y, z;
 };
 template <>
 struct Id<PositionComponent> {

@@ -127,6 +127,7 @@ void WorldXmlParser::serialize(std::ostream& out,
   out << "<position";
   out << " x=" << pos.x;
   out << " y=" << pos.y;
+  out << " z=" << pos.z;
   out << "/>";
 }
 
@@ -199,7 +200,8 @@ PositionComponent WorldXmlParser::deserializePosition(
     const xml_node* node) const {
   float x = getAttrib<float>(node, "x");
   float y = getAttrib<float>(node, "y");
-  return PositionComponent(x, y);
+  float z = getAttrib<float>(node, "z");
+  return PositionComponent(x, y, z);
 }
 
 SpeedComponent WorldXmlParser::deserializeSpeed(const xml_node* node) const {

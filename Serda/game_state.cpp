@@ -1,6 +1,8 @@
 #include "game_state.h"
 
 #include <cstdlib>
+#include <vector>
+#include <algorithm>
 
 #include "keyboard.h"
 
@@ -144,6 +146,8 @@ void GameState::renderSystem() {
       std::max(std::min(world.lowerBounds().y, view.y / 2.0f - pos.y),
                view.y - bounds.y));
   const auto& textures = *getContext().textures;
+  std::vector< sf::Sprite > sprites;
+  int k = 0;
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
       // TODO: put this into a function.
@@ -153,7 +157,15 @@ void GameState::renderSystem() {
       sprite.setTextureRect(sf::IntRect(render.tx(), render.ty(),
                                         render.width(), render.height()));
       sprite.setPosition(position.x + offset.x, position.y + offset.y);
-      window->draw(sprite);
+      //sprites[k] = sprite;
+      sprites.push_back(sprite);
+      ++k;
+      //window->draw(sprite);
     }
+  }
+  //std::sort(std::begin(sprites),std::end(sprites));
+  for(int i = 0; i < sprites.size(); ++i){
+    sf::Sprite sprite = sprites[i];
+    window->draw(sprite);
   }
 }
