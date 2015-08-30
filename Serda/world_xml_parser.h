@@ -40,6 +40,7 @@ class WorldXmlParser {
   // Read from XML.
   void deserializeEntity(const xml_node* node);
   void deserializeGeneric(const xml_node* node);
+  void instantiateGeneric(const std::string& type, id_type id);
 
   PositionComponent deserializePosition(const xml_node* node) const;
   SpeedComponent deserializeSpeed(const xml_node* node) const;
@@ -54,7 +55,7 @@ class WorldXmlParser {
 
  private:
   World* world;
-  std::vector<Generic> generics;
+  std::map<std::string, Generic> generics;
   std::map<int, std::string> files;
 };
 

@@ -163,16 +163,16 @@ void WorldXmlParser::serialize(std::ostream& out,
 }
 
 void WorldXmlParser::deserializeEntity(const xml_node* node) {
-  // TODO: remove.
-  if (node->first_attribute("type")) return;
-
   id_type id;
-  if (node->first_attribute("id")) {
-    id = getFromString<id_type>(node->first_attribute("id")->value());
+  if (const auto* attr = node->first_attribute("id")) {
+    id = getFromString<id_type>(attr->value());
     world->createEntity(id);
   } else {
     id = world->createEntity();
   }
+
+  if (const auto* attr = node->first_attribute("type"))
+    instantiateGeneric(std::string(attr->value()), id);
 
   if (const auto* cnode = node->first_node("position"))
     world->add(id, deserializePosition(cnode));
@@ -193,12 +193,52 @@ void WorldXmlParser::deserializeEntity(const xml_node* node) {
     world->add(id, deserializeLogic(cnode));
 }
 
-void WorldXmlParser::deserializeGeneric(const xml_node* node) {}
+void WorldXmlParser::deserializeGeneric(const xml_node* node) {
+  const std::string& type(getAttrib<std::string>(node, "type"));
+  generics.emplace(type, Generic(type));
+  Generic& generic = generics[type];
+
+  if (const auto* cnode = node->first_node("position"))
+    generic.add(deserializePosition(cnode));
+
+  if (const auto* cnode = node->first_node("speed"))
+    generic.add(deserializeSpeed(cnode));
+
+  if (const auto* cnode = node->first_node("render"))
+    generic.add(deserializeRender(cnode));
+
+  if (const auto* cnode = node->first_node("anim"))
+    generic.add(deserializeAnim(cnode));
+
+  if (const auto* cnode = node->first_node("input"))
+    generic.add(deserializeInput(cnode));
+
+  if (const auto* cnode = node->first_node("logic"))
+    generic.add(deserializeLogic(cnode));
+}
+
+void WorldXmlParser::instantiateGeneric(const std::string& type, id_type id) {
+  assert(generics.count(type));
+  const Generic& generic = generics[type];
+
+  if (generic.has<PositionComponent>())
+    world->add(id, generic.get<PositionComponent>());
+  if (generic.has<SpeedComponent>())
+    world->add(id, generic.get<SpeedComponent>());
+  if (generic.has<RenderComponent>())
+    world->add(id, generic.get<RenderComponent>());
+  if (generic.has<AnimComponent>())
+    world->add(id, generic.get<AnimComponent>());
+  if (generic.has<InputComponent>())
+    world->add(id, generic.get<InputComponent>());
+  if (generic.has<LogicComponent>())
+    world->add(id, generic.get<LogicComponent>());
+}
 
 PositionComponent WorldXmlParser::deserializePosition(
     const xml_node* node) const {
-  float x = getAttrib<float>(node, "x");
-  float y = getAttrib<float>(node, "y");
+  auto x = getAttrib<float>(node, "x");
+  auto y = getAttrib<float>(node, "y");
   return PositionComponent(x, y);
 }
 
@@ -217,12 +257,12 @@ AnimComponent WorldXmlParser::deserializeAnim(const xml_node* node) const {
 }
 
 InputComponent WorldXmlParser::deserializeInput(const xml_node* node) const {
-  int id = getAttrib<int>(node, "script_id");
+  auto id = getAttrib<int>(node, "script_id");
   return InputComponent(id);
 }
 
 LogicComponent WorldXmlParser::deserializeLogic(const xml_node* node) const {
-  int id = getAttrib<int>(node, "script_id");
+  auto id = getAttrib<int>(node, "script_id");
   return LogicComponent(id);
 }
 
