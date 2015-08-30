@@ -17,7 +17,7 @@ typedef int id_type;
 // Component base class.
 class Component {
  public:
-  enum Id { POSITION, SPEED, RENDER, ANIM, INPUT, NUM_IDS };
+  enum Id { POSITION, SPEED, RENDER, ANIM, INPUT, LOGIC, NUM_IDS };
 
   Component();
   explicit Component(id_type entity_id);
@@ -201,7 +201,7 @@ class LogicComponent : public Component {
 };
 template <>
 struct Id<LogicComponent> {
-  operator int() { return Component::INPUT; }
+  operator int() { return Component::LOGIC; }
 };
 
 class Generic {
@@ -209,22 +209,24 @@ class Generic {
   Generic();
   Generic(std::string type);
 
+  std::string getType() const;
+
   template <class C>
   bool has() const {
     return components[Id<C>()];
   }
 
-  void addComponent(const PositionComponent& component);
-  void addComponent(const SpeedComponent& component);
-  void addComponent(const RenderComponent& component);
-  void addComponent(const AnimComponent& component);
-  void addComponent(const InputComponent& component);
-
-  std::string getType() const { return type; }
+  template <class C>
+  void add(const C& component) {
+    components.set(Id<C>());
+    variable<C>() = component;
+  }
 
   template <class C>
-  C& get() {
-    throw std::exception("Error Generic::get - Unknown type");
+  const C& get() const;
+  template <class C>
+  C& variable() {
+    return const_cast<C&>(get<C>());
   }
 
  private:

@@ -110,32 +110,34 @@ LogicComponent::LogicComponent(id_type entity_id, int script_id)
 Generic::Generic() : components() {}
 Generic::Generic(std::string type) : type(std::move(type)), components() {}
 
+std::string Generic::getType() const { return type; }
+
 template <>
-PositionComponent& Generic::get<PositionComponent>() {
+const PositionComponent& Generic::get<PositionComponent>() const {
   return position;
 }
 
 template <>
-SpeedComponent& Generic::get<SpeedComponent>() {
+const SpeedComponent& Generic::get<SpeedComponent>() const {
   return speed;
 }
 
 template <>
-RenderComponent& Generic::get<RenderComponent>() {
+const RenderComponent& Generic::get<RenderComponent>() const {
   return render;
 }
 
 template <>
-AnimComponent& Generic::get<AnimComponent>() {
+const AnimComponent& Generic::get<AnimComponent>() const {
   return anim;
 }
 
 template <>
-InputComponent& Generic::get<InputComponent>() {
+const InputComponent& Generic::get<InputComponent>() const {
   return input;
 }
 
 template <>
-LogicComponent& Generic::get<LogicComponent>() {
+const LogicComponent& Generic::get<LogicComponent>() const {
   return logic;
 }

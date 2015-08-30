@@ -61,7 +61,6 @@ class World {
   const sf::Vector2f& upperBounds() const;
   sf::Vector2f& variableUpperBounds();
 
-
   // Compenent queries.
   template <typename C>
   bool has(const Entity& entity) const {
@@ -113,10 +112,13 @@ class World {
   void add(id_type entity_id, C component) {
     component.entity_id = entity_id;
     Entity& entity = entities.at(entity_id);
-    assert(not has<C>(entity));
-    entity.component_indices[Id<C>()] = getVect<C>().size();
-    entity.components.set(Id<C>(), true);
-    mutVect<C>().push_back(component);
+    if (has<C>(entity))
+      variable<C>(entity) = component;
+    else {
+      entity.component_indices[Id<C>()] = getVect<C>().size();
+      entity.components.set(Id<C>(), true);
+      mutVect<C>().push_back(component);
+    }
   }
 
  private:
@@ -141,7 +143,8 @@ class World {
   Range range;
 
   sf::Vector2f lower_bounds;
-  sf::Vector2f upper_bounds;;
+  sf::Vector2f upper_bounds;
+  ;
 
   // Components go here.
   std::vector<PositionComponent> position_components;
