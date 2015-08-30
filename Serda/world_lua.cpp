@@ -19,12 +19,15 @@ void World::registerLuaFunctions() {
     return 0;
   });
 
+  // Parameters: entity_id.
+  // Return the x, y, z coordinates of the entity.
   lua_register(L, "getPosition", [](lua_State* L) -> int {
     id_type entity_id = luaL_checknumber(L, 1);
     const auto& pos = world->get<PositionComponent>(entity_id);
     lua_pushnumber(L, pos.x);
     lua_pushnumber(L, pos.y);
-    return 2;
+    lua_pushnumber(L, pos.z);
+    return 3;
   });
 
   // Parameters: entity_id, x, y.
