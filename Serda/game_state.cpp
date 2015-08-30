@@ -146,8 +146,9 @@ void GameState::renderSystem() {
       std::max(std::min(world.lowerBounds().y, view.y / 2.0f - pos.y),
                view.y - bounds.y));
   const auto& textures = *getContext().textures;
-  std::vector< sf::Sprite > sprites;
-  std::vector< std::pair< std::pair<float,float>, int> > ordenar; //vector auxiliar para ordenar los sprites
+  std::vector<sf::Sprite> sprites;
+  // Aux vector to sort sprites by priority befores drawing.
+  std::vector<std::pair<std::pair<float, float>, int>> sorted_sprites;
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
       // TODO: put this into a function.
@@ -158,13 +159,14 @@ void GameState::renderSystem() {
                                         render.width(), render.height()));
       sprite.setPosition(position.x + offset.x, position.y + offset.y);
       sprites.push_back(sprite);
-      ordenar.push_back(std::pair<std::pair<float,float>,int>
-                        (std::pair<float,float>(position.z,position.y),ordenar.size()) );
+      sorted_sprites.push_back(std::pair<std::pair<float, float>, int>(
+          std::pair<float, float>(position.z, position.y),
+          sorted_sprites.size()));
     }
   }
-  std::sort(ordenar.begin(),ordenar.end());
-  for(int i = 0; i < sprites.size(); ++i){
-    sf::Sprite sprite = sprites[ordenar[i].second];
+  std::sort(sorted_sprites.begin(), sorted_sprites.end());
+  for (int i = 0; i < int(sprites.size()); ++i) {
+    sf::Sprite sprite = sprites[sorted_sprites[i].second];
     window->draw(sprite);
   }
 }
