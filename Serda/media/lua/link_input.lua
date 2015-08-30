@@ -1,3 +1,7 @@
+local id = tostring(2);
+init(id);
+local s = vars[id]; -- Script specific variables in this table.
+
 local mxSpeed = 100;
 
 local up
@@ -27,5 +31,4 @@ function input(entity, key, pressed)
   if key == "Right" then right(entity, pressed) end
   if key == "Left" then left(entity, pressed) end
 end
-
-game["2"] = input
+game[id] = input

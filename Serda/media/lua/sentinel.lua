@@ -1,6 +1,6 @@
 local id = tostring(3);
 
-init(id)
+init(id);
 local s = vars[id]; -- Script specific variables in this table.
 
 s.mxSpeed = 100;
