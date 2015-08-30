@@ -5,44 +5,15 @@
 #include "keyboard.h"
 
 GameState::GameState(StateStack* stack, Context context, Save save)
-    : State(stack, context), save(std::move(save)) {
-  // Temporal code for testing. TODO: remove.
-  auto window = context.window;
-  id_type link_id = world.createEntity();
-  world.variableLinkId() = link_id;
-
-  sf::Vector2f size = window->getView().getSize();
-  world.add(link_id, PositionComponent(size.x / 2, size.y / 2));
-
-  sf::Vector2u link_size = context.textures->get(2)->getSize();
-  world.add(link_id, RenderComponent(2, link_size.x, link_size.y));
-  world.add(link_id, SpeedComponent(0, 0));
-  // Setup link test animation.
-  std::vector<AnimFrame> frames;
-  const int num_frames = 8;
-  const sf::Time frame_time(sf::seconds(0.08));
-  for (int i = 0; i < num_frames; ++i) {
-    frames.push_back(AnimFrame(frame_time, Frame(3, 16, 25, 3 + 30*i, 32)));
-  }
-  world.add(link_id, AnimComponent(Animation(frames, true)));
-  // Setup background.
-  id_type map = world.createEntity();
-  world.add(map, PositionComponent(0, 0));
-  sf::Vector2u map_size = context.textures->get(5)->getSize();
-  world.add(map, RenderComponent(5, map_size.x, map_size.y));
-  // Set boundaries.
-  world.variableUpperBounds().x = 6.0f * window->getView().getSize().x;
-  world.variableUpperBounds().y = 4.0f * window->getView().getSize().y;
-
-  InputComponent input(2);
-  world.add(link_id, input);
+    : State(stack, context), save(std::move(save)), wxp(&world) {
+  // TODO: I don't like this.
+  wxp.loadWorld(1);
+  world.variableLinkId() = 1;
 }
 
 bool GameState::update(sf::Time dt) {
   motionSystem(dt);
   animSystem(dt);
-
-  // world.update();
 
   return false;
 }
@@ -54,18 +25,14 @@ bool GameState::handleEvent(const sf::Event& event) {
     if (event.type == sf::Event::KeyReleased) action = InputEvent::KEY_RELEASED;
     InputEvent input_event(action, event.key.code);
     inputSystem(input_event);
-
-    // TODO: remove
-    if (event.key.code == sf::Keyboard::H) {
-      getContext().scripts->runScript(world.getL(), 1);
-    }
   } else if (event.type == sf::Event::LostFocus ||
              event.type == sf::Event::GainedFocus) {
     // On focus gain, send all keys to be pressed, on focus lost, send all keys
     // to be released, to avoid weird behaviour.
     for (int idx = 0; idx < sf::Keyboard::Key::KeyCount; ++idx) {
-      InputEvent::KeyAction ievent = event.type == sf::Event::GainedFocus ?
-          InputEvent::KEY_PRESSED : InputEvent::KEY_RELEASED;
+      InputEvent::KeyAction ievent = event.type == sf::Event::GainedFocus
+                                         ? InputEvent::KEY_PRESSED
+                                         : InputEvent::KEY_RELEASED;
       sf::Keyboard::Key key = sf::Keyboard::Key(idx);
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(key))) {
         inputSystem(InputEvent(ievent, key));
@@ -179,11 +146,12 @@ void GameState::renderSystem() {
   const auto& textures = *getContext().textures;
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
+      // TODO: put this into a function.
       auto& render = world.variable<RenderComponent>(entity);
       const auto& position = world.get<PositionComponent>(entity);
       sf::Sprite sprite(*textures.get(render.textureId()));
-      sprite.setTextureRect(
-          sf::IntRect(render.tx(), render.ty(), render.width(), render.height()));
+      sprite.setTextureRect(sf::IntRect(render.tx(), render.ty(),
+                                        render.width(), render.height()));
       sprite.setPosition(position.x + offset.x, position.y + offset.y);
       window->draw(sprite);
     }

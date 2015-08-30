@@ -88,8 +88,8 @@ struct Frame {
   };
   Frame();
   explicit Frame(int texture_id);
-  explicit Frame(int texture_id, int width = 0, int height = 0,
-                           int tx = 0, int ty = 0, bool rotated = false);
+  explicit Frame(int texture_id, int width = 0, int height = 0, int tx = 0,
+                 int ty = 0, bool rotated = false);
   void init();
   int texture_id;
   int width;     // Width of the sprite.
@@ -101,6 +101,7 @@ struct Frame {
 class RenderComponent : public Component {
  public:
   RenderComponent();
+  explicit RenderComponent(Frame frame);
   explicit RenderComponent(int texture_id, int width = 0, int height = 0,
                            int tx = 0, int ty = 0, bool rotated = false);
   RenderComponent(id_type entity_id, int texture_id);
@@ -127,8 +128,9 @@ struct Id<RenderComponent> {
 struct AnimFrame {
   AnimFrame();
   AnimFrame(sf::Time duration, Frame frame);
-  sf::Time duration;
+  AnimFrame(float duration_secs, Frame frame);
   Frame frame;
+  sf::Time duration;
   sf::Time elapsed_time;
 };
 struct Animation {
@@ -147,15 +149,15 @@ class AnimComponent : public Component {
   Animation& variableAnimation();
 
   int index;
+
  private:
   Animation animation;
 };
 
-template<>
+template <>
 struct Id<AnimComponent> {
   operator int() { return Component::ANIM; }
 };
-
 
 struct InputEvent {
   enum KeyAction {
@@ -186,6 +188,19 @@ class InputComponent : public Component {
 };
 template <>
 struct Id<InputComponent> {
+  operator int() { return Component::INPUT; }
+};
+
+class LogicComponent : public Component {
+ public:
+  LogicComponent();
+  explicit LogicComponent(int script_id);
+  LogicComponent(id_type entity_id, int script_id);
+
+  int script_id;
+};
+template <>
+struct Id<LogicComponent> {
   operator int() { return Component::INPUT; }
 };
 
@@ -222,6 +237,7 @@ class Generic {
   RenderComponent render;
   AnimComponent anim;
   InputComponent input;
+  LogicComponent logic;
 };
 
 #endif  // SERDA_ENTITY_H

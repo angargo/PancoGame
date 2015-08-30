@@ -26,6 +26,7 @@ class GameState : public State {
  private:
   Save save;
   World world;
+  WorldXmlParser wxp;
   // TODO: remove
   sf::Texture texture;
 };

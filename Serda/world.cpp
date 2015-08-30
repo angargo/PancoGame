@@ -41,13 +41,29 @@ World::World()
 
 World::~World() { lua_close(L); }
 
-int World::linkId() const {
-  return link_id;
+void World::reset() {
+  // TODO: maybe reset Lua.
+
+  // Reset entities and components.
+  entities.clear();
+  position_components.clear();
+  speed_components.clear();
+  render_components.clear();
+  anim_components.clear();
+  input_components.clear();
+  logic_components.clear();
+
+  // Reset link.
+  link_id = 0;
+
+  // Reset map bounds.
+  lower_bounds = sf::Vector2f(0.0f, 0.0f);
+  upper_bounds = sf::Vector2f(1e9f, 1e9f);
 }
 
-int& World::variableLinkId() {
-  return link_id;
-}
+int World::linkId() const { return link_id; }
+
+int& World::variableLinkId() { return link_id; }
 
 void World::createEntity(id_type entity_id) {
   entities.emplace(entity_id, Entity(entity_id));
@@ -111,6 +127,11 @@ const std::vector<AnimComponent>& World::getVect<AnimComponent>() const {
 template <>
 const std::vector<InputComponent>& World::getVect<InputComponent>() const {
   return input_components;
+}
+
+template <>
+const std::vector<LogicComponent>& World::getVect<LogicComponent>() const {
+  return logic_components;
 }
 
 template <typename C>

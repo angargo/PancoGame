@@ -57,6 +57,8 @@ void Frame::init() {
 }
 
 RenderComponent::RenderComponent() : Component() {}
+RenderComponent::RenderComponent(Frame frame)
+    : Component(), frame(std::move(frame)) {}
 RenderComponent::RenderComponent(int texture_id, int width, int height, int tx,
                                  int ty, bool rotated)
     : Component(), frame(texture_id, width, height, tx, ty, rotated) {}
@@ -75,6 +77,10 @@ AnimFrame::AnimFrame()
     : duration(sf::seconds(1.0f)), frame(), elapsed_time(sf::Time::Zero) {}
 AnimFrame::AnimFrame(sf::Time duration, Frame frame)
     : duration(duration), frame(frame), elapsed_time(sf::Time::Zero) {}
+AnimFrame::AnimFrame(float duration_secs, Frame frame)
+    : duration(sf::seconds(duration_secs)),
+      frame(frame),
+      elapsed_time(sf::Time::Zero) {}
 
 Animation::Animation() : frames() {}
 Animation::Animation(const std::vector<AnimFrame>& frames, bool repeated)
@@ -91,6 +97,13 @@ InputComponent::InputComponent() : Component(), script_id(-1) {}
 InputComponent::InputComponent(int script_id)
     : Component(), script_id(script_id) {}
 InputComponent::InputComponent(id_type entity_id, int script_id)
+    : Component(entity_id), script_id(script_id) {}
+
+// Logic Component.
+LogicComponent::LogicComponent() : Component(), script_id(-1) {}
+LogicComponent::LogicComponent(int script_id)
+    : Component(), script_id(script_id) {}
+LogicComponent::LogicComponent(id_type entity_id, int script_id)
     : Component(entity_id), script_id(script_id) {}
 
 // Generic Entity.
@@ -120,4 +133,9 @@ AnimComponent& Generic::get<AnimComponent>() {
 template <>
 InputComponent& Generic::get<InputComponent>() {
   return input;
+}
+
+template <>
+LogicComponent& Generic::get<LogicComponent>() {
+  return logic;
 }
