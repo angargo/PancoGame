@@ -19,6 +19,14 @@ void World::registerLuaFunctions() {
     return 0;
   });
 
+  lua_register(L, "getPosition", [](lua_State* L) -> int {
+    id_type entity_id = luaL_checknumber(L, 1);
+    const auto& pos = world->get<PositionComponent>(entity_id);
+    lua_pushnumber(L, pos.x);
+    lua_pushnumber(L, pos.y);
+    return 2;
+  });
+
   // Parameters: entity_id, x, y.
   // Add ('x','y') to speed of entity 'entity_id'.
   lua_register(L, "addSpeed", [](lua_State* L) -> int {
@@ -26,6 +34,16 @@ void World::registerLuaFunctions() {
     int x = luaL_checknumber(L, 2);
     int y = luaL_checknumber(L, 3);
     world->variable<SpeedComponent>(entity_id).addSpeed(x, y);
+    return 0;
+  });
+
+  // Parameters: entity_id, x, y.
+  // Set ('x','y') to speed of entity 'entity_id'.
+  lua_register(L, "setSpeed", [](lua_State* L) -> int {
+    id_type entity_id = luaL_checknumber(L, 1);
+    int x = luaL_checknumber(L, 2);
+    int y = luaL_checknumber(L, 3);
+    world->variable<SpeedComponent>(entity_id).setSpeed(x, y);
     return 0;
   });
 }

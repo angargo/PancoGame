@@ -14,6 +14,7 @@ GameState::GameState(StateStack* stack, Context context, Save save)
 }
 
 bool GameState::update(sf::Time dt) {
+  logicSystem(dt);
   motionSystem(dt);
   animSystem(dt);
 
@@ -77,6 +78,18 @@ void GameState::motionSystem(sf::Time dt) {
   }
 }
 
+void GameState::logicSystem(sf::Time dt) {
+  static const std::bitset<Component::NUM_IDS> skey(
+      createBitset(Component::LOGIC));
+
+  for (const Entity& entity : world.getEntities()) {
+    if ((entity.components & skey) == skey) {
+      const auto& logic = world.get<LogicComponent>(entity);
+      getContext().scripts->runScript(world.getL(), logic.script_id, entity.id);
+    }
+  }
+}
+
 void GameState::animSystem(sf::Time dt) {
   static const std::bitset<Component::NUM_IDS> skey(
       createBitset(Component::RENDER, Component::ANIM));
@@ -122,7 +135,7 @@ void GameState::inputSystem(InputEvent event) {
 
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
-      const auto& input = world.variable<InputComponent>(entity);
+      const auto& input = world.get<InputComponent>(entity);
       getContext().scripts->runScript(world.getL(), input.script_id, entity.id,
                                       KeyToStr.at(event.key),
                                       event.key_pressed);

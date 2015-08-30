@@ -18,6 +18,7 @@ class GameState : public State {
   virtual void draw();
 
   // ECS Systems.
+  void logicSystem(sf::Time dt);
   void motionSystem(sf::Time dt);
   void animSystem(sf::Time dt);
   void inputSystem(InputEvent input_event);

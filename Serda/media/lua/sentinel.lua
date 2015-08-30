@@ -1,18 +1,24 @@
-if game==nil then game = {} end
+local id = tostring(3);
 
-local mxSpeed = 100;
-local length = 100;
-local down = {};
-local up = {};
+if game == nil then game = {} end
+if vars == nil then vars = {} end
+if vars[id] == nil then vars[id] = {} end
+local s = vars[id]; -- Script specific variables in this table.
+
+s.mxSpeed = 100;
+s.length = 100;
 
 local f
 function f(entity)
-  x, y = 0, 0 --getPosition(entity);
-  if up[entity] == nil then up[entity] = y end
-  if down[entity] == nil then down[entity] = y + length end
+  if s[entity] == nil then s[entity] = {} end
+  local e = s[entity]; -- Entity-specific variables in this table.
 
-  if y <= up[entity] then setSpeed(entity, 0, mxSpeed) end
-  if y >= down[entity] then setSpeed(entity, 0, -mxSpeed) end
+  local x, y = getPosition(entity);
+
+  if e.up == nil then e.up = y end
+  if e.down == nil then e.down = y + s.length end
+
+  if y <= e.up then setSpeed(entity, 0, s.mxSpeed) end
+  if y >= e.down then setSpeed(entity, 0, -s.mxSpeed) end
 end
-
-game["3"] = f
+game[id] = f
