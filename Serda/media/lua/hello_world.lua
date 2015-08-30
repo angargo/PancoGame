@@ -1,5 +1,3 @@
-if game==nil then game = {} end
-
 local f
 function f()
   sayHelloWorld();

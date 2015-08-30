@@ -9,6 +9,9 @@
 GameState::GameState(StateStack* stack, Context context, Save save)
     : State(stack, context), save(std::move(save)), wxp(&world) {
   // TODO: I don't like this.
+  const int lua_init_id = 4;
+  // We need to run the init script before all other scripts.
+  context.scripts->loadScript(world.getL(), lua_init_id);
   wxp.loadWorld(1);
   world.variableLinkId() = 1;
 }

@@ -1,5 +1,3 @@
-if game==nil then game = {} end
-
 local mxSpeed = 100;
 
 local up
