@@ -44,10 +44,13 @@ class WorldXmlParser {
   PositionComponent deserializePosition(const xml_node* node) const;
   SpeedComponent deserializeSpeed(const xml_node* node) const;
   RenderComponent deserializeRender(const xml_node* node) const;
+  AnimComponent deserializeAnim(const xml_node* node) const;
   InputComponent deserializeInput(const xml_node* node) const;
   LogicComponent deserializeLogic(const xml_node* node) const;
 
   Frame deserializeFrame(const xml_node* node) const;
+  Animation deserializeAnimation(const xml_node* node) const;
+  AnimFrame deserializeAnimFrame(const xml_node* node) const;
 
  private:
   World* world;

@@ -77,6 +77,10 @@ AnimFrame::AnimFrame()
     : duration(sf::seconds(1.0f)), frame(), elapsed_time(sf::Time::Zero) {}
 AnimFrame::AnimFrame(sf::Time duration, Frame frame)
     : duration(duration), frame(frame), elapsed_time(sf::Time::Zero) {}
+AnimFrame::AnimFrame(float duration_secs, Frame frame)
+    : duration(sf::seconds(duration_secs)),
+      frame(frame),
+      elapsed_time(sf::Time::Zero) {}
 
 Animation::Animation() : frames() {}
 Animation::Animation(const std::vector<AnimFrame>& frames, bool repeated)

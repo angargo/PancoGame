@@ -125,6 +125,7 @@ struct Id<RenderComponent> {
 struct AnimFrame {
   AnimFrame();
   AnimFrame(sf::Time duration, Frame frame);
+  AnimFrame(float duration_secs, Frame frame);
   Frame frame;
   sf::Time duration;
   sf::Time elapsed_time;

@@ -3,27 +3,46 @@
 #include <istream>
 #include <sstream>
 
+namespace {
+
 template <typename C>
-static C getFromString(const char* value) {
+C getFromString(const char* value) {
   std::stringstream ss(value);
   C aux;
   ss >> aux;
   return aux;
 }
 
+template <>
+bool getFromString(const char* value) {
+  if (std::string(value) == "true") return true;
+  return false;
+}
+
 template <typename C>
-static C getAttribOrDefault(const xml_node* node, const char* name, C def) {
-  const rapidxml::xml_attribute<> *attr = node->first_attribute(name);
+C getAttribOrDefault(const xml_node* node, const char* name, C def) {
+  const rapidxml::xml_attribute<>* attr = node->first_attribute(name);
   if (attr) return getFromString<C>(attr->value());
   return def;
 }
 
-static std::string loadFile(const std::string& filename) {
+template <typename C>
+C getAttrib(const xml_node* node, const char* name) {
+  const rapidxml::xml_attribute<>* attr = node->first_attribute(name);
+  if (not attr)
+    throw std::runtime_error("Attribute " + std::string(name) +
+                             " missing in node " + std::string(node->name()));
+  return getFromString<C>(attr->value());
+}
+
+std::string loadFile(const std::string& filename) {
   std::ifstream in(filename);
   std::stringstream ss;
   ss << in.rdbuf();
   return ss.str();
 }
+
+}  // anonymous namespace
 
 WorldXmlParser::WorldXmlParser(World* world) : world(world) {
   loadDictionary("media/maps/dictionary");
@@ -146,6 +165,7 @@ void WorldXmlParser::serialize(std::ostream& out,
 void WorldXmlParser::deserializeEntity(const xml_node* node) {
   // TODO: remove.
   if (node->first_attribute("type")) return;
+
   id_type id;
   if (node->first_attribute("id")) {
     id = getFromString<id_type>(node->first_attribute("id")->value());
@@ -163,16 +183,22 @@ void WorldXmlParser::deserializeEntity(const xml_node* node) {
   if (const auto* cnode = node->first_node("render"))
     world->add(id, deserializeRender(cnode));
 
+  if (const auto* cnode = node->first_node("anim"))
+    world->add(id, deserializeAnim(cnode));
+
   if (const auto* cnode = node->first_node("input"))
     world->add(id, deserializeInput(cnode));
+
+  if (const auto* cnode = node->first_node("logic"))
+    world->add(id, deserializeLogic(cnode));
 }
 
 void WorldXmlParser::deserializeGeneric(const xml_node* node) {}
 
 PositionComponent WorldXmlParser::deserializePosition(
     const xml_node* node) const {
-  float x = getFromString<float>(node->first_attribute("x")->value());
-  float y = getFromString<float>(node->first_attribute("y")->value());
+  float x = getAttrib<float>(node, "x");
+  float y = getAttrib<float>(node, "y");
   return PositionComponent(x, y);
 }
 
@@ -186,21 +212,40 @@ RenderComponent WorldXmlParser::deserializeRender(const xml_node* node) const {
   return RenderComponent(deserializeFrame(node->first_node("frame")));
 }
 
+AnimComponent WorldXmlParser::deserializeAnim(const xml_node* node) const {
+  return AnimComponent(deserializeAnimation(node->first_node("animation")));
+}
+
 InputComponent WorldXmlParser::deserializeInput(const xml_node* node) const {
-  int id = getFromString<int>(node->first_attribute("script_id")->value());
+  int id = getAttrib<int>(node, "script_id");
   return InputComponent(id);
 }
 
 LogicComponent WorldXmlParser::deserializeLogic(const xml_node* node) const {
-  int id = getFromString<int>(node->first_attribute("script_id")->value());
+  int id = getAttrib<int>(node, "script_id");
   return LogicComponent(id);
 }
 
 Frame WorldXmlParser::deserializeFrame(const xml_node* node) const {
-  auto tex_id = getFromString<int>(node->first_attribute("tex_id")->value());
-  auto width = getFromString<int>(node->first_attribute("width")->value());
-  auto height = getFromString<int>(node->first_attribute("height")->value());
+  auto tex_id = getAttrib<int>(node, "tex_id");
+  auto width = getAttrib<int>(node, "width");
+  auto height = getAttrib<int>(node, "height");
   auto tx = getAttribOrDefault<int>(node, "tx", 0);
   auto ty = getAttribOrDefault<int>(node, "ty", 0);
   return Frame(tex_id, width, height, tx, ty);
+}
+
+Animation WorldXmlParser::deserializeAnimation(const xml_node* node) const {
+  std::vector<AnimFrame> frames;
+  for (const auto* snode = node->first_node("animframe"); snode;
+       snode = snode->next_sibling()) {
+    frames.push_back(deserializeAnimFrame(snode));
+  }
+  auto repeated = getAttribOrDefault<bool>(node, "repeated", false);
+  return Animation(frames, repeated);
+}
+
+AnimFrame WorldXmlParser::deserializeAnimFrame(const xml_node* node) const {
+  auto duration_secs = getAttrib<float>(node, "duration");
+  return AnimFrame(duration_secs, deserializeFrame(node->first_node("frame")));
 }
