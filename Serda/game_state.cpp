@@ -163,7 +163,7 @@ void GameState::renderSystem() {
                view.y - bounds.y));
   const auto& textures = *getContext().textures;
   std::vector<sf::Sprite> sprites;
-  // Aux vector to sort sprites by priority befores drawing.
+  // Aux vector to sort sprites by priority before drawing.
   std::vector<std::pair<std::pair<float, float>, int>> sorted_sprites;
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
@@ -182,7 +182,6 @@ void GameState::renderSystem() {
   }
   std::sort(sorted_sprites.begin(), sorted_sprites.end());
   for (int i = 0; i < int(sprites.size()); ++i) {
-    sf::Sprite sprite = sprites[sorted_sprites[i].second];
-    window->draw(sprite);
+    window->draw(sprites[sorted_sprites[i].second]);
   }
 }
