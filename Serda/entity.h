@@ -17,7 +17,7 @@ typedef int id_type;
 // Component base class.
 class Component {
  public:
-  enum Id { POSITION, SPEED, RENDER, ANIM, INPUT, LOGIC, NUM_IDS };
+  enum Id { POSITION, SPEED, RENDER, ANIM, INPUT, LOGIC, COLLISION, NUM_IDS };
 
   Component();
   explicit Component(id_type entity_id);
@@ -204,6 +204,21 @@ struct Id<LogicComponent> {
   operator int() { return Component::LOGIC; }
 };
 
+class Hitbox {
+ public:
+  bool collidesWith(const Hitbox& hitbox) const;
+};
+class CollisionComponent : public Component {
+ public:
+  CollisionComponent();
+
+  Hitbox hitbox;
+};
+template <>
+struct Id<CollisionComponent> {
+  operator int() { return Component::COLLISION; }
+};
+
 class Generic {
  public:
   Generic();
@@ -240,6 +255,7 @@ class Generic {
   AnimComponent anim;
   InputComponent input;
   LogicComponent logic;
+  CollisionComponent collision;
 };
 
 #endif  // SERDA_ENTITY_H

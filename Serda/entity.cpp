@@ -17,8 +17,9 @@ bool Entity::hasId() const { return id != 0; }
 // Components.
 PositionComponent::PositionComponent() : Component() {}
 PositionComponent::PositionComponent(float x, float y, float z)
-    : Component(), x(x), y(y), z(z){}
-PositionComponent::PositionComponent(id_type entity_id, float x, float y, float z)
+    : Component(), x(x), y(y), z(z) {}
+PositionComponent::PositionComponent(id_type entity_id, float x, float y,
+                                     float z)
     : Component(entity_id), x(x), y(y), z(z) {}
 
 SpeedComponent::SpeedComponent() : Component() {}
@@ -106,6 +107,9 @@ LogicComponent::LogicComponent(int script_id)
 LogicComponent::LogicComponent(id_type entity_id, int script_id)
     : Component(entity_id), script_id(script_id) {}
 
+bool Hitbox::collidesWith(const Hitbox& hitbox) const { return false; }
+CollisionComponent::CollisionComponent() : Component() {}
+
 // Generic Entity.
 Generic::Generic() : components() {}
 Generic::Generic(std::string type) : type(std::move(type)), components() {}
@@ -140,4 +144,9 @@ const InputComponent& Generic::get<InputComponent>() const {
 template <>
 const LogicComponent& Generic::get<LogicComponent>() const {
   return logic;
+}
+
+template <>
+const CollisionComponent& Generic::get<CollisionComponent>() const {
+  return collision;
 }

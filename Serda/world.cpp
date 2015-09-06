@@ -89,18 +89,10 @@ id_type World::getRandomEntityId() {
   return id;
 }
 
-const sf::Vector2f& World::lowerBounds() const {
-  return lower_bounds;
-}
-sf::Vector2f& World::variableLowerBounds() {
-  return lower_bounds;
-}
-const sf::Vector2f& World::upperBounds() const {
-  return upper_bounds;
-}
-sf::Vector2f& World::variableUpperBounds() {
-  return upper_bounds;
-}
+const sf::Vector2f& World::lowerBounds() const { return lower_bounds; }
+sf::Vector2f& World::variableLowerBounds() { return lower_bounds; }
+const sf::Vector2f& World::upperBounds() const { return upper_bounds; }
+sf::Vector2f& World::variableUpperBounds() { return upper_bounds; }
 
 template <>
 const std::vector<PositionComponent>& World::getVect<PositionComponent>()
@@ -131,6 +123,12 @@ const std::vector<InputComponent>& World::getVect<InputComponent>() const {
 template <>
 const std::vector<LogicComponent>& World::getVect<LogicComponent>() const {
   return logic_components;
+}
+
+template <>
+const std::vector<CollisionComponent>& World::getVect<CollisionComponent>()
+    const {
+  return collision_components;
 }
 
 template <typename C>
