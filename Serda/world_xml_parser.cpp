@@ -196,6 +196,9 @@ void WorldXmlParser::deserializeEntity(const xml_node* node) {
 
   if (const auto* cnode = node->first_node("logic"))
     world->add(id, deserializeLogic(cnode));
+
+  if (const auto* cnode = node->first_node("collision"))
+    world->add(id, deserializeCollision(cnode));
 }
 
 void WorldXmlParser::deserializeGeneric(const xml_node* node) {
@@ -270,6 +273,11 @@ InputComponent WorldXmlParser::deserializeInput(const xml_node* node) const {
 LogicComponent WorldXmlParser::deserializeLogic(const xml_node* node) const {
   auto id = getAttrib<int>(node, "script_id");
   return LogicComponent(id);
+}
+
+CollisionComponent WorldXmlParser::deserializeCollision(
+    const xml_node* node) const {
+  return CollisionComponent();
 }
 
 Frame WorldXmlParser::deserializeFrame(const xml_node* node) const {

@@ -32,7 +32,10 @@ class WorldXmlParser {
   void serialize(std::ostream& out, const PositionComponent& pos) const;
   void serialize(std::ostream& out, const SpeedComponent& speed) const;
   void serialize(std::ostream& out, const RenderComponent& render) const;
+  void serialize(std::ostream& out, const AnimComponent& render) const;
   void serialize(std::ostream& out, const InputComponent& input) const;
+  void serialize(std::ostream& out, const LogicComponent& input) const;
+  void serialize(std::ostream& out, const CollisionComponent& input) const;
 
   // Serialize generic.
   void serialize(std::ostream& out, const Generic& generic) const;
@@ -48,10 +51,12 @@ class WorldXmlParser {
   AnimComponent deserializeAnim(const xml_node* node) const;
   InputComponent deserializeInput(const xml_node* node) const;
   LogicComponent deserializeLogic(const xml_node* node) const;
+  CollisionComponent deserializeCollision(const xml_node* node) const;
 
   Frame deserializeFrame(const xml_node* node) const;
   Animation deserializeAnimation(const xml_node* node) const;
   AnimFrame deserializeAnimFrame(const xml_node* node) const;
+  Hitbox deserializeHitbox(const xml_node* node) const;
 
   // Map attributes
   void deserializeMapBounds(const xml_node* node) const;

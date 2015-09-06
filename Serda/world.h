@@ -9,25 +9,43 @@
 #include "lua.hpp"
 
 class World {
- private:
+ public:
   // Class to iterate over values of entities.
-  typedef std::unordered_map<id_type, Entity> entityMap;
+  typedef std::unordered_map<id_type, Entity> EntityMap;
 
-  class value_iterator : public entityMap::iterator {
+  // Range to allow for range loop in entities.
+  class value_iterator : public EntityMap::iterator {
    public:
     value_iterator();
-    value_iterator(entityMap::iterator e);
+    value_iterator(const EntityMap::iterator& e);
     Entity* operator->();
-    Entity operator*();
+    Entity& operator*();
+  };
+  class pair_iterator {
+   public:
+    pair_iterator(EntityMap& entities, EntityMap::iterator first,
+                  EntityMap::iterator second);
+
+    std::pair<Entity&, Entity&> operator*();
+    pair_iterator& operator++();
+    bool operator!=(const World::pair_iterator& pi) const;
+
+   private:
+    EntityMap& entities;
+    std::pair<EntityMap::iterator, EntityMap::iterator> p;
   };
 
- public:
-  // Range to allow for range loop in entities.
   struct Range {
-    std::unordered_map<id_type, Entity>& entities;
-    Range(std::unordered_map<id_type, Entity>& entities);
+    EntityMap& entities;
+    Range(EntityMap& entities);
     value_iterator begin();
     value_iterator end();
+  };
+  struct PairRange {
+    EntityMap& entities;
+    PairRange(EntityMap& entities);
+    pair_iterator begin();
+    pair_iterator end();
   };
 
   // Range of the entity ids that the game will use.
@@ -55,6 +73,7 @@ class World {
 
   const Entity& getEntity(id_type entity_id) const;
   Range getEntities();
+  PairRange getEntityPairs();
 
   const sf::Vector2f& lowerBounds() const;
   sf::Vector2f& variableLowerBounds();
@@ -121,6 +140,10 @@ class World {
     }
   }
 
+  // When implementing deleteEntities, we must take into account that
+  // all iterators will became invalid, so must not do it while a system
+  // is iterating over the entities. Use an event queue instead.
+
  private:
   // Returns an random entityId not being used.
   id_type getRandomEntityId();
@@ -138,9 +161,10 @@ class World {
   lua_State* L;
 
   // TODO: cache problems, maybe.
-  std::unordered_map<id_type, Entity> entities;
+  EntityMap entities;
 
   Range range;
+  PairRange pair_range;
 
   sf::Vector2f lower_bounds;
   sf::Vector2f upper_bounds;
