@@ -45,7 +45,10 @@ World::value_iterator World::Range::end() { return entities.end(); }
 // World PairRange struct to iterate over pairs of entities.
 World::PairRange::PairRange(EntityMap& entities) : entities(entities) {}
 World::pair_iterator World::PairRange::begin() {
-  return pair_iterator(entities, entities.begin(), entities.begin());
+  if (entities.size() < 2) {
+    return end();
+  }
+  return pair_iterator(entities, entities.begin(), ++entities.begin());
 }
 World::pair_iterator World::PairRange::end() {
   return pair_iterator(entities, entities.end(), entities.end());

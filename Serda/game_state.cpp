@@ -21,6 +21,7 @@ bool GameState::update(sf::Time dt) {
   logicSystem(dt);
   motionSystem(dt);
   animSystem(dt);
+  collisionSystem();
 
   return false;
 }
@@ -205,28 +206,28 @@ void GameState::collisionSystem() {
       createBitset(Component::POSITION, Component::COLLISION));
 
   std::set<CollisionInfo> collisions;
-  for (const Entity& entity_a : world.getEntities()) {
+  for (auto entity_pair : world.getEntityPairs()) {
+    const Entity& entity_a = entity_pair.first;
+    const Entity& entity_b = entity_pair.second;
     if ((entity_a.components & skey) != skey) {
       continue;
     }
-    for (const Entity& entity_b : world.getEntities()) {
-      if ((entity_b.components & skey) != skey) {
-        continue;
-      }
-      // TODO update hitbox to contain absolute position.
-      const CollisionComponent& collision_a =
-          world.get<CollisionComponent>(entity_a);
-      Hitbox hitbox_a = collision_a.hitbox;
-      //Hitbox lHitbox = lCollision.add(world.get<PositionComponent>(lhs);
+    if ((entity_b.components & skey) != skey) {
+      continue;
+    }
+    // TODO update hitbox to contain absolute position.
+    const CollisionComponent& collision_a =
+        world.get<CollisionComponent>(entity_a);
+    Hitbox hitbox_a = collision_a.hitbox;
+    //Hitbox lHitbox = lCollision.add(world.get<PositionComponent>(lhs);
 
-      const CollisionComponent& collision_b =
-          world.get<CollisionComponent>(entity_b);
-      Hitbox hitbox_b = collision_b.hitbox;
-      //Hitbox rHitbox = rCollision.add(world.get<PositionComponent>(rhs);
-      if (hitbox_a.collidesWith(hitbox_b)) {
-        // Calculate any desired information about collision.
-        collisions.insert(CollisionInfo(entity_a, entity_b));
-      }
+    const CollisionComponent& collision_b =
+        world.get<CollisionComponent>(entity_b);
+    Hitbox hitbox_b = collision_b.hitbox;
+    //Hitbox rHitbox = rCollision.add(world.get<PositionComponent>(rhs);
+    if (hitbox_a.collidesWith(hitbox_b)) {
+      // Calculate any desired information about collision.
+      collisions.insert(CollisionInfo(entity_a, entity_b));
     }
   }
   // Now, treat collisions.
