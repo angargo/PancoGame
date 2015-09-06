@@ -23,8 +23,18 @@ class GameState : public State {
   void animSystem(sf::Time dt);
   void inputSystem(InputEvent input_event);
   void renderSystem();
+  void collisionSystem();
 
  private:
+  struct CollisionInfo {
+    id_type entity_a;
+    id_type entity_b;
+    // Room for more information about collision.
+    CollisionInfo(const Entity& entity_a, const Entity& entity_b);
+    CollisionInfo(id_type entity_a, id_type entity_b);
+    bool operator<(const CollisionInfo& other) const;
+  };
+
   Save save;
   World world;
   WorldXmlParser wxp;

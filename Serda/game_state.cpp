@@ -1,8 +1,9 @@
 #include "game_state.h"
 
-#include <cstdlib>
-#include <vector>
 #include <algorithm>
+#include <cstdlib>
+#include <set>
+#include <vector>
 
 #include "keyboard.h"
 
@@ -184,4 +185,49 @@ void GameState::renderSystem() {
   for (int i = 0; i < int(sprites.size()); ++i) {
     window->draw(sprites[sorted_sprites[i].second]);
   }
+}
+
+// CollisionInfo
+GameState::CollisionInfo::CollisionInfo(const Entity& entity_a,
+                                        const Entity& entity_b)
+    : entity_a(entity_a.id), entity_b(entity_b.id) {}
+
+GameState::CollisionInfo::CollisionInfo(id_type entity_a, id_type entity_b)
+    : entity_a(entity_a), entity_b(entity_b) {}
+
+bool GameState::CollisionInfo::operator<(const CollisionInfo& other) const {
+  return std::minmax(entity_a, entity_b) <
+         std::minmax(other.entity_a, other.entity_b);
+}
+
+void GameState::collisionSystem() {
+  static const std::bitset<Component::NUM_IDS> skey(
+      createBitset(Component::POSITION, Component::COLLISION));
+
+  std::set<CollisionInfo> collisions;
+  for (const Entity& entity_a : world.getEntities()) {
+    if ((entity_a.components & skey) != skey) {
+      continue;
+    }
+    for (const Entity& entity_b : world.getEntities()) {
+      if ((entity_b.components & skey) != skey) {
+        continue;
+      }
+      // TODO update hitbox to contain absolute position.
+      const CollisionComponent& collision_a =
+          world.get<CollisionComponent>(entity_a);
+      Hitbox hitbox_a = collision_a.hitbox;
+      //Hitbox lHitbox = lCollision.add(world.get<PositionComponent>(lhs);
+
+      const CollisionComponent& collision_b =
+          world.get<CollisionComponent>(entity_b);
+      Hitbox hitbox_b = collision_b.hitbox;
+      //Hitbox rHitbox = rCollision.add(world.get<PositionComponent>(rhs);
+      if (hitbox_a.collidesWith(hitbox_b)) {
+        // Calculate any desired information about collision.
+        collisions.insert(CollisionInfo(entity_a, entity_b));
+      }
+    }
+  }
+  // Now, treat collisions.
 }
