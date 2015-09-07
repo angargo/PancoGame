@@ -7,46 +7,14 @@
 
 #include "entity.h"
 #include "lua.hpp"
+#include "range.h"
 
 class World {
  public:
   // Class to iterate over values of entities.
   typedef std::unordered_map<id_type, Entity> EntityMap;
-
-  // Range to allow for range loop in entities.
-  class value_iterator : public EntityMap::iterator {
-   public:
-    value_iterator();
-    value_iterator(const EntityMap::iterator& e);
-    Entity* operator->();
-    Entity& operator*();
-  };
-  class pair_iterator {
-   public:
-    pair_iterator(EntityMap& entities, EntityMap::iterator first,
-                  EntityMap::iterator second);
-
-    std::pair<Entity&, Entity&> operator*();
-    pair_iterator& operator++();
-    bool operator!=(const World::pair_iterator& pi) const;
-
-   private:
-    EntityMap& entities;
-    std::pair<EntityMap::iterator, EntityMap::iterator> p;
-  };
-
-  struct Range {
-    EntityMap& entities;
-    Range(EntityMap& entities);
-    value_iterator begin();
-    value_iterator end();
-  };
-  struct PairRange {
-    EntityMap& entities;
-    PairRange(EntityMap& entities);
-    pair_iterator begin();
-    pair_iterator end();
-  };
+  typedef ValueRange<EntityMap> ValRange;
+  typedef ValuePairRange<EntityMap> ValPairRange;
 
   // Range of the entity ids that the game will use.
   static const id_type DYNAMIC_ID_RANGE_FROM;
@@ -72,8 +40,8 @@ class World {
   id_type createEntity();
 
   const Entity& getEntity(id_type entity_id) const;
-  Range getEntities();
-  PairRange getEntityPairs();
+  ValRange getEntities();
+  ValPairRange getEntityPairs();
 
   const sf::Vector2f& lowerBounds() const;
   sf::Vector2f& variableLowerBounds();
@@ -163,8 +131,8 @@ class World {
   // TODO: cache problems, maybe.
   EntityMap entities;
 
-  Range range;
-  PairRange pair_range;
+  ValRange range;
+  ValPairRange pair_range;
 
   sf::Vector2f lower_bounds;
   sf::Vector2f upper_bounds;

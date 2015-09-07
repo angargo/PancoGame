@@ -5,55 +5,6 @@
 const id_type World::DYNAMIC_ID_RANGE_FROM = 1u << 25;
 const id_type World::DYNAMIC_ID_RANGE_TO = (1u << 31) - 1;
 
-// World iterator for entities.
-World::value_iterator::value_iterator() : World::EntityMap::iterator() {}
-World::value_iterator::value_iterator(const World::EntityMap::iterator& e)
-    : EntityMap::iterator(e){};
-Entity* World::value_iterator::operator->() {
-  return (Entity * const) & (EntityMap::iterator::operator->()->second);
-}
-Entity& World::value_iterator::operator*() {
-  return EntityMap::iterator::operator*().second;
-}
-
-// World iterator for pairs of entities.
-World::pair_iterator::pair_iterator(World::EntityMap& entities,
-                                    World::EntityMap::iterator first,
-                                    World::EntityMap::iterator second)
-    : entities(entities), p(first, second) {}
-std::pair<Entity&, Entity&> World::pair_iterator::operator*() {
-  return std::pair<Entity&, Entity&>(p.first->second, p.second->second);
-}
-World::pair_iterator& World::pair_iterator::operator++() {
-  ++p.second;
-  if (p.second == entities.end()) {
-    p.second = ++p.first;
-    ++p.second;
-    if (p.second == entities.end()) ++p.first;
-  }
-  return *this;
-}
-bool World::pair_iterator::operator!=(const World::pair_iterator& pi) const {
-  return p != pi.p;
-}
-
-// World Range struct to iterate over entities with for range loop.
-World::Range::Range(EntityMap& entities) : entities(entities) {}
-World::value_iterator World::Range::begin() { return entities.begin(); }
-World::value_iterator World::Range::end() { return entities.end(); }
-
-// World PairRange struct to iterate over pairs of entities.
-World::PairRange::PairRange(EntityMap& entities) : entities(entities) {}
-World::pair_iterator World::PairRange::begin() {
-  if (entities.size() < 2) {
-    return end();
-  }
-  return pair_iterator(entities, entities.begin(), ++entities.begin());
-}
-World::pair_iterator World::PairRange::end() {
-  return pair_iterator(entities, entities.end(), entities.end());
-}
-
 // World class.
 World::World()
     : link_id(0),
@@ -109,8 +60,8 @@ id_type World::createEntity() {
 const Entity& World::getEntity(id_type entity_id) const {
   return entities.at(entity_id);
 }
-World::Range World::getEntities() { return range; }
-World::PairRange World::getEntityPairs() { return pair_range; }
+World::ValRange World::getEntities() { return range; }
+World::ValPairRange World::getEntityPairs() { return pair_range; }
 
 id_type World::getRandomEntityId() {
   std::default_random_engine generator;
