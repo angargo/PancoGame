@@ -20,7 +20,7 @@ struct ValueRange {
   ValueRange(Map& map) : map(map) {}
   iterator begin() { return map.begin(); }
   iterator end() { return map.end(); }
-  size_t size() const { return map.size(); }
+  std::size_t size() const { return map.size(); }
 
  private:
   Map& map;
@@ -36,7 +36,7 @@ struct PairRange {
 
   class iterator {
    public:
-    iterator(Container& entities, container_iterator first,
+    iterator(Container& container, container_iterator first,
              container_iterator second)
         : container(container), p(first, second) {}
 
