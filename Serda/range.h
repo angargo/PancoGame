@@ -87,4 +87,24 @@ class ValuePairRange : public PairRange<ValueRange<Map>> {
   ValueRange<Map> value_range;
 };
 
+// Helpers to avoid verbosity on instantiation.
+// Example:
+// vector<int> v = getElems();
+// for (auto p : pairsRange(v)) {}
+
+template <typename Map>
+ValueRange<Map> valuesRange(Map& map) {
+  return ValueRange<Map>(map);
+}
+
+template <typename Container>
+PairRange<Container> pairsRange(Container& container) {
+  return PairRange<Container>(container);
+}
+
+template <typename Map>
+ValuePairRange<Map> valuePairsRange(Map& map) {
+  return ValuePairRange<Map>(map);
+}
+
 #endif  // SERDA_RANGE_H
