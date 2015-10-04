@@ -118,7 +118,7 @@ void MainWindow::make_menu_bar() {
       "        </item>"
       "      </section>"
       "    </submenu>"
-     "    <submenu>"
+      "    <submenu>"
       "      <attribute name='label'>_Help</attribute>"
       "      <section>"
       "        <item>"

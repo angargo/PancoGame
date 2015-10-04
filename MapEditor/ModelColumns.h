@@ -3,14 +3,16 @@
 
 #include <gtkmm.h>
 
-class ModelColumns : public TreeModelColumnRecord {
+class BaseToolbar;
+
+class ModelColumns : public Gtk::TreeModelColumnRecord {
  public:
   ModelColumns() {
     add(name);
     add(toolbar);
   }
   Gtk::TreeModelColumn<Glib::ustring> name;
-  Gtk::TreeModelColumn<*BaseToolbar> toolbar;
+  Gtk::TreeModelColumn<BaseToolbar*> toolbar;
 };
 
 #endif  // COLUMNS_H
