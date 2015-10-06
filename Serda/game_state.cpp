@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "keyboard.h"
+#include "joystick.h"
 
 GameState::GameState(StateStack* stack, Context context, Save save)
     : State(stack, context), save(std::move(save)), wxp(&world) {
@@ -32,6 +33,9 @@ bool GameState::handleEvent(const sf::Event& event) {
     InputEvent::KeyAction action = InputEvent::KEY_PRESSED;
     if (event.type == sf::Event::KeyReleased) action = InputEvent::KEY_RELEASED;
     InputEvent input_event(action, event.key.code);
+    inputSystem(input_event);
+  } else if (event.type == sf::Event::JoystickMoved) {
+    InputEvent input_event(event.joystickMove);
     inputSystem(input_event);
   } else if (event.type == sf::Event::LostFocus ||
              event.type == sf::Event::GainedFocus) {
@@ -141,9 +145,15 @@ void GameState::inputSystem(InputEvent event) {
   for (const Entity& entity : world.getEntities()) {
     if ((entity.components & skey) == skey) {
       const auto& input = world.get<InputComponent>(entity);
-      getContext().scripts->runScript(world.getL(), input.script_id, entity.id,
-                                      KeyToStr.at(event.key),
-                                      event.key_pressed);
+      if (event.key_pressed == InputEvent::JOY_MOVED) {
+        getContext().scripts->runScript(world.getL(), input.script_id, entity.id,
+                                        JoyToStr.at(event.axis),
+                                        event.position);
+      } else {
+        getContext().scripts->runScript(world.getL(), input.script_id, entity.id,
+                                        KeyToStr.at(event.key),
+                                        event.key_pressed);
+      }
     }
   }
 }
