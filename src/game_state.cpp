@@ -146,13 +146,15 @@ void GameState::inputSystem(InputEvent event) {
     if ((entity.components & skey) == skey) {
       const auto& input = world.get<InputComponent>(entity);
       if (event.key_pressed == InputEvent::JOY_MOVED) {
-        getContext().scripts->runScript(world.getL(), input.script_id,
-                                        entity.id, JoyToStr.at(event.axis),
-                                        event.position);
+        if (JoyToStr.count(event.axis))
+          getContext().scripts->runScript(world.getL(), input.script_id,
+                                          entity.id, JoyToStr.at(event.axis),
+                                          event.position);
       } else {
-        getContext().scripts->runScript(world.getL(), input.script_id,
-                                        entity.id, KeyToStr.at(event.key),
-                                        static_cast<bool>(event.key_pressed));
+        if (KeyToStr.count(event.key))
+          getContext().scripts->runScript(world.getL(), input.script_id,
+                                          entity.id, KeyToStr.at(event.key),
+                                          static_cast<bool>(event.key_pressed));
       }
     }
   }
