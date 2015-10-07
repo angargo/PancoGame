@@ -18,12 +18,28 @@ function input(entity, key, pressed)
   if key == "Right" then v.right = pressed and 1 or 0 end
   if key == "Left" then v.left = pressed and 1 or 0 end
   if key == "JoyX" then
-    v.right = pressed/100
-    v.left = 0
+    if pressed > 10 then
+      v.right = pressed/100
+      v.left = 0
+    elseif pressed < -10 then
+      v.right = 0
+      v.left = -pressed/100
+    else
+      v.right = 0
+      v.left = 0
+    end
   end
   if key == "JoyY" then
-    v.up = 0
-    v.down = pressed/100
+    if pressed > 10 then
+      v.down = pressed/100
+      v.up = 0
+    elseif pressed < -10 then
+      v.down = 0
+      v.up = -pressed/100
+    else
+      v.down = 0
+      v.up = 0
+    end
   end
   setSpeed(entity, (v.right - v.left) * mxSpeed, (v.down - v.up) * mxSpeed);
 end
