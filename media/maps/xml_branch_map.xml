@@ -1,0 +1,56 @@
+<!-- Sentinel generic entity -->
+<generic type="sentinel">
+  <speed/>
+  <render> <frame tex_id="2" width="16" height="22"/> </render>
+  <logic script_id="3"/>
+</generic>
+
+<!-- Map -->
+<entity id="2">
+  <position x="0" y="0" z="-1"/>
+  <render> <frame tex_id="5" width="1536" height="896"/> </render>
+</entity>
+<map_bounds lower_x="0" lower_y="0" upper_x="1536" upper_y="896"/>
+
+<!-- Link -->
+<entity id="1">
+  <position x="128" y="112" z="0"/>
+  <speed/>
+  <render> <frame tex_id="2" width="16" height="22"/> </render>
+  <anim>
+    <!-- Link walking down -->
+    <animation repeated="true">
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="3" ty="32"/>
+      </animframe>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="33" ty="32"/>
+      </animframe>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="63" ty="32"/>
+      </animframe>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="93" ty="32"/>
+      </animframe>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="123" ty="32"/>
+      </animframe>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="153" ty="32"/>
+      </animframe>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="183" ty="32"/>
+      </animframe>
+      <animframe duration="0.08">
+        <frame tex_id="3" width="16" height="25" tx="213" ty="32"/>
+      </animframe>
+    </animation>
+  </anim>
+  <input script_id="2"/>
+</entity>
+
+<entity type="sentinel"> <position x="170"  y="112" z="0"/> </entity>
+<entity type="sentinel"> <position x="110"  y="81"  z="0"/> </entity>
+<entity type="sentinel"> <position x="1100" y="81"  z="0"/> </entity>
+<entity type="sentinel"> <position x="510"  y="481" z="0"/> </entity>
+<entity type="sentinel"> <position x="310"  y="481" z="0"/> </entity>
