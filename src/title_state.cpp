@@ -29,7 +29,7 @@ bool TitleState::handleEvent(const sf::Event& event) {
       requestStackPop();
     } else if (event.key.code == sf::Keyboard::Return) {
       requestStackClear();
-      requestStackPush(States::Game);
+      requestStackPush(States::Menu);
     }
   }
   return false;

@@ -15,7 +15,7 @@
 
 namespace Fonts {
 enum {
-  Menu = 0,
+  Arial = 0,
   NumFonts,
 };
 }

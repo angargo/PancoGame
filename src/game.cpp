@@ -2,6 +2,7 @@
 
 #include "game_state.h"
 #include "title_state.h"
+#include "menu_state.h"
 #include "troll_state.h"
 
 using namespace sf;
@@ -13,8 +14,6 @@ Game::Game()
       scripts("media/lua/dictionary"),
       stack(State::Context(&window, &textures, &fonts, &scripts)) {
   window.setSize(Vector2u(window.getSize().x * 2, window.getSize().y * 2));
-
-  fonts.load(Fonts::Menu, "media/fonts/arial.ttf");
 
   window.setKeyRepeatEnabled(false);
 
@@ -68,6 +67,7 @@ void Game::render() {
 void Game::registerStates() {
   stack.registerState<TrollState>(States::Troll);
   stack.registerState<TitleState>(States::Title);
+  stack.registerState<MenuState>(States::Menu);
   // TODO: load saved games.
   stack.registerState<GameState>(States::Game, GameState::Save());
 }
