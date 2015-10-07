@@ -9,7 +9,9 @@
 #include <memory>
 
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/Joystick.hpp>
 #include <SFML/System/Time.hpp>
 
 typedef int id_type;
@@ -163,17 +165,27 @@ struct InputEvent {
   enum KeyAction {
     KEY_RELEASED = 0,
     KEY_PRESSED = 1,
+    JOY_MOVED = 2,
   };
   // If not pressed, it's implicitly released.
-  bool key_pressed;
+  KeyAction key_pressed;
   sf::Keyboard::Key key;
+  sf::Joystick::Axis axis;
+  float position;
 
   InputEvent(KeyAction key_action, sf::Keyboard::Key key)
       : key_pressed(key_action), key(key) {}
 
+  InputEvent(const sf::Event::JoystickMoveEvent& move_event)
+      : key_pressed(JOY_MOVED), axis(move_event.axis), position(move_event.position) {}
+
   // Comparator function to use InputEvent as a map key.
   bool operator<(const InputEvent& other) const {
-    if (key_pressed ^ other.key_pressed) return key_pressed < other.key_pressed;
+    if (key_pressed != other.key_pressed) return key_pressed < other.key_pressed;
+    if (key_pressed == JOY_MOVED) {
+      if (axis != other.axis) return axis < other.axis;
+      return position < other.position;
+    }
     return key < other.key;
   }
 };
