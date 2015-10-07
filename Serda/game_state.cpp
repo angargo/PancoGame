@@ -152,7 +152,7 @@ void GameState::inputSystem(InputEvent event) {
       } else {
         getContext().scripts->runScript(world.getL(), input.script_id, entity.id,
                                         KeyToStr.at(event.key),
-                                        event.key_pressed);
+                                        static_cast<bool>(event.key_pressed));
       }
     }
   }
