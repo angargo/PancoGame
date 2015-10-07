@@ -106,6 +106,11 @@ class LuaManager {
       lua_pushstring(L, p.c_str());
       callScript(L, nargs + 1, args...);
     }
+    template<typename... Args>
+    void callScript(lua_State* L, int nargs, double p, Args... args) {
+      lua_pushnumber(L, p);
+      callScript(L, nargs + 1, args...);
+    }
 
     template<typename... Args>
     void runScript(lua_State* L, int script_id, Args... args) {

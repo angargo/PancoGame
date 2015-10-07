@@ -22,8 +22,8 @@ function input(entity, key, pressed)
     v.left = 0
   end
   if key == "JoyY" then
-    v.up = pressed/100
-    v.down = 0
+    v.up = 0
+    v.down = pressed/100
   end
   setSpeed(entity, (v.right - v.left) * mxSpeed, (v.down - v.up) * mxSpeed);
 end
