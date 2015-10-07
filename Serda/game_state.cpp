@@ -146,12 +146,12 @@ void GameState::inputSystem(InputEvent event) {
     if ((entity.components & skey) == skey) {
       const auto& input = world.get<InputComponent>(entity);
       if (event.key_pressed == InputEvent::JOY_MOVED) {
-        getContext().scripts->runScript(world.getL(), input.script_id, entity.id,
-                                        JoyToStr.at(event.axis),
+        getContext().scripts->runScript(world.getL(), input.script_id,
+                                        entity.id, JoyToStr.at(event.axis),
                                         event.position);
       } else {
-        getContext().scripts->runScript(world.getL(), input.script_id, entity.id,
-                                        KeyToStr.at(event.key),
+        getContext().scripts->runScript(world.getL(), input.script_id,
+                                        entity.id, KeyToStr.at(event.key),
                                         static_cast<bool>(event.key_pressed));
       }
     }
@@ -229,12 +229,12 @@ void GameState::collisionSystem() {
     const CollisionComponent& collision_a =
         world.get<CollisionComponent>(entity_a);
     Hitbox hitbox_a = collision_a.hitbox;
-    //Hitbox lHitbox = lCollision.add(world.get<PositionComponent>(lhs);
+    // Hitbox lHitbox = lCollision.add(world.get<PositionComponent>(lhs);
 
     const CollisionComponent& collision_b =
         world.get<CollisionComponent>(entity_b);
     Hitbox hitbox_b = collision_b.hitbox;
-    //Hitbox rHitbox = rCollision.add(world.get<PositionComponent>(rhs);
+    // Hitbox rHitbox = rCollision.add(world.get<PositionComponent>(rhs);
     if (hitbox_a.collidesWith(hitbox_b)) {
       // Calculate any desired information about collision.
       collisions.insert(CollisionInfo(entity_a, entity_b));

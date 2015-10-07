@@ -177,11 +177,14 @@ struct InputEvent {
       : key_pressed(key_action), key(key) {}
 
   InputEvent(const sf::Event::JoystickMoveEvent& move_event)
-      : key_pressed(JOY_MOVED), axis(move_event.axis), position(move_event.position) {}
+      : key_pressed(JOY_MOVED),
+        axis(move_event.axis),
+        position(move_event.position) {}
 
   // Comparator function to use InputEvent as a map key.
   bool operator<(const InputEvent& other) const {
-    if (key_pressed != other.key_pressed) return key_pressed < other.key_pressed;
+    if (key_pressed != other.key_pressed)
+      return key_pressed < other.key_pressed;
     if (key_pressed == JOY_MOVED) {
       if (axis != other.axis) return axis < other.axis;
       return position < other.position;
